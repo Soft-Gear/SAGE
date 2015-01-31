@@ -23,6 +23,8 @@ class SimpleTest(unittest.TestCase):
 		response = self.client.get('/estacionamientos/')
 		self.assertEqual(response.status_code, 200)
 
+
+
 ###################################################################
 #                    ESTACIONAMIENTO_ALL FORM
 ###################################################################
