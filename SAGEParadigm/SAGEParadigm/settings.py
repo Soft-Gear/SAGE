@@ -90,4 +90,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-TIME_FORMAT = 'f a'
+TIME_FORMAT = 'G:i'

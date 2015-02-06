@@ -46,6 +46,7 @@ def estacionamientos_all(request):
                 obj.save()
                 # Recargamos los estacionamientos ya que acabamos de agregar
                 estacionamientos = Estacionamiento.objects.all()
+                form = EstacionamientoForm()
     # Si no es un POST es un GET, y mandamos un formulario vacio
     else:
         form = EstacionamientoForm()
@@ -85,6 +86,7 @@ def estacionamiento_detail(request, _id):
                 estacion.NroPuesto = form.cleaned_data['puestos']
 
                 estacion.save()
+                form = EstacionamientoExtendedForm()
     else:
         form = EstacionamientoExtendedForm()
 
