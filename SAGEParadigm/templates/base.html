@@ -125,7 +125,11 @@
               {% for field in form %}
                 <div class="control-group">
                   <div class="controls">
-                    <input type="text" class="form-control" name="{{field.name}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
+                    {% if not field.value or field.errors %}
+                      <input type="text" class="form-control" name="{{field.name}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
+                    {% else %}
+                      <input type="text" class="form-control" name="{{field.name}}" value="{{field.value}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
+                    {% endif %}
                     {{ field.errors }}
                   </div>
                 </div> 
