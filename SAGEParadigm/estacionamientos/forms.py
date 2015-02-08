@@ -66,3 +66,15 @@ class EstacionamientoExtendedForm(forms.Form):
 class EstacionamientoReserva(forms.Form):
     inicio = forms.TimeField(label = 'Horario Inicio Reserva')
     final = forms.TimeField(label = 'Horario Final Reserva')
+
+class PagoTarjetaDeCredito(forms.Form):
+    numeroTarjeta = forms.CharField(
+                            required = True,
+                            label = "Tarjeta de Credito",
+                            validators = [
+                                  RegexValidator(
+                                        regex = '^[0-9]+$',
+                                        message = 'Introduzca un numero de tarjeta válido.'
+                                )
+                            ]
+                        )

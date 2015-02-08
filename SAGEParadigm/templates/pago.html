@@ -11,18 +11,22 @@
 
 
     <script type="text/javascript">
-       function popuponclick()
-       {
+        function popuponclick()
+        {
           my_window = window.open("",
            "mywindow","status=1,width=350,height=150");
-     
+
           my_window.document.write('<h1>The Popup Window</h1>');
-       }
-     
-       function closepopup()
-       {
+        }
+
+        function closepopup()
+        {
           window.close();   
-       }
+        }
+        function openlink()
+        {
+         opener.location='/estacionamientos';
+        }
     </script>
 
 
@@ -68,54 +72,55 @@
             <!--center-right-->
           <!--/col-span-6-->
      
-       <div class="col-md-4">
-      
-      <table class="table table-striped">
-        <thead>
+      <div class="col-md-4">
+      {% if form %}
+        <table class="table table-striped">
+          <thead>
 
-        <table width="300" border="0" cellspacing="0">
-          <tr>
-            <td><font size="32" color="blue"><i class="fa fa-cc-visa"> </i></font></td>
-            <td><font size="32" color="red"><i class="fa fa-cc-mastercard"> </i></font></td>
-            <td><font size="32" color="gray"><i class="fa fa-cc-amex"> </i></font></td>
-          </tr>
-        </table>
-        <br>
+          <table width="300" border="0" cellspacing="0">
+            <tr>
+              <td><font size="32" color="blue"><i class="fa fa-cc-visa"> </i></font></td>
+              <td><font size="32" color="red"><i class="fa fa-cc-mastercard"> </i></font></td>
+              <td><font size="32" color="gray"><i class="fa fa-cc-amex"> </i></font></td>
+            </tr>
+          </table>
+          <br>
+              
+          </thead>
+          <tbody>
+            <form  method="post" class="form form-vertical">
+              {% csrf_token %}
+              {% for field in form %}
+                <div class="control-group">
+                  <div class="controls">
+                    <input type="text" class="form-control" name="{{field.name}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
+                    {{ field.errors }}
+                  </div>
+                </div> 
+              {% endfor %}
+
+            <button type="submit" class="btn btn-primary">Realizar Pago</button>
+            </form>
+            <a href="javascript: closepopup()">
+              <button  class="btn btn-primary">
+                Volver
+              </button>
+            </a> 
+
+        
             
-        </thead>
-        <tbody>
-          <form action="./reserva" method="post" class="form form-vertical">
-            {% csrf_token %}
-            <input type="text" class="form-control" name="Tarjeta de Credito" placeholder="Tarjeta de Credito" for="id_Tarjeta de Credito">
-          </form>
-
+          </tbody>
+        </table>
+        
       
-          
-        </tbody>
-      </table>
-      
-    
-    </div>
+      </div>
 
-          
-          <!--/panel-->
-          
-          <!--/panel-->
-          
+            
+            <!--/panel-->
+            
+            <!--/panel-->
+            
 
-    </div>
-      <div>
-          <a href="javascript: closepopup()">
-            <button class="btn btn-primary">
-              Pagar
-            </button>
-          </A> 
-          <a href="javascript: closepopup()">
-            <button type="submit" class="btn btn-primary">
-              Volver
-            </button>
-          </a>       
-        </div>
       </div>
       <!--/row-->
       <!--/upper section -->
@@ -124,7 +129,21 @@
       <div class="row">
       </div>
       <!--/row-->
-      
+      {% endif %}
+      {% if mensaje %}
+        <div class="col-md-8" style="color:{{color}}"> 
+          {{mensaje}}
+          <hr>              
+        </div><div class="col-md-4">
+        <div>
+            <a href="javascript: closepopup(); openlink()">
+              <button type="submit" class="btn btn-primary">
+                Volver
+              </button>
+            </a>  
+        </div>
+      {% endif %}
+
     </div>
 
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
