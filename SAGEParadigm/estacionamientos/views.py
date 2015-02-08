@@ -7,6 +7,7 @@ from estacionamientos.controller import *
 from estacionamientos.forms import EstacionamientoExtendedForm
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
+from estacionamientos.forms import PagoTarjetaDeCredito
 from estacionamientos.models import Estacionamiento, ReservasModel
 
 
@@ -147,11 +148,20 @@ def estacionamiento_reserva(request, _id):
                                         FinalReserva = final_reserva
                                     )
                     reservaFinal.save()
-                    return render(request, 'templateMensaje.html', {'color':'green', 'mensaje':'Se realizo la reserva exitosamente'})
+                    return render(request, 'estacionamientoPagarReserva.html', {'reserva' : reservaFinal,'color':'green', 'mensaje':'Se realizo la reserva exitosamente'})
                 else:
                     return render(request, 'templateMensaje.html', {'color':'red', 'mensaje':'No hay un puesto disponible para ese horario'})
     else:
         form = EstacionamientoReserva()
 
     return render(request, 'estacionamientoReserva.html', {'form': form, 'estacionamiento': estacion})
+
+def estacionamiento_pago(request,_id):
+    form = PagoTarjetaDeCredito()
+    if request.method == 'POST':
+        form = PagoTarjetaDeCredito(request.POST)
+        print (request.POST['numeroTarjeta'])
+        if form.is_valid():
+            return render(request,'pago.html',{"color": "green",'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
+    return render(request, 'pago.html', {'form':form})
 
