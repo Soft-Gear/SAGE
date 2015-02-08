@@ -147,11 +147,14 @@ def estacionamiento_reserva(request, _id):
                                         FinalReserva = final_reserva
                                     )
                     reservaFinal.save()
-                    return render(request, 'templateMensaje.html', {'color':'green', 'mensaje':'Se realizo la reserva exitosamente'})
+                    return render(request, 'estacionamientoPagarReserva.html', {'reserva' : reservaFinal,'color':'green', 'mensaje':'Se realizo la reserva exitosamente'})
                 else:
                     return render(request, 'templateMensaje.html', {'color':'red', 'mensaje':'No hay un puesto disponible para ese horario'})
     else:
         form = EstacionamientoReserva()
 
     return render(request, 'estacionamientoReserva.html', {'form': form, 'estacionamiento': estacion})
+
+def estacionamiento_pago(request, _id):
+    return render(request, 'pago.html')
 

@@ -1,0 +1,133 @@
+<html lang="es"><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>
+      SAGE
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+
+
+    <script type="text/javascript">
+       function popuponclick()
+       {
+          my_window = window.open("",
+           "mywindow","status=1,width=350,height=150");
+     
+          my_window.document.write('<h1>The Popup Window</h1>');
+       }
+     
+       function closepopup()
+       {
+          window.close();   
+       }
+    </script>
+
+
+   </head>
+
+    <!-- Header -->
+    <body><div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-toggle">
+            </span>
+          </button>
+          <div class="navbar-brand" href="#">
+            SAGE
+          </div>
+        </div>
+        <div class="navbar-collapse collapse">
+
+        </div>
+      </div>
+      <!-- /container -->
+    </div>
+    <!-- /Header -->
+
+    <!-- Main -->
+    <div class="container">
+
+      <!-- upper section -->
+
+        <!-- /span-3 -->
+<div class="col-sm-10">
+        
+      <!-- column 2 --> 
+       <h3><i class="fa fa-money"></i> Pago de Reserva</h3>  
+            
+       <hr>
+      
+     <div class="row">
+            <!-- center left--> 
+          <!--/col-->
+         
+            <!--center-right-->
+          <!--/col-span-6-->
+     
+       <div class="col-md-4">
+      
+      <table class="table table-striped">
+        <thead>
+
+        <table width="300" border="0" cellspacing="0">
+          <tr>
+            <td><font size="32" color="blue"><i class="fa fa-cc-visa"> </i></font></td>
+            <td><font size="32" color="red"><i class="fa fa-cc-mastercard"> </i></font></td>
+            <td><font size="32" color="gray"><i class="fa fa-cc-amex"> </i></font></td>
+          </tr>
+        </table>
+        <br>
+            
+        </thead>
+        <tbody>
+          <form action="./reserva" method="post" class="form form-vertical">
+            {% csrf_token %}
+            <input type="text" class="form-control" name="Tarjeta de Credito" placeholder="Tarjeta de Credito" for="id_Tarjeta de Credito">
+          </form>
+
+      
+          
+        </tbody>
+      </table>
+      
+    
+    </div>
+
+          
+          <!--/panel-->
+          
+          <!--/panel-->
+          
+
+    </div>
+      <div>
+          <a href="javascript: closepopup()">
+            <button class="btn btn-primary">
+              Pagar
+            </button>
+          </A> 
+          <a href="javascript: closepopup()">
+            <button type="submit" class="btn btn-primary">
+              Volver
+            </button>
+          </a>       
+        </div>
+      </div>
+      <!--/row-->
+      <!--/upper section -->
+      
+      <!-- lower section -->
+      <div class="row">
+      </div>
+      <!--/row-->
+      
+    </div>
+
+    <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+
+</body></html>
