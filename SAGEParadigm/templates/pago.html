@@ -25,7 +25,7 @@
         }
         function openlink()
         {
-         opener.location='/estacionamientos';
+          opener.location='/estacionamientos';
         }
     </script>
 
@@ -100,12 +100,10 @@
               {% endfor %}
 
             <button type="submit" class="btn btn-primary">Realizar Pago</button>
+
+              <input type="button" value="Volver" onclick="self.close()" class="btn btn-primary">
             </form>
-            <a href="javascript: closepopup()">
-              <button  class="btn btn-primary">
-                Volver
-              </button>
-            </a> 
+
 
         
             
@@ -136,11 +134,7 @@
           <hr>              
         </div><div class="col-md-4">
         <div>
-            <a href="javascript: closepopup(); openlink()">
-              <button type="submit" class="btn btn-primary">
-                Volver
-              </button>
-            </a>  
+          <input type="button" value="Volver" onclick="javascript: closepopup(); openlink()" class="btn btn-primary">
         </div>
       {% endif %}
 
