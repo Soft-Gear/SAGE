@@ -108,8 +108,8 @@ def estacionamiento_reserva(request, _id):
         form = EstacionamientoReserva(request.POST)
         # Verificamos si es valido con los validadores del formulario
         if form.is_valid():
-            inicio_reserva = form.cleaned_data['inicio']
-            final_reserva = form.cleaned_data['final']
+            inicioReserva = form.cleaned_data['inicio']
+            finalReserva = form.cleaned_data['final']
 
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
@@ -119,23 +119,10 @@ def estacionamiento_reserva(request, _id):
             if not m_validado[0]:
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
 
-
-
-
-            # Si esta en un rango valido, procedemos a buscar en la lista
-            # el lugar a insertar
-            x = buscar(inicio_reserva, final_reserva, listaReserva)
-            if x[2] == True :
-                reservar(inicio_reserva, final_reserva, listaReserva)
-                reservaFinal = ReservasModel(
-                                    Estacionamiento = estacion,
-                                    Puesto = x[0],
-                                    InicioReserva = inicio_reserva,
-                                    FinalReserva = final_reserva
-                                )
-                reservaFinal.save()
-                return render(request, 'templateMensaje.html', {'color':'green', 'mensaje':'Se realizo la reserva exitosamente'})
+            if marzullo(_id, estacionamiento.nroPuesto, inicioReserva, finalReserva):
+                return render(request, 'estacionamientoPagarReserva.html', {'reserva' : reservaFinal,'color':'green', 'mensaje':'Se realizo la reserva exitosamente'})
             else:
+                # Cambiar mensaje
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje':'No hay un puesto disponible para ese horario'})
 
     return render(request, 'estacionamientoReserva.html', {'form': form, 'estacionamiento': estacion})
@@ -148,4 +135,3 @@ def estacionamiento_pago(request,_id):
         if form.is_valid():
             return render(request,'pago.html',{"color": "green",'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
     return render(request, 'pago.html', {'form':form})
-

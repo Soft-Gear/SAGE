@@ -26,7 +26,7 @@ class Estacionamiento(models.Model):
 	reservasCierre = models.TimeField(blank = True, null = True)
 	nroPuesto = models.IntegerField(blank = True, null = True)
 
-class ReservasModel(models.Model):
+class Reserva(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
 	inicioReserva = models.TimeField()
 	finalReserva = models.TimeField()

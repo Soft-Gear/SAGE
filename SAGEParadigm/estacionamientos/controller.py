@@ -1,5 +1,6 @@
 # Archivo con funciones de control para SAGE
 import datetime
+from Models import Estacionamiento, Reserva
 
 # Las Tuplas de cada puesto deben tener los horarios de inicio y de cierre para que
 # pueda funcionar [(7:00,7:00), (19:00,19:00)]
@@ -56,7 +57,6 @@ def reservar(hin, hout, estacionamiento):
 		return 1
 
 def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCierre):
-
 	if ReservaInicio >= ReservaFin:
 		return (False, 'El horario de apertura debe ser menor al horario de cierre')
 	if ReservaFin.hour - ReservaInicio.hour < 1:
@@ -67,3 +67,15 @@ def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCie
 		return (False, 'El horario de cierre de reserva debe estar en un horario válido')
 	return (True, '')
 
+def marzullo(idEstacionamiento, capacidad, hIn, hOut):
+	ocupacion = []
+	for reserva in Reserva.filter(estacionamiento=idEstacionamiento):
+		ocupacion += [(reserva.inicioReserva, 1), (reserva.finReserva, -1)]
+	ocupacion += [(hIn, 1), (hOut, -1)]
+
+	count = 0
+	for r in sorted(ocupacion):
+		count += r[1]
+		if count > capacidad
+			return False
+	return True
