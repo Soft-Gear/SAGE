@@ -27,52 +27,6 @@ def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
 		return (False, 'El horario de cierre de estacionamiento debe ser mayor o igual al horario de finalización de reservas')
 	return (True, '')
 
-
-# busca un puesta en el estacionamiento
-def buscar(hin, hout, estacionamiento):
-	if not isinstance(estacionamiento, list):
-		return (-1, -1, False)
-	if len(estacionamiento) == 0:
-		return (-1, -1, False)
-	if not isinstance(hin, datetime.time) or not isinstance(hout, datetime.time):
-		return (-1, -1, False)
-	for i in range(len(estacionamiento)):
-		posicion = busquedaBin(hin, hout, estacionamiento[i])
-		if posicion[1] == True:
-			return (i, posicion[0], posicion[1])
-	return (-1, -1, False)
-
-def binaria(valor, inicio, fin, lista):
-	if inicio == fin:
-		return inicio
-	centro = (inicio + fin) // 2
-	if lista[centro][0] > valor:
-		return binaria(valor, inicio, centro, lista)
-	if lista[centro][0] < valor:
-		return binaria(valor, centro + 1, fin, lista)
-	return centro
-
-# Busca en una lista ordenada la posicion en la que una nueva tupla
-# puede ser insertado, y ademas devuelve un booleano que dice si la
-# tupla puede ser insertada, es decir que sus valores no solapen alguno
-# ya existente.
-# Precondición: la lista debe tener ya la mayor y menor posible tupla
-def busquedaBin(hin, hout, listaTuplas):
-	# ln = len(listaTuplas)
-	if not isinstance(listaTuplas, list):
-		return (0, False)
-	if len(listaTuplas) == 0:
-		return (0, True)
-	if not isinstance(hin, datetime.time) or not isinstance(hout, datetime.time):
-		return (0, False)
-	index = binaria(hin, 0, len(listaTuplas), listaTuplas)
-	if index == 0:
-		index = index + 1
-	if listaTuplas[index][0] >= hout and listaTuplas[index - 1][1] <= hin:
-		return (index, True)
-	else:
-		return (index, False)
-
 # inserta ordenadamente por hora de inicio
 def insertarReserva(hin, hout, puesto, listaReserva):
 	# no verifica precondicion, se supone que se hace buscar antes para ver si se puede agregar
@@ -100,7 +54,6 @@ def reservar(hin, hout, estacionamiento):
 		return estacionamiento
 	else:
 		return 1
-
 
 def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCierre):
 
