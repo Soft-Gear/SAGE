@@ -86,7 +86,7 @@
 <div class="col-sm-10">
         
       <!-- column 2 --> 
-       <h3><i class="fa fa-bus"></i> Estacionamientos</h3>  
+       <h3><i class="fa fa-bus"></i> Reservación</h3>  
             
        <hr>
       
@@ -130,11 +130,13 @@
             <tr><td><b><i class="fa fa-clock-o"></i> Horario fin de reserva:</b></td></tr>
             <tr><td>{{reserva.FinalReserva}}</td></tr>
               
-            <tr><td>           <A HREF="pago" onClick="return popup(this, 'stevie')">
+            <tr><td>           
+            <A HREF="pago" onClick="return popup(this, 'Pago de Reserva')">
             <button class="btn btn-primary">
               Pagar Reserva
             </button>
           </A> 
+
           <a href="/estacionamientos">
             <button type="submit" class="btn btn-primary">
               Volver
