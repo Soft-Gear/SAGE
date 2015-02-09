@@ -27,13 +27,14 @@
         {
           opener.location='/estacionamientos';
         }
-    </script>
+    </script> 
 
 
    </head>
 
     <!-- Header -->
-    <body><div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+    <body {% if mensaje %} onunload="openlink()" {% endif %}>
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -134,7 +135,7 @@
           <hr>              
         </div><div class="col-md-4">
         <div>
-          <input type="button" value="Volver" onclick="javascript: closepopup(); openlink()" class="btn btn-primary">
+          <input type="button" value="Volver" onclick="javascript: closepopup();" class="btn btn-primary">
         </div>
       {% endif %}
 
