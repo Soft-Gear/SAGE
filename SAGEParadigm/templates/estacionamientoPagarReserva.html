@@ -118,17 +118,14 @@
             <tr><td><b>
               <i class="fa fa-car"></i> Nombre del estacionamiento:</b></td></tr>
             <tr><td>
-              {{reserva.Estacionamiento.Nombre}}
+              {{reserva.estacionamiento.nombre}}
             </td></tr>
-
-            <tr><td><b><i class="fa fa-car"></i> Puesto </b></td></tr>
-            <tr><td>{{ reserva.Puesto }}</td></tr>
             
             <tr><td><b><i class="fa fa-clock-o"></i> Horario inicio de reserva:</b></td></tr>
-            <tr><td>{{reserva.InicioReserva}}</td></tr>
+            <tr><td>{{reserva.inicioReserva}}</td></tr>
 
             <tr><td><b><i class="fa fa-clock-o"></i> Horario fin de reserva:</b></td></tr>
-            <tr><td>{{reserva.FinalReserva}}</td></tr>
+            <tr><td>{{reserva.finalReserva}}</td></tr>
               
             <tr><td>           
             <A HREF="pago" onClick="return popup(this, 'Pago de Reserva')">

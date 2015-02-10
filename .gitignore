@@ -1,0 +1,4 @@
+__pycache__
+estacionamientos/migrations/*
+SAGEParadigm/estacionamientos/migrations/*
+SAGEParadigm/db.sqlite3

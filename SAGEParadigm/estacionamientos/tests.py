@@ -561,423 +561,423 @@ class SimpleFormTestCase(TestCase):
 # Binaria, Pruebas Unitarias
 
 	# caso borde
-	def test_Binaria_lista_vacia(self):
-		valor = datetime.time(hour = 10, minute = 0, second = 0)
-		lista = []
-		x = binaria(valor, 0, len(lista), lista)
-		self.assertEqual(x, 0)
+# 	def test_Binaria_lista_vacia(self):
+# 		valor = datetime.time(hour = 10, minute = 0, second = 0)
+# 		lista = []
+# 		x = binaria(valor, 0, len(lista), lista)
+# 		self.assertEqual(x, 0)
 
-	# caso borde
-	def test_Binaria_lista_un_elem(self):
-		valor = datetime.time(hour = 10, minute = 0, second = 0)
-		Hora1In = datetime.time(hour = 8, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 9, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		x = binaria(valor, 0, len(lista), lista)
-		self.assertEqual(x, 1)
+# 	# caso borde
+# 	def test_Binaria_lista_un_elem(self):
+# 		valor = datetime.time(hour = 10, minute = 0, second = 0)
+# 		Hora1In = datetime.time(hour = 8, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 9, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		x = binaria(valor, 0, len(lista), lista)
+# 		self.assertEqual(x, 1)
 
-	# caso borde
-	def test_Binaria_horas_borde(self):
-		valor = datetime.time(hour = 10, minute = 0, second = 0)
-		Hora1In = datetime.time(hour = 0, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 0, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
-		Hora2Out = datetime.time(hour = 23, minute = 59, second = 59)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		x = binaria(valor, 0, len(lista), lista)
-		self.assertEqual(x, 1)
+# 	# caso borde
+# 	def test_Binaria_horas_borde(self):
+# 		valor = datetime.time(hour = 10, minute = 0, second = 0)
+# 		Hora1In = datetime.time(hour = 0, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 0, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
+# 		Hora2Out = datetime.time(hour = 23, minute = 59, second = 59)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		x = binaria(valor, 0, len(lista), lista)
+# 		self.assertEqual(x, 1)
 
-	# caso borde
-	def test_Binaria_horas_borde2(self):
-		valor = datetime.time(hour = 0, minute = 0, second = 0)
-		Hora1In = datetime.time(hour = 0, minute = 0, second = 1)
-		Hora1Out = datetime.time(hour = 0, minute = 0, second = 1)
-		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
-		Hora2Out = datetime.time(hour = 23, minute = 59, second = 59)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		x = binaria(valor, 0, len(lista), lista)
-		self.assertEqual(x, 0)
+# 	# caso borde
+# 	def test_Binaria_horas_borde2(self):
+# 		valor = datetime.time(hour = 0, minute = 0, second = 0)
+# 		Hora1In = datetime.time(hour = 0, minute = 0, second = 1)
+# 		Hora1Out = datetime.time(hour = 0, minute = 0, second = 1)
+# 		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
+# 		Hora2Out = datetime.time(hour = 23, minute = 59, second = 59)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		x = binaria(valor, 0, len(lista), lista)
+# 		self.assertEqual(x, 0)
 
-	# caso borde
-	def test_Binaria_horas_borde3(self):
-		valor = datetime.time(hour = 23, minute = 59, second = 59)
-		Hora1In = datetime.time(hour = 0, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 0, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 23, minute = 59, second = 58)
-		Hora2Out = datetime.time(hour = 23, minute = 59, second = 58)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		x = binaria(valor, 0, len(lista), lista)
-		self.assertEqual(x, 2)
+# 	# caso borde
+# 	def test_Binaria_horas_borde3(self):
+# 		valor = datetime.time(hour = 23, minute = 59, second = 59)
+# 		Hora1In = datetime.time(hour = 0, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 0, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 23, minute = 59, second = 58)
+# 		Hora2Out = datetime.time(hour = 23, minute = 59, second = 58)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		x = binaria(valor, 0, len(lista), lista)
+# 		self.assertEqual(x, 2)
 
-	# malicia
-	def test_Binaria_horas_mal_orden(self):
-		valor = datetime.time(hour = 20, minute = 10, second = 13)
-		Hora1In = datetime.time(hour = 0, minute = 1, second = 0)
-		Hora1Out = datetime.time(hour = 0, minute = 0, second = 30)
-		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
-		Hora2Out = datetime.time(hour = 23, minute = 59, second = 58)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		x = binaria(valor, 0, len(lista), lista)
-		self.assertEqual(x, 1)
+# 	# malicia
+# 	def test_Binaria_horas_mal_orden(self):
+# 		valor = datetime.time(hour = 20, minute = 10, second = 13)
+# 		Hora1In = datetime.time(hour = 0, minute = 1, second = 0)
+# 		Hora1Out = datetime.time(hour = 0, minute = 0, second = 30)
+# 		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
+# 		Hora2Out = datetime.time(hour = 23, minute = 59, second = 58)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		x = binaria(valor, 0, len(lista), lista)
+# 		self.assertEqual(x, 1)
 
-	# malicia
-	def test_Binaria_horas_mal_orden2(self):
-		valor = datetime.time(hour = 20, minute = 10, second = 13)
-		Hora1In = datetime.time(hour = 0, minute = 1, second = 0)
-		Hora1Out = datetime.time(hour = 0, minute = 0, second = 30)
-		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
-		Hora2Out = datetime.time(hour = 19, minute = 59, second = 58)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		x = binaria(valor, 0, len(lista), lista)
-		self.assertEqual(x, 1)
+# 	# malicia
+# 	def test_Binaria_horas_mal_orden2(self):
+# 		valor = datetime.time(hour = 20, minute = 10, second = 13)
+# 		Hora1In = datetime.time(hour = 0, minute = 1, second = 0)
+# 		Hora1Out = datetime.time(hour = 0, minute = 0, second = 30)
+# 		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
+# 		Hora2Out = datetime.time(hour = 19, minute = 59, second = 58)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		x = binaria(valor, 0, len(lista), lista)
+# 		self.assertEqual(x, 1)
 
-	# malicia
-	def test_Binaria_horas_mal_orden3(self):
-		valor = datetime.time(hour = 20, minute = 10, second = 13)
-		Hora1In = datetime.time(hour = 0, minute = 1, second = 0)
-		Hora1Out = datetime.time(hour = 0, minute = 0, second = 30)
-		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
-		Hora2Out = datetime.time(hour = 19, minute = 59, second = 58)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		x = binaria(valor, 0, len(lista), lista)
-		self.assertEqual(x, 1)
+# 	# malicia
+# 	def test_Binaria_horas_mal_orden3(self):
+# 		valor = datetime.time(hour = 20, minute = 10, second = 13)
+# 		Hora1In = datetime.time(hour = 0, minute = 1, second = 0)
+# 		Hora1Out = datetime.time(hour = 0, minute = 0, second = 30)
+# 		Hora2In = datetime.time(hour = 23, minute = 59, second = 59)
+# 		Hora2Out = datetime.time(hour = 19, minute = 59, second = 58)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		x = binaria(valor, 0, len(lista), lista)
+# 		self.assertEqual(x, 1)
 
-# busquedaBin, Pruebas Integracion, funcion 'binaria' con 'busquedaBin'
+# # busquedaBin, Pruebas Integracion, funcion 'binaria' con 'busquedaBin'
 
-	# caso borde
-	def test_BusquedaBin_horarios_todoeldia(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (1, True))
+# 	# caso borde
+# 	def test_BusquedaBin_horarios_todoeldia(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (1, True))
 
-	# caso borde
-	def test_BusquedaBin_noDisponible(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora3In, Hora3Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = datetime.time(hour = 7, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 9, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (2, False))
+# 	# caso borde
+# 	def test_BusquedaBin_noDisponible(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora3In, Hora3Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = datetime.time(hour = 7, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 9, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (2, False))
 
-	# normal
-	def test_BusquedaBin_noDisponible_reservarTodoElDia(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora3In, Hora3Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (1, False))
+# 	# normal
+# 	def test_BusquedaBin_noDisponible_reservarTodoElDia(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora3In, Hora3Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (1, False))
 
-	# caso borde
-	def test_BusquedaBin_lista_solo_maxmin(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = datetime.time(hour = 12, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 18, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (1, True))
+# 	# caso borde
+# 	def test_BusquedaBin_lista_solo_maxmin(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = datetime.time(hour = 12, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 18, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (1, True))
 
-	# caso borde
-	def test_BusquedaBin_horasIguales_Inicio(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 6, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (1, True))
+# 	# caso borde
+# 	def test_BusquedaBin_horasIguales_Inicio(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 6, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (1, True))
 
-	# caso borde
-	def test_BusquedaBin_horasIguales_Fin(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = datetime.time(hour = 22, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (1, True))
+# 	# caso borde
+# 	def test_BusquedaBin_horasIguales_Fin(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = datetime.time(hour = 22, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (1, True))
 
-	# malicia
-	def test_BusquedaBin_lista_no_inicializada(self):
-		lista = []
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (0, True))
+# 	# malicia
+# 	def test_BusquedaBin_lista_no_inicializada(self):
+# 		lista = []
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (0, True))
 
-	# malicia
-	def test_BusquedaBin_lista_None(self):
-		lista = None
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (0, False))
+# 	# malicia
+# 	def test_BusquedaBin_lista_None(self):
+# 		lista = None
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (0, False))
 
-	# malicia
-	def test_BusquedaBin_lista_noLista(self):
-		lista = 'String'
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (0, False))
+# 	# malicia
+# 	def test_BusquedaBin_lista_noLista(self):
+# 		lista = 'String'
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (0, False))
 
-	# malicia
-	def test_BusquedaBin_horaIngreso_None(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = None
-		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (0, False))
+# 	# malicia
+# 	def test_BusquedaBin_horaIngreso_None(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = None
+# 		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (0, False))
 
-	# malicia
-	def test_BusquedaBin_horaSalida_None(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = None
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (0, False))
+# 	# malicia
+# 	def test_BusquedaBin_horaSalida_None(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = None
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (0, False))
 
-	# malicia
-	def test_BusquedaBin_horaIngreso_no_datetime(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = 'String'
-		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (0, False))
+# 	# malicia
+# 	def test_BusquedaBin_horaIngreso_no_datetime(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = 'String'
+# 		HoraOut = datetime.time(hour = 22, minute = 0, second = 0)
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (0, False))
 
-	# malicia
-	def test_BusquedaBin_horaSalida_no_datetime(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = 'String'
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (0, False))
+# 	# malicia
+# 	def test_BusquedaBin_horaSalida_no_datetime(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = 'String'
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (0, False))
 
-	# normal
-	def test_BusquedaBin_todoEn_None(self):
-		lista = None
-		HoraIn = None
-		HoraOut = None
-		x = busquedaBin(HoraIn, HoraOut, lista)
-		self.assertEqual(x, (0, False))
+# 	# normal
+# 	def test_BusquedaBin_todoEn_None(self):
+# 		lista = None
+# 		HoraIn = None
+# 		HoraOut = None
+# 		x = busquedaBin(HoraIn, HoraOut, lista)
+# 		self.assertEqual(x, (0, False))
 
-# buscar, Pruebas Integracion, funcion 'busquedaBin' con 'buscar'
+# # buscar, Pruebas Integracion, funcion 'busquedaBin' con 'buscar'
 
-	# normal
-	def test_buscar_funcionalidadOK(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		estacionamiento = [lista for x in range(2)]
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (0, 1, True))
+# 	# normal
+# 	def test_buscar_funcionalidadOK(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		estacionamiento = [lista for x in range(2)]
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (0, 1, True))
 
-	# caso borde
-	def test_buscar_horas_Iguales(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora2In, Hora2Out])
-		estacionamiento = [lista for x in range(2)]
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 6, minute = 0, second = 0)
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (0, 1, True))
+# 	# caso borde
+# 	def test_buscar_horas_Iguales(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		estacionamiento = [lista for x in range(2)]
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 6, minute = 0, second = 0)
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (0, 1, True))
 
-	# caso borde
-	def test_buscar_estacionamientoLleno(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora3In, Hora3Out])
-		lista.append([Hora2In, Hora2Out])
-		estacionamiento = [lista for x in range(2)]
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# caso borde
+# 	def test_buscar_estacionamientoLleno(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora3In, Hora3Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		estacionamiento = [lista for x in range(2)]
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
-	# malicia
-	def test_buscar_estacionamiento_None(self):
-		estacionamiento = None
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# malicia
+# 	def test_buscar_estacionamiento_None(self):
+# 		estacionamiento = None
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
-	# malicia
-	def test_buscar_estacionamiento_noLista(self):
-		estacionamiento = 'String'
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# malicia
+# 	def test_buscar_estacionamiento_noLista(self):
+# 		estacionamiento = 'String'
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
-	# malicia
-	def test_buscar_estacionamiento_noInicializado(self):
-		estacionamiento = []
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# malicia
+# 	def test_buscar_estacionamiento_noInicializado(self):
+# 		estacionamiento = []
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
-	# malicia
-	def test_buscar_horaIngreso_None(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora3In, Hora3Out])
-		lista.append([Hora2In, Hora2Out])
-		estacionamiento = [lista for x in range(2)]
-		HoraIn = None
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# malicia
+# 	def test_buscar_horaIngreso_None(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora3In, Hora3Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		estacionamiento = [lista for x in range(2)]
+# 		HoraIn = None
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
-	# malicia
-	def test_buscar_horaFin_None(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora3In, Hora3Out])
-		lista.append([Hora2In, Hora2Out])
-		estacionamiento = [lista for x in range(2)]
-		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
-		HoraOut = None
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# malicia
+# 	def test_buscar_horaFin_None(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora3In, Hora3Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		estacionamiento = [lista for x in range(2)]
+# 		HoraIn = datetime.time(hour = 6, minute = 0, second = 0)
+# 		HoraOut = None
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
-	# malicia
-	def test_buscar_horaIngreso_noDatetime(self):
-		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
-		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
-		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
-		lista = []
-		lista.append([Hora1In, Hora1Out])
-		lista.append([Hora3In, Hora3Out])
-		lista.append([Hora2In, Hora2Out])
-		estacionamiento = [lista for x in range(2)]
-		HoraIn = 'String'
-		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# malicia
+# 	def test_buscar_horaIngreso_noDatetime(self):
+# 		Hora1In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora1Out = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3In = datetime.time(hour = 6, minute = 0, second = 0)
+# 		Hora3Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2In = datetime.time(hour = 22, minute = 0, second = 0)
+# 		Hora2Out = datetime.time(hour = 22, minute = 0, second = 0)
+# 		lista = []
+# 		lista.append([Hora1In, Hora1Out])
+# 		lista.append([Hora3In, Hora3Out])
+# 		lista.append([Hora2In, Hora2Out])
+# 		estacionamiento = [lista for x in range(2)]
+# 		HoraIn = 'String'
+# 		HoraOut = datetime.time(hour = 12, minute = 0, second = 0)
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
-	# normal
-	def test_buscar_todo_None(self):
-		estacionamiento = None
-		HoraIn = None
-		HoraOut = None
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# normal
+# 	def test_buscar_todo_None(self):
+# 		estacionamiento = None
+# 		HoraIn = None
+# 		HoraOut = None
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
-	# normal
-	def test_buscar_todo_invalido(self):
-		estacionamiento = 'String'
-		HoraIn = 42
-		HoraOut = 42
-		x = buscar(HoraIn, HoraOut, estacionamiento)
-		self.assertEqual(x, (-1, -1, False))
+# 	# normal
+# 	def test_buscar_todo_invalido(self):
+# 		estacionamiento = 'String'
+# 		HoraIn = 42
+# 		HoraOut = 42
+# 		x = buscar(HoraIn, HoraOut, estacionamiento)
+# 		self.assertEqual(x, (-1, -1, False))
 
 
 # insertarReserva, Pruebas Unitarias

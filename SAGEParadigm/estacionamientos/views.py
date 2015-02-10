@@ -8,7 +8,7 @@ from estacionamientos.forms import EstacionamientoExtendedForm
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
-from estacionamientos.models import Estacionamiento, ReservasModel
+from estacionamientos.models import Estacionamiento, Reserva
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
@@ -113,19 +113,20 @@ def estacionamiento_reserva(request, _id):
 
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
-            m_validado = validarHorarioReserva(inicio_reserva, final_reserva, estacionamiento.Reservas_Inicio, estacionanmiento.Reservas_Cierre)
+            m_validado = validarHorarioReserva(inicioReserva, finalReserva, estacionamiento.reservasInicio, estacionamiento.reservasCierre)
 
             # Si no es valido devolvemos el request
             if not m_validado[0]:
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
 
             if marzullo(_id, estacionamiento.nroPuesto, inicioReserva, finalReserva):
-                return render(request, 'estacionamientoPagarReserva.html', {'reserva' : reservaFinal,'color':'green', 'mensaje':'Se realizo la reserva exitosamente'})
+                reserva = Reserva(estacionamiento=estacionamiento,inicioReserva=inicioReserva,finalReserva=finalReserva)
+                return render(request, 'estacionamientoPagarReserva.html', {'reserva': reserva,'color':'green', 'mensaje':'Existe un puesto disponible'})
             else:
                 # Cambiar mensaje
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje':'No hay un puesto disponible para ese horario'})
 
-    return render(request, 'estacionamientoReserva.html', {'form': form, 'estacionamiento': estacion})
+    return render(request, 'estacionamientoReserva.html', {'form': form, 'estacionamiento': estacionamiento})
 
 def estacionamiento_pago(request,_id):
     form = PagoTarjetaDeCredito()
