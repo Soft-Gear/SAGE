@@ -16,6 +16,7 @@ def estacionamientos_all(request):
 
     # Si es un GET, mandamos un formulario vacio
     if request.method == 'GET':
+
         form = EstacionamientoForm()
 
     # Si es POST, se verifica la información recibida
@@ -59,6 +60,7 @@ def estacionamiento_detail(request, _id):
         return render(request, '404.html')
 
     if request.method == 'GET':
+
         form = EstacionamientoExtendedForm()
 
     elif request.method == 'POST':
