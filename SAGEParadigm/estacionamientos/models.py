@@ -49,10 +49,10 @@ class EsquemaTarifario(models.Model):
 
 class TarifaHora(EsquemaTarifario):
 	
-	def calcularPrecio(self,rate, horaInicio,horaFinal):
+	def calcularPrecio(self,horaInicio,horaFinal):
 		a=(horaFinal-horaInicio).seconds
 		a=ceil(a/3600) #  De los segundos se calculan las horas en la funcion techo
-		return(tarifa*a)
+		return(self.tarifa*a)
 		
 
 class TarifaMinuto(EsquemaTarifario):

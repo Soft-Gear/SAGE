@@ -7,6 +7,7 @@ import unittest
 
 from estacionamientos.controller import *
 from estacionamientos.forms import *
+from estacionamientos.models import *
 from estacionamientos.forms import *
 
 
@@ -1254,4 +1255,25 @@ class SimpleFormTestCase(TestCase):
 		x = reservar(None, None, None)
 		self.assertEqual(x, 1)
 
+class RateTestCase(TestCase):
+	
+	def test_OneHourRate(self):
+		rate = TarifaHora(tarifa = 800)
+		initial_datetime = datetime.datetime(2015,1,23,8)
+		final_datetime = datetime.datetime(2015,1,23,9)
+		value = rate.calcularPrecio(initial_datetime, final_datetime)
+		self.assertEquals(value, 800)
 		
+	def test_FiveHoursRate(self):
+		rate = TarifaHora(tarifa = 800)
+		initial_datetime = datetime.datetime(2015,1,23,8)
+		final_datetime = datetime.datetime(2015,1,23,13)
+		value = rate.calcularPrecio(initial_datetime, final_datetime)
+		self.assertEquals(value, 4000)
+		
+	def test_LessThanAnHour(self):
+		rate = TarifaHora(tarifa = 800)
+		initial_datetime = datetime.datetime(2015,1,23,8)
+		final_datetime = datetime.datetime(2015,1,23,8,15)
+		value = rate.calcularPrecio(initial_datetime, final_datetime)
+		self.assertEquals(value, 800)
