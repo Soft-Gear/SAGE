@@ -7,6 +7,7 @@ import unittest
 
 from estacionamientos.controller import *
 from estacionamientos.forms import *
+from estacionamientos.models import *
 from estacionamientos.forms import *
 from estacionamientos.models import TarifaMinuto, EsquemaTarifario
 
@@ -1254,13 +1255,32 @@ class SimpleFormTestCase(TestCase):
 	def test_reservar_todo_None(self):
 		x = reservar(None, None, None)
 		self.assertEqual(x, 1)
-		
-class estaTest(unittest.TestCase):
-		
+
+class RateTestCase(TestCase):
+	
 	def test_oneMinutePay(self):
 		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
 		final_time = datetime.datetime(2009, 1, 24, 0, 1, 0, 0)
-		#rate = EsquemaTarifario.objects.get(all)
 		rate = TarifaMinuto(tarifa = 80)
 		self.assertEqual(rate.calcularPrecio(initial_time,final_time),80)
+	
+	def test_OneHourRate(self):
+		rate = TarifaHora(tarifa = 800)
+		initial_datetime = datetime.datetime(2015,1,23,8)
+		final_datetime = datetime.datetime(2015,1,23,9)
+		value = rate.calcularPrecio(initial_datetime, final_datetime)
+		self.assertEquals(value, 800)
 		
+	def test_FiveHoursRate(self):
+		rate = TarifaHora(tarifa = 800)
+		initial_datetime = datetime.datetime(2015,1,23,8)
+		final_datetime = datetime.datetime(2015,1,23,13)
+		value = rate.calcularPrecio(initial_datetime, final_datetime)
+		self.assertEquals(value, 4000)
+		
+	def test_LessThanAnHour(self):
+		rate = TarifaHora(tarifa = 800)
+		initial_datetime = datetime.datetime(2015,1,23,8)
+		final_datetime = datetime.datetime(2015,1,23,8,15)
+		value = rate.calcularPrecio(initial_datetime, final_datetime)
+		self.assertEquals(value, 800)

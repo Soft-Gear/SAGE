@@ -3,6 +3,8 @@ from django.db import models
 from math import ceil
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from datetime import time, timedelta
+from math import ceil
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
@@ -24,7 +26,6 @@ class Estacionamiento(models.Model):
 	object_id = models.PositiveIntegerField()
 	esquemaTarifa = GenericForeignKey()
 
-    # 
 
 	tarifa = models.CharField(max_length = 50, blank = True, null = True)
 	apertura = models.TimeField(blank = True, null = True)
@@ -50,7 +51,9 @@ class EsquemaTarifario(models.Model):
 class TarifaHora(EsquemaTarifario):
 
 	def calcularPrecio(self,horaInicio,horaFinal):
-		pass
+		a=(horaFinal-horaInicio).seconds
+		a=ceil(a/3600) #  De los segundos se calculan las horas en la funcion techo
+		return(self.tarifa*a)
 
 class TarifaMinuto(EsquemaTarifario):
 
