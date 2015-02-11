@@ -38,11 +38,11 @@ def estacionamientos_all(request):
                 nombre = form.cleaned_data['nombre'],
                 direccion = form.cleaned_data['direccion'],
                 rif = form.cleaned_data['rif'],
-                telefono1 = form.cleaned_data['telefono_1'],
-                telefono2 = form.cleaned_data['telefono_2'],
-                telefono3 = form.cleaned_data['telefono_3'],
-                email1 = form.cleaned_data['email_1'],
-                email2 = form.cleaned_data['email_2']
+                telefono1 = form.cleaned_data['telefono1'],
+                telefono2 = form.cleaned_data['telefono2'],
+                telefono3 = form.cleaned_data['telefono3'],
+                email1 = form.cleaned_data['email1'],
+                email2 = form.cleaned_data['email2']
             )
             obj.save()
             # Recargamos los estacionamientos ya que acabamos de agregar

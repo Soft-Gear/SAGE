@@ -19,6 +19,14 @@ class Estacionamiento(models.Model):
 
 	rif = models.CharField(max_length = 12)
 
+	# Campos para referenciar al esquema de tarifa
+
+	content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    esquemaTarifa = GenericForeignKey()
+
+    # 
+
 	tarifa = models.CharField(max_length = 50, blank = True, null = True)
 	apertura = models.TimeField(blank = True, null = True)
 	cierre = models.TimeField(blank = True, null = True)
@@ -26,7 +34,26 @@ class Estacionamiento(models.Model):
 	reservasCierre = models.TimeField(blank = True, null = True)
 	nroPuesto = models.IntegerField(blank = True, null = True)
 
+
 class Reserva(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
 	inicioReserva = models.TimeField()
 	finalReserva = models.TimeField()
+
+class EsquemaTarifario(models.Model):
+	# No se cuantos digitos o decimales deberiamos poner
+	tarifa = models.DecimalField(max_digits=10, decimal_places=4) 
+
+	class Meta:
+		abstract = True
+
+
+class TarifaHora(EsquemaTarifario):
+
+	def calcularPrecio(horaInicio,horaFinal):
+		pass
+
+class TarifaMinuto(EsquemaTarifario):
+
+	def calcularPrecio(horaInicio,horaFinal):
+		pass
