@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from math import ceil
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -48,10 +49,14 @@ class EsquemaTarifario(models.Model):
 
 class TarifaHora(EsquemaTarifario):
 
-	def calcularPrecio(horaInicio,horaFinal):
+	def calcularPrecio(self,horaInicio,horaFinal):
 		pass
 
 class TarifaMinuto(EsquemaTarifario):
 
-	def calcularPrecio(horaInicio,horaFinal):
-		pass
+	def calcularPrecio(self,horaInicio,horaFinal):
+		if(horaInicio>horaFinal):
+			raise ValueError("Fechas inválidos.")
+		time = (horaFinal-horaInicio).seconds
+		minutes = ceil(time/60)
+		return (minutes*self.tarifa)
