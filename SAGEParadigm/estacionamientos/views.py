@@ -148,7 +148,11 @@ def estacionamiento_reserva(request, _id):
                                         FinalReserva = final_reserva
                                     )
                     reservaFinal.save()
-                    return render(request, 'estacionamientoPagarReserva.html', {'reserva' : reservaFinal,'color':'green', 'mensaje':'Se realizo la reserva exitosamente'})
+                    return render(request, 'estacionamientoPagarReserva.html',
+								  {'reserva' : reservaFinal,
+								   'color'   : 'green',
+								   'mensaje' :'Se realizo la reserva exitosamente',
+								  'id' : _id})
                 else:
                     return render(request, 'templateMensaje.html', {'color':'red', 'mensaje':'No hay un puesto disponible para ese horario'})
     else:
@@ -162,6 +166,6 @@ def estacionamiento_pago(request,_id):
         form = PagoTarjetaDeCredito(request.POST)
         print (request.POST['numeroTarjeta'])
         if form.is_valid():
-            return render(request,'pago.html',{"color": "green",'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
+            return render(request,'pago.html',{"id": _id, "color": "green",'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
     return render(request, 'pago.html', {'form':form})
 
