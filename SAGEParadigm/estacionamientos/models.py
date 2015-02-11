@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-
-from django.core.validators import RegexValidator
 from django.db import models
-from django.forms import ModelForm
-
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
@@ -22,8 +20,8 @@ class Estacionamiento(models.Model):
 	# Campos para referenciar al esquema de tarifa
 
 	content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    esquemaTarifa = GenericForeignKey()
+	object_id = models.PositiveIntegerField()
+	esquemaTarifa = GenericForeignKey()
 
     # 
 
