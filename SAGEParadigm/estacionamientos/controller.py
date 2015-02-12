@@ -45,7 +45,7 @@ def marzullo(idEstacionamiento, hIn, hOut):
 	capacidad = e.nroPuesto
 
 	for reserva in e.reserva_set.all():
-		ocupacion += [(reserva.inicioReserva, 1), (reserva.finReserva, -1)]
+		ocupacion += [(reserva.inicioReserva, 1), (reserva.finalReserva, -1)]
 	ocupacion += [(hIn, 1), (hOut, -1)]
 
 	count = 0
