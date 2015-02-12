@@ -8,7 +8,15 @@ from estacionamientos.forms import EstacionamientoExtendedForm
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
+<<<<<<< HEAD
 from estacionamientos.models import Estacionamiento, Reserva
+=======
+from estacionamientos.models import Estacionamiento, ReservasModel
+
+
+listaReserva = []
+reservaFinal = ""
+>>>>>>> PagoTarifa
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
@@ -107,6 +115,7 @@ def estacionamiento_reserva(request, _id):
 
     # Si es un POST estan mandando un request
     elif request.method == 'POST':
+<<<<<<< HEAD
         form = EstacionamientoReserva(request.POST)
         # Verificamos si es valido con los validadores del formulario
         if form.is_valid():
@@ -116,6 +125,42 @@ def estacionamiento_reserva(request, _id):
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
             m_validado = validarHorarioReserva(inicioReserva, finalReserva, estacionamiento.reservasInicio, estacionamiento.reservasCierre)
+=======
+            form = EstacionamientoReserva(request.POST)
+            # Verificamos si es valido con los validadores del formulario
+            if form.is_valid():
+                inicio_reserva = form.cleaned_data['inicio']
+                final_reserva = form.cleaned_data['final']
+
+                # Validamos los horarios con los horario de salida y entrada
+                m_validado = validarHorarioReserva(inicio_reserva, final_reserva, estacion.Reservas_Inicio, estacion.Reservas_Cierre)
+
+                # Si no es valido devolvemos el request
+                if not m_validado[0]:
+                    return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
+
+                # Si esta en un rango valido, procedemos a buscar en la lista
+                # el lugar a insertar
+                x = buscar(inicio_reserva, final_reserva, listaReserva)
+                if x[2] == True :
+                    reservar(inicio_reserva, final_reserva, listaReserva)
+                    global reservaFinal
+                    reservaFinal = ReservasModel(
+                                        Estacionamiento = estacion,
+                                        Puesto = x[0],
+                                        InicioReserva = inicio_reserva,
+                                        FinalReserva = final_reserva
+                                    )
+                    return render(request, 'estacionamientoPagarReserva.html',
+								  {'reserva' : reservaFinal,
+								   'color'   : 'green',
+								   'mensaje' :'Se realizo la reserva exitosamente',
+								   'id' : _id})
+                else:
+                    return render(request, 'templateMensaje.html', {'color':'red', 'mensaje':'No hay un puesto disponible para ese horario'})
+    else:
+        form = EstacionamientoReserva()
+>>>>>>> PagoTarifa
 
             # Si no es valido devolvemos el request
             if not m_validado[0]:
@@ -134,7 +179,8 @@ def estacionamiento_pago(request,_id):
     form = PagoTarjetaDeCredito()
     if request.method == 'POST':
         form = PagoTarjetaDeCredito(request.POST)
-        print (request.POST['numeroTarjeta'])
         if form.is_valid():
-            return render(request,'pago.html',{"color": "green",'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
+            global reservaFinal
+            reservaFinal.save()
+            return render(request,'pago.html',{"id": _id, "color": "green",'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
     return render(request, 'pago.html', {'form':form})
