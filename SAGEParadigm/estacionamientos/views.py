@@ -121,7 +121,7 @@ def estacionamiento_reserva(request, _id):
             if not m_validado[0]:
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
 
-            if marzullo(_id, estacionamiento.nroPuesto, inicioReserva, finalReserva):
+            if marzullo(_id, inicioReserva, finalReserva):
                 reserva = Reserva(estacionamiento=estacionamiento,inicioReserva=inicioReserva,finalReserva=finalReserva)
                 return render(request, 'estacionamientoPagarReserva.html', {'reserva': reserva,'color':'green', 'mensaje':'Existe un puesto disponible'})
             else:
