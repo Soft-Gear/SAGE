@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from math import ceil
+from math import ceil, floor
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from datetime import time, timedelta
@@ -51,15 +51,35 @@ class EsquemaTarifario(models.Model):
 class TarifaHora(EsquemaTarifario):
 
 	def calcularPrecio(self,horaInicio,horaFinal):
-		a=(horaFinal-horaInicio).seconds
-		a=ceil(a/3600) #  De los segundos se calculan las horas en la funcion techo
+		time = (horaFinal-horaInicio).seconds+((horaFinal-horaInicio).days)*86400
+		a=ceil(time/3600) #  De los segundos se calculan las horas en la funcion techo
 		return(self.tarifa*a)
 
 class TarifaMinuto(EsquemaTarifario):
 
 	def calcularPrecio(self,horaInicio,horaFinal):
-		if(horaInicio>horaFinal):
+		if(horaInicio>=horaFinal):
 			raise ValueError("Fechas inválidos.")
-		time = (horaFinal-horaInicio).seconds
+		time = (horaFinal-horaInicio).seconds+((horaFinal-horaInicio).days)*86400
+		print("---"+str(time)+"---")
 		minutes = ceil(time/60)
 		return (minutes*self.tarifa)
+	
+class TarifaHorayFraccion(EsquemaTarifario):
+
+	def calcularPrecio(self,horaInicio,horaFinal):
+		#en este modelo se supone que la tarifa es lo que cuesta una hora
+		if(horaInicio>=horaFinal):
+			raise ValueError("Fechas inválidos.")
+		time = (horaFinal-horaInicio).seconds+((horaFinal-horaInicio).days)*86400
+		if(time>3600):
+			valor = (floor(time/3600)*self.tarifa)
+			if((time%3600)==0):
+				pass
+			elif((time%3600)>1800):
+				valor += self.tarifa
+			else:
+				valor += self.tarifa/2
+		else:
+			valor = self.tarifa
+		return valor

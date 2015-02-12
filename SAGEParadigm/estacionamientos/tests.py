@@ -1258,11 +1258,89 @@ class SimpleFormTestCase(TestCase):
 
 class RateTestCase(TestCase):
 	
+	def test_ceroHourFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 1)
+		self.assertRaises(ValueError,rate.calcularPrecio,initial_time,final_time)
+		
+	def test_oneHourFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 1, 0, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
+		
+	def test_twoHourFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 2, 0, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
+		
+	def test_halfHourFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 0, 30, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
+		
+	def test_onePlusHalfHourFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 1, 30, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),3)
+		
+	def test_DecimalFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 1, 30, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 1)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1.5)
+		
+	def test_onePlusHalfPlusMinuteHourFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 1, 31, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
+		
+	def test_oneDayFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 25, 0, 0, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),48)
+		
+	def test_oneDayPlusHalfFraccionPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 25, 0, 30, 0, 0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),49)
+	
+	def test_ceroMinutePay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		rate = TarifaMinuto(tarifa = 80)
+		self.assertRaises(ValueError,rate.calcularPrecio,initial_time,final_time)
+	
 	def test_oneMinutePay(self):
 		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
 		final_time = datetime.datetime(2009, 1, 24, 0, 1, 0, 0)
 		rate = TarifaMinuto(tarifa = 80)
 		self.assertEqual(rate.calcularPrecio(initial_time,final_time),80)
+		
+	def test_twoMinutePay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 24, 0, 2, 0, 0)
+		rate = TarifaMinuto(tarifa = 80)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),160)
+		
+	def test_oneDayMinutePay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 25, 0, 0, 0, 0)
+		rate = TarifaMinuto(tarifa = 1)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1440)
+		
+	def test_oneDayAndAMinuteMinutePay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 25, 0, 1, 0, 0)
+		rate = TarifaMinuto(tarifa = 1)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1441)
 	
 	def test_OneHourRate(self):
 		rate = TarifaHora(tarifa = 800)
@@ -1284,3 +1362,9 @@ class RateTestCase(TestCase):
 		final_datetime = datetime.datetime(2015,1,23,8,15)
 		value = rate.calcularPrecio(initial_datetime, final_datetime)
 		self.assertEquals(value, 800)
+		
+	def test_oneDayHourPay(self):
+		initial_time = datetime.datetime(2009, 1, 24, 0, 0, 0, 0)
+		final_time = datetime.datetime(2009, 1, 25, 0, 0, 0, 0)
+		rate = TarifaHora(tarifa = 1)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),24)
