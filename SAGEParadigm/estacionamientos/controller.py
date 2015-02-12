@@ -2,15 +2,6 @@
 import datetime
 from estacionamientos.models import Estacionamiento, Reserva
 
-# Las Tuplas de cada puesto deben tener los horarios de inicio y de cierre para que
-# pueda funcionar [(7:00,7:00), (19:00,19:00)]
-
-
-# Suponiendo que cada estacionamiento tiene una estructura "matricial" lista de listas
-# donde si m es una matriz, m[i,j] las i corresponden a los puestos y las j corresponden a tuplas
-# con el horario inicio y fin de las reservas
-# [[(horaIn,horaOut),(horaIn,horaOut)],[],....]
-
 # chequeo de horarios de extended
 def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
 
@@ -28,34 +19,6 @@ def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
 		return (False, 'El horario de cierre de estacionamiento debe ser mayor o igual al horario de finalización de reservas')
 	return (True, '')
 
-# inserta ordenadamente por hora de inicio
-def insertarReserva(hin, hout, puesto, listaReserva):
-	# no verifica precondicion, se supone que se hace buscar antes para ver si se puede agregar
-	if not isinstance(listaReserva, list):
-		return None
-	if len(listaReserva) == 0:
-		return listaReserva
-	if not isinstance(hin, datetime.time) or not isinstance(hout, datetime.time):
-		return listaReserva
-	tupla = (hin, hout)
-	listaReserva.insert(puesto, tupla)
-	# estacionamiento[puesto].sort()
-	return listaReserva
-
-def reservar(hin, hout, estacionamiento):
-	if not isinstance(estacionamiento, list):
-		return 1
-	if len(estacionamiento) == 0:
-		return 1
-	if not isinstance(hin, datetime.time) or not isinstance(hout, datetime.time):
-		return 1
-	puesto = buscar(hin, hout, estacionamiento)
-	if puesto[2] != False:
-		estacionamiento[puesto[0]] = insertarReserva(hin, hout, puesto[1], estacionamiento[puesto[0]])
-		return estacionamiento
-	else:
-		return 1
-
 def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCierre):
 	if ReservaInicio >= ReservaFin:
 		return (False, 'El horario de apertura debe ser menor al horario de cierre')
@@ -67,9 +30,12 @@ def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCie
 		return (False, 'El horario de cierre de reserva debe estar en un horario válido')
 	return (True, '')
 
-def marzullo(idEstacionamiento, capacidad, hIn, hOut):
+def marzullo(idEstacionamiento, hIn, hOut):
+	e = Estacionamiento.objects.get(id = idEstacionamiento)
 	ocupacion = []
-	for reserva in Reserva.objects.filter(estacionamiento=idEstacionamiento):
+	capacidad = e.nroPuesto
+
+	for reserva in e.reserva_set.all():
 		ocupacion += [(reserva.inicioReserva, 1), (reserva.finalReserva, -1)]
 	ocupacion += [(hIn, 1), (hOut, -1)]
 

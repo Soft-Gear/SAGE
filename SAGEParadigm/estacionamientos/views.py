@@ -117,13 +117,13 @@ def estacionamiento_reserva(request, _id):
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
             m_validado = validarHorarioReserva(inicioReserva, finalReserva, estacionamiento.reservasInicio, estacionamiento.reservasCierre)
-            
+
 
             # Si no es valido devolvemos el request
             if not m_validado[0]:
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
 
-            if marzullo(_id, estacionamiento.nroPuesto, inicioReserva, finalReserva):
+            if marzullo(_id, inicioReserva, finalReserva):
                 global reservaFinal
                 reservaFinal = Reserva(estacionamiento=estacionamiento,inicioReserva=inicioReserva,finalReserva=finalReserva)
                 return render(request, 'estacionamientoPagarReserva.html', {'reserva': reservaFinal,'color':'green', 'mensaje':'Existe un puesto disponible'})
