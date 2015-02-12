@@ -70,7 +70,7 @@ def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCie
 def marzullo(idEstacionamiento, capacidad, hIn, hOut):
 	ocupacion = []
 	for reserva in Reserva.objects.filter(estacionamiento=idEstacionamiento):
-		ocupacion += [(reserva.inicioReserva, 1), (reserva.finReserva, -1)]
+		ocupacion += [(reserva.inicioReserva, 1), (reserva.finalReserva, -1)]
 	ocupacion += [(hIn, 1), (hOut, -1)]
 
 	count = 0
