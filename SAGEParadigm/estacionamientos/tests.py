@@ -1285,9 +1285,3 @@ class RateTestCase(TestCase):
 		value = rate.calcularPrecio(initial_time, final_time)
 		self.assertEqual(value, 24)
 	
-	def test_ZeroMinutes(self):
-		rate=TarifaHora(tarifa=1)
-		initial_time=datetime.time(15,0)
-		final_time=datetime.time(15,0)
-		value = rate.calcularPrecio(initial_time, final_time)
-		self.assertEqual(value, 24)
