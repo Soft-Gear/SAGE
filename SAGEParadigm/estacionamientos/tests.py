@@ -9,6 +9,7 @@ from estacionamientos.controller import *
 from estacionamientos.forms import *
 from estacionamientos.models import *
 from estacionamientos.forms import *
+from estacionamientos.models import TarifaMinuto,TarifaHora,TarifaHorayFraccion
 
 
 ###################################################################
@@ -1257,6 +1258,71 @@ class SimpleFormTestCase(TestCase):
 
 class RateTestCase(TestCase):
 	
+	#Pruebas para tarifa de hora y fraccion
+		
+	def test_oneHourFraccionPay(self):
+		initial_time = datetime.time(13,0)
+		final_time = datetime.time(14,0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
+		
+	def test_twoHourFraccionPay(self):
+		initial_time = datetime.time(13,0)
+		final_time = datetime.time(15,0)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
+		
+	def test_halfHourFraccionPay(self):
+		initial_time = datetime.time(13,15)
+		final_time = datetime.time(13,45)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
+		
+	def test_onePlusHalfHourFraccionPay(self):
+		initial_time = datetime.time(13,0)
+		final_time = datetime.time(14,30)
+		rate = TarifaHorayFraccion(tarifa = 20)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),30)
+		
+	def test_DecimalFraccionPay(self):
+		initial_time = datetime.time(19,0)
+		final_time = datetime.time(20,15)
+		rate = TarifaHorayFraccion(tarifa = 1)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1.5)
+		
+	def test_onePlusHalfPlusMinuteHourFraccionPay(self):
+		initial_time = datetime.time(15,15)
+		final_time = datetime.time(16,46)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
+		
+	def test_oneDayFraccionPay(self):
+		initial_time = datetime.time(0,0)
+		final_time = datetime.time(23,59)
+		rate = TarifaHorayFraccion(tarifa = 2)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),48)
+		
+	# Pruebas para la tarifa por minuto
+	
+	def test_oneMinutePay(self):
+		initial_time = datetime.time(15,1)
+		final_time = datetime.time(15,2)
+		rate = TarifaMinuto(tarifa = 80)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),80)
+		
+	def test_twoMinutePay(self):
+		initial_time = datetime.time(15,1)
+		final_time = datetime.time(15,3)
+		rate = TarifaMinuto(tarifa = 80)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),160)
+		
+	def test_oneDayMinutePay(self):
+		initial_time = datetime.time(0,0)
+		final_time = datetime.time(23,59)
+		rate = TarifaMinuto(tarifa = 1)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1439)
+
+	# Pruebas para la clase tarifa	
 	def test_OneHourRate(self):
 		rate = TarifaHora(tarifa = 800)
 		initial_datetime = datetime.time(13,0)
@@ -1284,4 +1350,3 @@ class RateTestCase(TestCase):
 		final_time=datetime.time(23,59)
 		value = rate.calcularPrecio(initial_time, final_time)
 		self.assertEqual(value, 24)
-	
