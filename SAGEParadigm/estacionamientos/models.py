@@ -21,8 +21,8 @@ class Estacionamiento(models.Model):
 
 	# Campos para referenciar al esquema de tarifa
 
-	content_type = models.ForeignKey(ContentType)
-	object_id = models.PositiveIntegerField()
+	content_type = models.ForeignKey(ContentType,null=True)
+	object_id = models.PositiveIntegerField(null=True)
 	esquemaTarifa = GenericForeignKey()
 
 
