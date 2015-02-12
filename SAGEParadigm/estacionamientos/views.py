@@ -3,6 +3,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 
+from decimal import Decimal
 from estacionamientos.controller import *
 from estacionamientos.forms import EstacionamientoExtendedForm, EstacionamientoExtendedForm2
 from estacionamientos.forms import EstacionamientoForm
@@ -138,7 +139,8 @@ def estacionamiento_reserva(request, _id):
             if marzullo(_id, inicioReserva, finalReserva):
                 global reservaFinal
                 reservaFinal = Reserva(estacionamiento=estacionamiento,inicioReserva=inicioReserva,finalReserva=finalReserva)
-                return render(request, 'estacionamientoPagarReserva.html', {'reserva': reservaFinal,'color':'green', 'mensaje':'Existe un puesto disponible'})
+                monto = Decimal(estacionamiento.esquemaTarifa.calcularPrecio(inicioReserva,finalReserva))
+                return render(request, 'estacionamientoPagarReserva.html', {'id': _id,'monto': monto,'reserva': reservaFinal,'color':'green', 'mensaje':'Existe un puesto disponible'})
             else:
                 # Cambiar mensaje
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje':'No hay un puesto disponible para ese horario'})

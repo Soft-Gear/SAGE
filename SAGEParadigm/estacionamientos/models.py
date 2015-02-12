@@ -63,7 +63,7 @@ class TarifaMinuto(EsquemaTarifario):
 	
 	def calcularPrecio(self,horaInicio,horaFinal):
 		minutes = (horaFinal.hour-horaInicio.hour)*60+(horaFinal.minute-horaInicio.minute)
-		return (minutes*self.tarifa)
+		return (minutes*self.tarifa/60)
 	
 	def  tipo(self):
 		return("Tarifa por minuto")
@@ -74,13 +74,11 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		time = (horaFinal.hour-horaInicio.hour)*3600+(horaFinal.minute-horaInicio.minute)*60
 		if(time>3600):
 			valor = (floor(time/3600)*self.tarifa)
-			print(valor)
 			if((time%3600)==0):
 				pass
 			elif((time%3600)>1800):
 				valor += self.tarifa
 			else:
-				print()
 				valor += self.tarifa/2
 		else:
 			valor = self.tarifa

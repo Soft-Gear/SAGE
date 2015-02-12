@@ -722,19 +722,19 @@ class RateTestCase(TestCase):
 	def test_oneMinutePay(self):
 		initial_time = datetime.time(15,1)
 		final_time = datetime.time(15,2)
-		rate = TarifaMinuto(tarifa = 80)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),80)
+		rate = TarifaMinuto(tarifa = 60)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1)
 		
 	def test_twoMinutePay(self):
 		initial_time = datetime.time(15,1)
 		final_time = datetime.time(15,3)
-		rate = TarifaMinuto(tarifa = 80)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),160)
+		rate = TarifaMinuto(tarifa = 60)
+		self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
 		
 	def test_oneDayMinutePay(self):
 		initial_time = datetime.time(0,0)
 		final_time = datetime.time(23,59)
-		rate = TarifaMinuto(tarifa = 1)
+		rate = TarifaMinuto(tarifa = 60)
 		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1439)
 
 	# Pruebas para la clase tarifa	
