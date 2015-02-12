@@ -22,8 +22,8 @@ class Estacionamiento(models.Model):
 
 	# Campos para referenciar al esquema de tarifa
 
-	content_type = models.ForeignKey(ContentType)
-	object_id = models.PositiveIntegerField()
+	content_type = models.ForeignKey(ContentType, null = True)
+	object_id = models.PositiveIntegerField(null = True)
 	esquemaTarifa = GenericForeignKey()
 
 
@@ -42,10 +42,12 @@ class Reserva(models.Model):
 
 class EsquemaTarifario(models.Model):
 	# No se cuantos digitos o decimales deberiamos poner
-	tarifa = models.DecimalField(max_digits=10, decimal_places=4) 
-
+	tarifa = models.DecimalField(max_digits=10, decimal_places=4)
+	
 	class Meta:
 		abstract = True
+	def __str__(self):
+		return str(self.tarifa)
 
 
 class TarifaHora(EsquemaTarifario):
@@ -54,6 +56,9 @@ class TarifaHora(EsquemaTarifario):
 		time = (horaFinal-horaInicio).seconds+((horaFinal-horaInicio).days)*86400
 		a=ceil(time/3600) #  De los segundos se calculan las horas en la funcion techo
 		return(self.tarifa*a)
+	
+	def  tipo(self):
+		return("Tarifa por hora")
 
 class TarifaMinuto(EsquemaTarifario):
 
@@ -65,12 +70,15 @@ class TarifaMinuto(EsquemaTarifario):
 		minutes = ceil(time/60)
 		return (minutes*self.tarifa)
 	
+	def  tipo(self):
+		return("Tarifa por minuto")
+	
 class TarifaHorayFraccion(EsquemaTarifario):
 
 	def calcularPrecio(self,horaInicio,horaFinal):
 		#en este modelo se supone que la tarifa es lo que cuesta una hora
 		if(horaInicio>=horaFinal):
-			raise ValueError("Fechas inválidos.")
+			raise ValueError("Fechas invalidas.")
 		time = (horaFinal-horaInicio).seconds+((horaFinal-horaInicio).days)*86400
 		if(time>3600):
 			valor = (floor(time/3600)*self.tarifa)
@@ -83,3 +91,6 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		else:
 			valor = self.tarifa
 		return valor
+	
+	def  tipo(self):
+		return("Tarifa por fraccion")

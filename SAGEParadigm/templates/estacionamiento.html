@@ -162,6 +162,10 @@
         <tr><td><b><i class="fa fa-money"></i></i> Tarifa:</b></td></tr>
         <tr><td>{{estacionamiento.tarifa}} Bsf.</td></tr>
       {% endif %}
+   	  {% if estacionamiento.esquemaTarifa %}
+        <tr><td><b><i class="fa fa-circle"></i></i> Esquema:</b></td></tr>
+        <tr><td>{{estacionamiento.esquemaTarifa.tipo}} </td></tr>
+      {% endif %}
 
 
         </tbody>
@@ -197,7 +201,20 @@
                   </div>
                 </div>
               {% endfor %}
-
+              {% for field in form2 %}
+                <div class="control-group">
+                  <div class="controls">
+                      <select class="form-control" name="{{field.name}}" placeholder="{{field.label}}">
+                     	<option value='Por hora'>Por hora</option>
+                     	<option value="Por minuto">Por minuto</option>
+                     	<option value="Por fraccion">Por fraccion</option>
+                      </select>
+                      {{ field.errors }}
+                  </div>
+                </div>
+              {% endfor %}
+                
+              <form action="." method="post" class="form form-vertical">
                 <div class="control-group">
                   <label>
                   </label>
