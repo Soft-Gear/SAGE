@@ -4,11 +4,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 
 from estacionamientos.controller import *
-from estacionamientos.forms import EstacionamientoExtendedForm
+from estacionamientos.forms import EstacionamientoExtendedForm, EstacionamientoExtendedForm2
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
-from estacionamientos.models import Estacionamiento, Reserva
+from estacionamientos.models import Estacionamiento, Reserva, TarifaHora, TarifaMinuto, TarifaHorayFraccion
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
@@ -62,17 +62,27 @@ def estacionamiento_detail(request, _id):
     if request.method == 'GET':
 
         form = EstacionamientoExtendedForm()
+        form2 = EstacionamientoExtendedForm2()
 
     elif request.method == 'POST':
         # Leemos el formulario
         form = EstacionamientoExtendedForm(request.POST)
+        form2 = EstacionamientoExtendedForm2(request.POST)
         # Si el formulario
-        if form.is_valid():
+        if form.is_valid() and form2.is_valid():
             horaIn = form.cleaned_data['horarioin']
             horaOut = form.cleaned_data['horarioout']
             reservaIn = form.cleaned_data['horario_reserin']
             reservaOut = form.cleaned_data['horario_reserout']
-
+            tipo = form2.cleaned_data['esquema']
+            tmonto = form.cleaned_data['tarifa']
+            if(tipo=='Por hora'):
+                t = TarifaHora(tarifa = tmonto)
+            elif(tipo=='Por minuto'):
+                t = TarifaMinuto(tarifa = tmonto)
+            elif(tipo=='Por fraccion'):
+                t = TarifaHorayFraccion(tarifa = tmonto)
+            t.save()
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
             m_validado = HorarioEstacionamiento(horaIn, horaOut, reservaIn, reservaOut)
@@ -80,17 +90,18 @@ def estacionamiento_detail(request, _id):
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
             # debería funcionar con excepciones
 
-            estacionamiento.tarifa = form.cleaned_data['tarifa']
+            estacionamiento.tarifa = tmonto
             estacionamiento.apertura = horaIn
             estacionamiento.cierre = horaOut
             estacionamiento.reservasInicio = reservaIn
             estacionamiento.reservasCierre = reservaOut
+            estacionamiento.esquemaTarifa = t
             estacionamiento.nroPuesto = form.cleaned_data['puestos']
 
             estacionamiento.save()
             form = EstacionamientoExtendedForm()
 
-    return render(request, 'estacionamiento.html', {'form': form, 'estacionamiento': estacionamiento})
+    return render(request, 'estacionamiento.html', {'form': form, 'form2': form2, 'estacionamiento': estacionamiento})
 
 
 def estacionamiento_reserva(request, _id):

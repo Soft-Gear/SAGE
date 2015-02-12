@@ -1323,6 +1323,7 @@ class RateTestCase(TestCase):
 		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1439)
 
 	# Pruebas para la clase tarifa	
+
 	def test_OneHourRate(self):
 		rate = TarifaHora(tarifa = 800)
 		initial_datetime = datetime.time(13,0)
