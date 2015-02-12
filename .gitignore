@@ -50,7 +50,8 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
-
-# PyBuilder
 target/
 
+# PyBuilder
+
+SAGEParadigm/db.sqlite3
