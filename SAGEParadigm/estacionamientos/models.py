@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from datetime import time, timedelta
+from datetime import time
 from math import ceil
 
 class Estacionamiento(models.Model):
@@ -50,8 +50,8 @@ class EsquemaTarifario(models.Model):
 class TarifaHora(EsquemaTarifario):
 	
 	def calcularPrecio(self,horaInicio,horaFinal):
-		a=(horaFinal-horaInicio).seconds
-		a=ceil(a/3600) #  De los segundos se calculan las horas en la funcion techo
+		a=horaFinal.hour+horaFinal.minute/60-horaInicio.hour-horaInicio.minute/60 # De momento todo pasa a horas con float
+		a=ceil(a) #  De los segundos se calculan las horas en la funcion techo
 		return(self.tarifa*a)
 		
 
