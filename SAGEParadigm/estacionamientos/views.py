@@ -124,8 +124,9 @@ def estacionamiento_reserva(request, _id):
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
 
             if marzullo(_id, estacionamiento.nroPuesto, inicioReserva, finalReserva):
-                reserva = Reserva(estacionamiento=estacionamiento,inicioReserva=inicioReserva,finalReserva=finalReserva)
-                return render(request, 'estacionamientoPagarReserva.html', {'reserva': reserva,'color':'green', 'mensaje':'Existe un puesto disponible'})
+                global reservaFinal
+                reservaFinal = Reserva(estacionamiento=estacionamiento,inicioReserva=inicioReserva,finalReserva=finalReserva)
+                return render(request, 'estacionamientoPagarReserva.html', {'reserva': reservaFinal,'color':'green', 'mensaje':'Existe un puesto disponible'})
             else:
                 # Cambiar mensaje
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje':'No hay un puesto disponible para ese horario'})
@@ -137,5 +138,7 @@ def estacionamiento_pago(request,_id):
     if request.method == 'POST':
         form = PagoTarjetaDeCredito(request.POST)
         if form.is_valid():
+            global reservaFinal
+            reservaFinal.save()
             return render(request,'pago.html',{"id": _id, "color": "green",'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
     return render(request, 'pago.html', {'form':form})
