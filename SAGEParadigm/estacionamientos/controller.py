@@ -1,6 +1,5 @@
 # Archivo con funciones de control para SAGE
-import datetime
-from estacionamientos.models import Estacionamiento, Reserva
+from estacionamientos.models import Estacionamiento
 
 # chequeo de horarios de extended
 def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):

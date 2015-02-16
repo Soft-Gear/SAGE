@@ -3,7 +3,9 @@ from django.db import models
 from math import ceil, floor
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from datetime import time
+import pytz
+
+utc=pytz.UTC
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
@@ -27,17 +29,17 @@ class Estacionamiento(models.Model):
 
 
 	tarifa = models.CharField(max_length = 50, blank = True, null = True)
-	apertura = models.TimeField(blank = True, null = True)
-	cierre = models.TimeField(blank = True, null = True)
-	reservasInicio = models.TimeField(blank = True, null = True)
-	reservasCierre = models.TimeField(blank = True, null = True)
+	apertura = models.DateTimeField(blank = True, null = True)
+	cierre = models.DateTimeField(blank = True, null = True)
+	reservasInicio = models.DateTimeField(blank = True, null = True)
+	reservasCierre = models.DateTimeField(blank = True, null = True)
 	nroPuesto = models.IntegerField(blank = True, null = True)
 
 
 class Reserva(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
-	inicioReserva = models.TimeField()
-	finalReserva = models.TimeField()
+	inicioReserva = models.DateTimeField()
+	finalReserva = models.DateTimeField()
 
 class EsquemaTarifario(models.Model):
 	# No se cuantos digitos o decimales deberiamos poner

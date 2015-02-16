@@ -9,7 +9,7 @@ from estacionamientos.forms import EstacionamientoExtendedForm, EstacionamientoE
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
-from estacionamientos.models import Estacionamiento, Reserva, TarifaHora, TarifaMinuto, TarifaHorayFraccion
+from estacionamientos.models import Reserva, TarifaHora, TarifaMinuto, TarifaHorayFraccion
 reservaFinal = ""
 
 

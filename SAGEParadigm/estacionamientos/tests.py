@@ -5,10 +5,9 @@ from django.test import Client
 from django.test import TestCase
 import unittest
 
-from estacionamientos.controller import *
-from estacionamientos.forms import *
-from estacionamientos.models import *
-from estacionamientos.forms import *
+from estacionamientos.controller import HorarioEstacionamiento, validarHorarioReserva, marzullo
+from estacionamientos.models import Estacionamiento, Reserva
+from estacionamientos.forms import EstacionamientoForm, EstacionamientoExtendedForm, EstacionamientoReserva
 from estacionamientos.models import TarifaMinuto,TarifaHora,TarifaHorayFraccion
 
 
@@ -205,44 +204,44 @@ class ExtendedFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoExtendedForm_DosCampos(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0)}
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
     def test_EstacionamientoExtendedForm_TresCampos(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0)}
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
     def test_EstacionamientoExtendedForm_CuatroCampos(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0)}
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # caso borde
     def test_EstacionamientoExtendedForm_CincoCampos(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(14, 0)}
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # caso borde
     def test_EstacionamientoExtendedForm_TodosCamposBien(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(14, 0),
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
@@ -250,10 +249,10 @@ class ExtendedFormTestCase(TestCase):
     # caso borde
     def test_EstacionamientoExtendedForm_Puestos0(self):
         form_data = { 'puestos': 0,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(14, 0),
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
@@ -261,10 +260,10 @@ class ExtendedFormTestCase(TestCase):
     # caso borde
     def test_EstacionamientoExtendedForm_HoraInicioIgualHoraCierre(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(6, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(14, 0),
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
@@ -272,10 +271,10 @@ class ExtendedFormTestCase(TestCase):
     # caso borde
     def test_EstacionamientoExtendedForm_HoraIniReserIgualHoraFinReser(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(7, 0),
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
@@ -283,10 +282,10 @@ class ExtendedFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoExtendedForm_StringEnPuesto(self):
         form_data = { 'puestos': 'hola',
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(14, 0),
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -295,9 +294,9 @@ class ExtendedFormTestCase(TestCase):
     def test_EstacionamientoExtendedForm_StringHoraInicio(self):
         form_data = { 'puestos': 2,
                                 'horarioin': 'holaa',
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(14, 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -306,9 +305,9 @@ class ExtendedFormTestCase(TestCase):
     def test_EstacionamientoExtendedForm_NumeroNegativoHoraInicio(self):
         form_data = { 'puestos': 2,
                                 'horarioin':-1,
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(14, 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -316,10 +315,10 @@ class ExtendedFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoExtendedForm_NoneEntarifa(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': datetime.time(14, 0),
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': None}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -328,9 +327,9 @@ class ExtendedFormTestCase(TestCase):
     def test_EstacionamientoExtendedForm_NoneEnHorarioReserva(self):
         form_data = { 'puestos': 2,
                                 'horarioin': 'holaa',
-                                'horarioout': datetime.time(19, 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
                                 'horario_reserin': None,
-                                'horario_reserout': datetime.time(14, 0),
+                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -338,10 +337,10 @@ class ExtendedFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoExtendedForm_listaEnHoraReserva(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.time(6, 0),
-                                'horarioout': datetime.time(19, 0),
-                                'horario_reserin': datetime.time(7, 0),
-                                'horario_reserout': [datetime.time(14, 0)],
+                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserout': [datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0)],
                                 'tarifa': 12}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -465,26 +464,26 @@ class ReservaFormTestCase(TestCase):
 
     # caso borde
     def test_EstacionamientoReserva_UnCampo(self):
-        form_data = {'inicio':datetime.time(6, 0)}
+        form_data = {'inicio':datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0)}
         form = EstacionamientoReserva(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # normal
     def test_EstacionamientoReserva_TodosCamposBien(self):
-        form_data = {'inicio':datetime.time(6, 0), 'final':datetime.time(12, 0)}
+        form_data = {'inicio':datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0), 'final':datetime.datetime(year = 2000, month = 6, day = 15, hour = 12,  minute = 0)}
         form = EstacionamientoReserva(data = form_data)
         self.assertEqual(form.is_valid(), True)
 
     # malicia
     def test_EstacionamientoReserva_InicioString(self):
         form_data = {'inicio':'hola',
-                                'final':datetime.time(12, 0)}
+                                'final':datetime.datetime(year = 2000, month = 6, day = 15, hour = 12,  minute = 0)}
         form = EstacionamientoReserva(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
     def test_EstacionamientoReserva_FinString(self):
-        form_data = {'inicio':datetime.time(6, 0),
+        form_data = {'inicio':datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
                                 'final':'hola'}
         form = EstacionamientoReserva(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -492,13 +491,13 @@ class ReservaFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoReserva_InicioNone(self):
         form_data = {'inicio':None,
-                                'final':datetime.time(12, 0)}
+                                'final':datetime.datetime(year = 2000, month = 6, day = 15, hour = 12,  minute = 0)}
         form = EstacionamientoReserva(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
     def test_EstacionamientoReserva_finalNone(self):
-        form_data = {'inicio':datetime.time(6, 0),
+        form_data = {'inicio':datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
                                 'final':None}
         form = EstacionamientoReserva(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -560,17 +559,13 @@ class ReservaFormControllerTestCase(TestCase):
 
     # malicia
     def test_Reservacion_CamposVacios(self):
-        form_data = {'inicio':datetime.time(6, 0), 'final':datetime.time(12, 0)}
+        form_data = {'inicio':datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0), 'final':datetime.datetime(year = 2000, month = 6, day = 15, hour = 12,  minute = 0)}
         form = EstacionamientoReserva(data = form_data)
         self.assertEqual(form.is_valid(), True)
 
 ###############################################################################
 # Marzullo
 ###############################################################################
-
-from estacionamientos.controller import marzullo
-from estacionamientos.models import Estacionamiento, Reserva
-from datetime import time
 
 class TestMarzullo(unittest.TestCase):
     def crearEstacionamiento(self, puestos):
@@ -586,183 +581,183 @@ class TestMarzullo(unittest.TestCase):
 
     def testOneReservation(self): #borde
         e = self.crearEstacionamiento(1)
-        self.assertTrue(marzullo(e.id, time(9), time(15)))
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,15)))
 
     def testNoSpotParking(self): #borde
         e = self.crearEstacionamiento(0)
-        self.assertFalse(marzullo(e.id, time(9), time(15)))
+        self.assertFalse(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,15)))
 
     def testTenSpotsOneReservation(self): #malicia
         e = self.crearEstacionamiento(10)
-        self.assertTrue(marzullo(e.id, time(9), time(15)))
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,15)))
 
     def testAddTwoReservation(self): #malicia
         e = self.crearEstacionamiento(10)
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="18:00").save()
-        self.assertTrue(marzullo(e.id, time(12), time(18)))
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 18:00").save()
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,12), datetime.datetime(2015,1,20,18)))
 
     def testAddThreeReservations(self): #malicia
         e = self.crearEstacionamiento(3)
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        self.assertTrue(marzullo(e.id, time(12), time(18)))
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,12), datetime.datetime(2015,1,20,18)))
 
     def testFiveSpotsFiveReservation(self): #Borde
         e = self.crearEstacionamiento(5)
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="12:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        self.assertTrue(marzullo(e.id, time(10), time(18)))
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,10), datetime.datetime(2015,1,20,18)))
 
     def testFiveSpotsSixReservation(self): #borde
         e = self.crearEstacionamiento(5)
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="12:00", finalReserva="18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="12:00", finalReserva="18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="18:00").save()
-        self.assertFalse(marzullo(e.id, time(9), time(18)))
-        self.assertFalse(marzullo(e.id, time(9), time(15)))
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 18:00").save()
+        self.assertFalse(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,18)))
+        self.assertFalse(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,15)))
 
     def testFiveSpotsSixReservationNoOverlapping(self): #esquina
         e = self.crearEstacionamiento(5)
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="12:00", finalReserva="18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="12:00", finalReserva="18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="18:00").save()
-        self.assertTrue(marzullo(e.id, time(6), time(10)))
-        self.assertTrue(marzullo(e.id, time(9), time(12)))
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 18:00").save()
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,6), datetime.datetime(2015,1,20,10)))
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,12)))
 
     def testManyReservationsMaxOverlapping(self): #malicia
         e = self.crearEstacionamiento(10)
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="07:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="08:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="07:00", finalReserva="11:00").save()
-        Reserva(estacionamiento = e, inicioReserva="08:00", finalReserva="12:00").save()
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="13:00").save()
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="09:00").save()
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        Reserva(estacionamiento = e, inicioReserva="10:00", finalReserva="15:00").save()
-        self.assertTrue(marzullo(e.id, time(10), time(15)))
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 07:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 08:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 07:00", finalReserva="2015-01-20 11:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 08:00", finalReserva="2015-01-20 12:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 13:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 09:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,10), datetime.datetime(2015,1,20,15)))
 
     def testManyReservationsOneOverlap(self): #malicia y esquinas
         e = self.crearEstacionamiento(10)
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="07:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="08:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="07:00", finalReserva="11:00").save()
-        Reserva(estacionamiento = e, inicioReserva="08:00", finalReserva="12:00").save()
-        Reserva(estacionamiento = e, inicioReserva="09:00", finalReserva="13:00").save()
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="09:00").save()
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="10:00").save()
-        Reserva(estacionamiento = e, inicioReserva="06:00", finalReserva="10:00").save()
-        self.assertFalse(marzullo(e.id, time(9), time(10)))
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 07:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 08:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 07:00", finalReserva="2015-01-20 11:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 08:00", finalReserva="2015-01-20 12:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 13:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 09:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
+        self.assertFalse(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,10)))
 
 class RateTestCase(TestCase):
-	
-	#Pruebas para tarifa de hora y fraccion
-		
-	def test_oneHourFraccionPay(self):
-		initial_time = datetime.time(13,0)
-		final_time = datetime.time(14,0)
-		rate = TarifaHorayFraccion(tarifa = 2)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
-		
-	def test_twoHourFraccionPay(self):
-		initial_time = datetime.time(13,0)
-		final_time = datetime.time(15,0)
-		rate = TarifaHorayFraccion(tarifa = 2)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
-		
-	def test_halfHourFraccionPay(self):
-		initial_time = datetime.time(13,15)
-		final_time = datetime.time(13,45)
-		rate = TarifaHorayFraccion(tarifa = 2)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
-		
-	def test_onePlusHalfHourFraccionPay(self):
-		initial_time = datetime.time(13,0)
-		final_time = datetime.time(14,30)
-		rate = TarifaHorayFraccion(tarifa = 20)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),30)
-		
-	def test_DecimalFraccionPay(self):
-		initial_time = datetime.time(19,0)
-		final_time = datetime.time(20,15)
-		rate = TarifaHorayFraccion(tarifa = 1)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1.5)
-		
-	def test_onePlusHalfPlusMinuteHourFraccionPay(self):
-		initial_time = datetime.time(15,15)
-		final_time = datetime.time(16,46)
-		rate = TarifaHorayFraccion(tarifa = 2)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
-		
-	def test_oneDayFraccionPay(self):
-		initial_time = datetime.time(0,0)
-		final_time = datetime.time(23,59)
-		rate = TarifaHorayFraccion(tarifa = 2)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),48)
-		
-	# Pruebas para la tarifa por minuto
-	
-	def test_oneMinutePay(self):
-		initial_time = datetime.time(15,1)
-		final_time = datetime.time(15,2)
-		rate = TarifaMinuto(tarifa = 60)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1)
-		
-	def test_twoMinutePay(self):
-		initial_time = datetime.time(15,1)
-		final_time = datetime.time(15,3)
-		rate = TarifaMinuto(tarifa = 60)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
-		
-	def test_oneDayMinutePay(self):
-		initial_time = datetime.time(0,0)
-		final_time = datetime.time(23,59)
-		rate = TarifaMinuto(tarifa = 60)
-		self.assertEqual(rate.calcularPrecio(initial_time,final_time),1439)
 
-	# Pruebas para la clase tarifa	
+    #Pruebas para tarifa de hora y fraccion
 
-	def test_OneHourRate(self):
-		rate = TarifaHora(tarifa = 800)
-		initial_datetime = datetime.time(13,0)
-		final_datetime = datetime.time(14,0)
-		value = rate.calcularPrecio(initial_datetime, final_datetime)
-		self.assertEquals(value, 800)
-		
-	def test_MoreThanHourRate(self):
-		rate = TarifaHora(tarifa = 800)
-		initial_datetime = datetime.time(6,8)
-		final_datetime = datetime.time(7,9)
-		value = rate.calcularPrecio(initial_datetime, final_datetime)
-		self.assertEquals(value, 1600)
-		
-	def test_LessThanAnHour(self):
-		rate = TarifaHora(tarifa = 800)
-		initial_datetime = datetime.time(11,0)
-		final_datetime = datetime.time(11,15)
-		value = rate.calcularPrecio(initial_datetime, final_datetime)
-		self.assertEquals(value, 800)
-		
-	def testCompleteDay(self):
-		rate=TarifaHora(tarifa=1)
-		initial_time=datetime.time(0,0)
-		final_time=datetime.time(23,59)
-		value = rate.calcularPrecio(initial_time, final_time)
-		self.assertEqual(value, 24)
+    def test_oneHourFraccionPay(self):
+        initial_time = datetime.time(13,0)
+        final_time = datetime.time(14,0)
+        rate = TarifaHorayFraccion(tarifa = 2)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
+
+    def test_twoHourFraccionPay(self):
+        initial_time = datetime.time(13,0)
+        final_time = datetime.time(15,0)
+        rate = TarifaHorayFraccion(tarifa = 2)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
+
+    def test_halfHourFraccionPay(self):
+        initial_time = datetime.time(13,15)
+        final_time = datetime.time(13,45)
+        rate = TarifaHorayFraccion(tarifa = 2)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
+
+    def test_onePlusHalfHourFraccionPay(self):
+        initial_time = datetime.time(13,0)
+        final_time = datetime.time(14,30)
+        rate = TarifaHorayFraccion(tarifa = 20)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),30)
+
+    def test_DecimalFraccionPay(self):
+        initial_time = datetime.time(19,0)
+        final_time = datetime.time(20,15)
+        rate = TarifaHorayFraccion(tarifa = 1)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),1.5)
+
+    def test_onePlusHalfPlusMinuteHourFraccionPay(self):
+        initial_time = datetime.time(15,15)
+        final_time = datetime.time(16,46)
+        rate = TarifaHorayFraccion(tarifa = 2)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
+
+    def test_oneDayFraccionPay(self):
+        initial_time = datetime.time(0,0)
+        final_time = datetime.time(23,59)
+        rate = TarifaHorayFraccion(tarifa = 2)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),48)
+
+    # Pruebas para la tarifa por minuto
+
+    def test_oneMinutePay(self):
+        initial_time = datetime.time(15,1)
+        final_time = datetime.time(15,2)
+        rate = TarifaMinuto(tarifa = 60)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),1)
+
+    def test_twoMinutePay(self):
+        initial_time = datetime.time(15,1)
+        final_time = datetime.time(15,3)
+        rate = TarifaMinuto(tarifa = 60)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
+
+    def test_oneDayMinutePay(self):
+        initial_time = datetime.time(0,0)
+        final_time = datetime.time(23,59)
+        rate = TarifaMinuto(tarifa = 60)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),1439)
+
+    # Pruebas para la clase tarifa	
+
+    def test_OneHourRate(self):
+        rate = TarifaHora(tarifa = 800)
+        initial_datetime = datetime.time(13,0)
+        final_datetime = datetime.time(14,0)
+        value = rate.calcularPrecio(initial_datetime, final_datetime)
+        self.assertEquals(value, 800)
+
+    def test_MoreThanHourRate(self):
+        rate = TarifaHora(tarifa = 800)
+        initial_datetime = datetime.time(6,8)
+        final_datetime = datetime.time(7,9)
+        value = rate.calcularPrecio(initial_datetime, final_datetime)
+        self.assertEquals(value, 1600)
+
+    def test_LessThanAnHour(self):
+        rate = TarifaHora(tarifa = 800)
+        initial_datetime = datetime.time(11,0)
+        final_datetime = datetime.time(11,15)
+        value = rate.calcularPrecio(initial_datetime, final_datetime)
+        self.assertEquals(value, 800)
+
+    def testCompleteDay(self):
+        rate=TarifaHora(tarifa=1)
+        initial_time=datetime.time(0,0)
+        final_time=datetime.time(23,59)
+        value = rate.calcularPrecio(initial_time, final_time)
+        self.assertEqual(value, 24)

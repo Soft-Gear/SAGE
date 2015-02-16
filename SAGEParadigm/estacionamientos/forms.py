@@ -55,11 +55,11 @@ class EstacionamientoExtendedForm(forms.Form):
                             message = 'Sólo debe contener dígitos.'
                         )
 
-    horarioin = forms.TimeField(required = True, label = 'Horario Apertura')
-    horarioout = forms.TimeField(required = True, label = 'Horario Cierre')
+    horarioin = forms.DateTimeField(required = True, label = 'Horario Apertura')
+    horarioout = forms.DateTimeField(required = True, label = 'Horario Cierre')
 
-    horario_reserin = forms.TimeField(required = True, label = 'Horario Inicio Reserva')
-    horario_reserout = forms.TimeField(required = True, label = 'Horario Fin Reserva')
+    horario_reserin = forms.DateTimeField(required = True, label = 'Horario Inicio Reserva')
+    horario_reserout = forms.DateTimeField(required = True, label = 'Horario Fin Reserva')
 
     tarifa = forms.CharField(required = True, validators = [tarifa_validator])
     
@@ -77,8 +77,8 @@ class EstacionamientoExtendedForm2(forms.Form):
     )
 
 class EstacionamientoReserva(forms.Form):
-    inicio = forms.TimeField(label = 'Horario Inicio Reserva')
-    final = forms.TimeField(label = 'Horario Final Reserva')
+    inicio = forms.DateTimeField(label = 'Horario Inicio Reserva')
+    final = forms.DateTimeField(label = 'Horario Final Reserva')
 
 class PagoTarjetaDeCredito(forms.Form):
     numeroTarjeta = forms.CharField(
