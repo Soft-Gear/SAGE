@@ -1,5 +1,6 @@
 # Archivo con funciones de control para SAGE
 from estacionamientos.models import Estacionamiento
+from datetime import date, datetime, timedelta, time
 
 # chequeo de horarios de extended
 def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
@@ -19,15 +20,31 @@ def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
 	return (True, '')
 
 def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCierre):
+	
 	if ReservaInicio >= ReservaFin:
 		return (False, 'El horario de apertura debe ser menor al horario de cierre')
-	if ReservaFin.hour - ReservaInicio.hour < 1:
-		return (False, 'El tiempo de reserva debe ser al menos de 1 hora')
-	if ReservaFin > HorarioCierre:
+	'''if ReservaFin > HorarioCierre:
 		return (False, 'El horario de inicio de reserva debe estar en un horario válido')
 	if ReservaInicio < HorarioApertura:
 		return (False, 'El horario de cierre de reserva debe estar en un horario válido')
-	return (True, '')
+	return (True, '')'''
+	if HorarioApertura.hour==0 and HorarioApertura.minute==0 \
+		and HorarioCierre.hour==23 and HorarioCierre.minute==59:
+		seven_days=timedelta(days=7)
+		if ReservaFin-ReservaInicio<=seven_days:
+			return (True,'')
+		else:
+			return(False,'Se puede reservar un puesto por un maximo de 7 dias')
+	else:
+		hora_inicio=time(ReservaInicio.hour,ReservaInicio.minute)
+		hora_final=time(ReservaFin.hour,ReservaFin.minute)
+		if ReservaFin.hour - ReservaInicio.hour < 1:
+			return (False, 'El tiempo de reserva debe ser al menos de 1 hora')
+		if hora_inicio<HorarioApertura:
+			return (False, 'El horario de inicio de reserva debe estar en un horario válido')
+		if hora_final > HorarioCierre:
+			return (False, 'El horario de cierre de reserva debe estar en un horario válido')
+		return (True,'')
 
 def marzullo(idEstacionamiento, hIn, hOut):
 	e = Estacionamiento.objects.get(id = idEstacionamiento)
