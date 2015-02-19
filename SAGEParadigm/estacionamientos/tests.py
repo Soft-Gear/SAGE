@@ -221,7 +221,7 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin': datetime.time(hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0)}
+                                'horario_reserin': datetime.time(hour = 7,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
@@ -230,8 +230,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin': datetime.time(hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0)}
+                                'horario_reserin': datetime.time(hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time( hour = 14,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
@@ -240,8 +240,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin': datetime.time(hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
+                                'horario_reserin': datetime.time(hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time(hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
@@ -251,8 +251,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 0,
                                 'horarioin': datetime.time(hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
+                                'horario_reserin': datetime.time(hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time(hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
@@ -262,8 +262,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin': datetime.time(hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 6,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
+                                'horario_reserin': datetime.time(hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time(hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
@@ -273,8 +273,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin': datetime.time(hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
+                                'horario_reserin': datetime.time( hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time( hour = 7,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
@@ -284,8 +284,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 'hola',
                                 'horarioin': datetime.time(hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
+                                'horario_reserin': datetime.time( hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time( hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -295,8 +295,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin': 'holaa',
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
+                                'horario_reserin': datetime.time(hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time( hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -306,8 +306,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin':-1,
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
+                                'horario_reserin': datetime.time( hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time(hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -317,8 +317,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin': datetime.time( hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
+                                'horario_reserin': datetime.time(hour = 7,  minute = 0),
+                                'horario_reserout': datetime.time( hour = 14,  minute = 0),
                                 'tarifa': None}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -329,7 +329,7 @@ class ExtendedFormTestCase(TestCase):
                                 'horarioin': 'holaa',
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': None,
-                                'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
+                                'horario_reserout': datetime.time( hour = 14,  minute = 0),
                                 'tarifa': '12'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -339,8 +339,8 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'puestos': 2,
                                 'horarioin': datetime.time( hour = 6,  minute = 0),
                                 'horarioout': datetime.time(hour = 19,  minute = 0),
-                                'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
-                                'horario_reserout': [datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0)],
+                                'horario_reserin': datetime.time(hour = 7,  minute = 0),
+                                'horario_reserout': [datetime.time( hour = 14,  minute = 0)],
                                 'tarifa': 12}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
