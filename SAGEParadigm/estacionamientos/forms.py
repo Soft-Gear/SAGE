@@ -81,12 +81,51 @@ class EstacionamientoReserva(forms.Form):
     final = forms.DateTimeField(label = 'Horario Final Reserva')
 
 class PagoTarjetaDeCredito(forms.Form):
-    numeroTarjeta = forms.CharField(
+    nombre = forms.CharField( required = True, 
+                            label = "Nombre",
+                            validators = [ RegexValidator( 
+                                       regex = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+                                       message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos'
+                                       )
+                                    ]
+                            )
+    apellido = forms.CharField( required = True, 
+                            label = "Apellido",
+                            validators = [ RegexValidator( 
+                                       regex = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+                                       message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos')
+                                    ]
+                            )
+    cedulaTipo = forms.ChoiceField(required = True,
+                                label = 'cedulaTipo',
+                                choices = (
+                                    ('V', 'V'),
+                                    ('E', 'E')
+                                )                       
+                            )
+    cedula = forms.CharField( required = True, 
+                        label = "Cédula",
+                        validators = [ RegexValidator( 
+                                   regex = '^[0-9]+$',
+                                   message = 'La cédula solo puede contener caracteres numéricos')
+                                ]
+                        )
+
+    tarjetaTipo = forms.ChoiceField(required = True,
+                                label = 'tarjetaTipo',
+                                choices = (
+                                    ('Vista', ' VISTA '),
+                                    ('Mister', ' MISTER '),
+                                    ('Xpress', ' XPRESS ')
+                                ),
+                                widget = forms.RadioSelect()
+                            )
+    tarjeta = forms.CharField(
                             required = True,
                             label = "Tarjeta de Credito",
                             validators = [
                                   RegexValidator(
-                                        regex = '^[0-9]+$',
+                                        regex = '^[0-9]{16}$',
                                         message = 'Introduzca un numero de tarjeta válido.'
                                 )
                             ]

@@ -3,14 +3,15 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 
+import datetime
 from decimal import Decimal
 from estacionamientos.controller import *
 from estacionamientos.forms import EstacionamientoExtendedForm, EstacionamientoExtendedForm2
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
-from estacionamientos.models import Reserva, TarifaHora, TarifaMinuto, TarifaHorayFraccion
-reservaFinal = ""
+
+from estacionamientos.models import Estacionamiento, Reserva, TarifaHora, TarifaMinuto, TarifaHorayFraccion
 
 
 # Usamos esta vista para procesar todos los estacionamientos
@@ -137,9 +138,14 @@ def estacionamiento_reserva(request, _id):
                 return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
 
             if marzullo(_id, inicioReserva, finalReserva):
-                global reservaFinal
                 reservaFinal = Reserva(estacionamiento=estacionamiento,inicioReserva=inicioReserva,finalReserva=finalReserva)
                 monto = Decimal(estacionamiento.esquemaTarifa.calcularPrecio(inicioReserva,finalReserva))
+
+                request.session['monto'] = float(estacionamiento.esquemaTarifa.calcularPrecio(inicioReserva,finalReserva))
+                request.session['finalReservaHora'] = finalReserva.hour
+                request.session['finalReservaMinuto'] = finalReserva.minute
+                request.session['inicioReservaHora'] = inicioReserva.hour
+                request.session['inicioReservaMinuto'] = inicioReserva.minute
                 return render(request, 'estacionamientoPagarReserva.html', {'id': _id,'monto': monto,'reserva': reservaFinal,'color':'green', 'mensaje':'Existe un puesto disponible'})
             else:
                 # Cambiar mensaje
@@ -152,7 +158,23 @@ def estacionamiento_pago(request,_id):
     if request.method == 'POST':
         form = PagoTarjetaDeCredito(request.POST)
         if form.is_valid():
-            global reservaFinal
+            try:
+                estacionamiento = Estacionamiento.objects.get(id = _id)
+            except ObjectDoesNotExist:
+                return render(request, '404.html')
+            inicioReserva = datetime.time(hour = request.session['inicioReservaHora'],
+                                        minute = request.session['inicioReservaMinuto']
+                                    )
+            finalReserva  = datetime.time(hour = request.session['finalReservaHora'],
+                                        minute = request.session['finalReservaMinuto']
+                                    )
+
+            reservaFinal = Reserva( estacionamiento = estacionamiento,
+                                    inicioReserva   = inicioReserva,
+                                    finalReserva    = finalReserva)
+            monto = Decimal(request.session['monto'])
             reservaFinal.save()
-            return render(request,'pago.html',{"id": _id, "color": "green",'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
+            return render(request,'pago.html',{"id": _id,
+                                            "color": "green",
+                                            'mensaje' : "Se realizo el pago de reserva satisfactoriamente. Id de pago:" + str(reservaFinal.id)})
     return render(request, 'pago.html', {'form':form})
