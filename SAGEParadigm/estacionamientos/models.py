@@ -33,15 +33,20 @@ class Estacionamiento(models.Model):
 	reservasCierre = models.TimeField(blank = True, null = True)
 	nroPuesto = models.IntegerField(blank = True, null = True)
 
+	def __str__(self):
+		return self.nombre+' '+str(self.id)
 
 class Reserva(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
 	inicioReserva = models.TimeField()
 	finalReserva = models.TimeField()
 
+	def __str__(self):
+		return self.estacionamiento.nombre+' ('+str(self.inicioReserva)+','+str(self.finalReserva)+')'
+
 class EsquemaTarifario(models.Model):
-	# No se cuantos digitos o decimales deberiamos poner
-	tarifa = models.DecimalField(max_digits=10, decimal_places=4)
+	# No se cuantos digitos deberiamos poner
+	tarifa = models.DecimalField(max_digits=10, decimal_places=2)
 	
 	class Meta:
 		abstract = True

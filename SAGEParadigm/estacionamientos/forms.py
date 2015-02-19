@@ -125,7 +125,7 @@ class PagoTarjetaDeCredito(forms.Form):
                             label = "Tarjeta de Credito",
                             validators = [
                                   RegexValidator(
-                                        regex = '^[0-9]+$',
+                                        regex = '^[0-9]{16}$',
                                         message = 'Introduzca un numero de tarjeta válido.'
                                 )
                             ]
