@@ -706,11 +706,18 @@ class RateTestCase(TestCase):
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),4)
 
-    def test_oneDayFraccionPay(self):
+    def test_oneDayMinusAMinuteFraccionPay(self):
         initial_time = datetime.datetime(2015,2,18,0,0)
         final_time = datetime.datetime(2015,2,18,23,59)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),48)
+        
+    def test_oneDayFractionPay(self):
+        initial_time = datetime.datetime(2015,2,18,0,0)
+        final_time = datetime.datetime(2015,2,19,0,0)
+        rate = TarifaHorayFraccion(tarifa = 2)
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),48)
+        
 
     # Pruebas para la tarifa por minuto
 
