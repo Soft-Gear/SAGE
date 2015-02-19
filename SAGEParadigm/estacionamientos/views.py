@@ -175,5 +175,5 @@ def estacionamiento_pago(request,_id):
             reservaFinal.save()
             return render(request,'pago.html',{"id": _id,
                                             "color": "green",
-                                            'mensaje' : "Se realizo el pago de reserva satisfactoriamente"})
+                                            'mensaje' : "Se realizo el pago de reserva satisfactoriamente. Id de pago:" + str(reservaFinal.id)})
     return render(request, 'pago.html', {'form':form})
