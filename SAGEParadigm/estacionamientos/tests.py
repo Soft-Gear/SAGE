@@ -574,16 +574,20 @@ class TestMarzullo(unittest.TestCase):
             nombre = "nom",
             direccion = "dir",
             rif = "rif",
-            nroPuesto = puestos
+            nroPuesto = puestos,
+            apertura       = "06:00",
+            reservasInicio = "06:00",
+            cierre         = "18:00",
+            reservasCierre = "18:00"
         )
         e.save()
         return e
 
-    def testOneReservation(self): #borde
+    def testOneReservation(self): #borde, ocupación = capacidad
         e = self.crearEstacionamiento(1)
         self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,15)))
 
-    def testNoSpotParking(self): #borde
+    def testNoSpotParking(self): #borde, capacidad = 0
         e = self.crearEstacionamiento(0)
         self.assertFalse(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,15)))
 
@@ -591,18 +595,23 @@ class TestMarzullo(unittest.TestCase):
         e = self.crearEstacionamiento(10)
         self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,15)))
 
-    def testAddTwoReservation(self): #malicia
+    def testAddTwoReservation(self): #borde (esquina?), dos reservaciones con fin = cierre estac.
         e = self.crearEstacionamiento(10)
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 18:00").save()
         self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,12), datetime.datetime(2015,1,20,18)))
 
-    def testAddThreeReservations(self): #malicia
+    def testAddTwoReservation2(self): #borde (esquina?), dos reservaciones con incio = apertura estac.
+        e = self.crearEstacionamiento(10)
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 15:00").save()
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,6), datetime.datetime(2015,1,20,14)))
+
+    def testAddThreeReservations(self): #esquina maliciosa, reserva cubre todo el horario, y ocupación = capacidad
         e = self.crearEstacionamiento(3)
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 15:00").save()
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
-        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,12), datetime.datetime(2015,1,20,18)))
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,6), datetime.datetime(2015,1,20,18)))
 
-    def testFiveSpotsFiveReservation(self): #Borde
+    def testFiveSpotsFiveReservation(self): #borde, ocupación = capacidad
         e = self.crearEstacionamiento(5)
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 15:00").save()
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
@@ -610,27 +619,30 @@ class TestMarzullo(unittest.TestCase):
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
         self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,10), datetime.datetime(2015,1,20,18)))
 
-    def testFiveSpotsSixReservation(self): #borde
+    def testFiveSpotsSixReservation(self): #borde, ocupacion = capacidad antes de intentar hacer reservas nuevas
         e = self.crearEstacionamiento(5)
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 17:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 17:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 17:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 17:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 17:00").save()
         self.assertFalse(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,18)))
         self.assertFalse(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,15)))
 
-    def testFiveSpotsSixReservationNoOverlapping(self): #esquina
+    def testFiveSpotsSixReservationNoOverlapping(self): #Dos esquinas, 1. count = capacidad, inicio=apertura
+                                                        #              2. count = capacidad, fin=cierre
         e = self.crearEstacionamiento(5)
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 18:00").save()
-        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 18:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 09:00", finalReserva="2015-01-20 17:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 17:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 17:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 12:00", finalReserva="2015-01-20 17:00").save()
+        Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 17:00").save()
         self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,6), datetime.datetime(2015,1,20,10)))
-        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,12)))
+        #La reserva de arriba NO se concreta, puesto que sólo se verificó si era válida, sin agregar su objeto
+        self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,9), datetime.datetime(2015,1,20,18)))
 
-    def testManyReservationsMaxOverlapping(self): #malicia
+    def testManyReservationsMaxOverlapping(self): #esquina, count = capacidad en una hora (10am - 11am),
+                                                  #         algunas reservas tienen inicio = apertura
         e = self.crearEstacionamiento(10)
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 07:00", finalReserva="2015-01-20 10:00").save()
@@ -651,7 +663,8 @@ class TestMarzullo(unittest.TestCase):
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 10:00", finalReserva="2015-01-20 15:00").save()
         self.assertTrue(marzullo(e.id, datetime.datetime(2015,1,20,10), datetime.datetime(2015,1,20,15)))
 
-    def testManyReservationsOneOverlap(self): #malicia y esquinas
+    def testManyReservationsOneOverlap(self): #malicia y esquinas, count = (capacidad+1) en la hora (9am - 10am)
+                                              #                    algunas reservas tienen inicio = apertura
         e = self.crearEstacionamiento(10)
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 06:00", finalReserva="2015-01-20 10:00").save()
         Reserva(estacionamiento = e, inicioReserva="2015-01-20 07:00", finalReserva="2015-01-20 10:00").save()
@@ -732,7 +745,7 @@ class RateTestCase(TestCase):
         rate = TarifaMinuto(tarifa = 60)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),1439)
 
-    # Pruebas para la clase tarifa	
+    # Pruebas para la clase tarifa
 
     def test_OneHourRate(self):
         rate = TarifaHora(tarifa = 800)

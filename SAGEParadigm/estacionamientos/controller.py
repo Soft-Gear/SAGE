@@ -19,13 +19,13 @@ def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
 	return (True, '')
 
 def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCierre):
-	if ReservaInicio >= ReservaFin:
+	if ReservaInicio.time() >= HorarioCierre:
 		return (False, 'El horario de apertura debe ser menor al horario de cierre')
 	if ReservaFin.hour - ReservaInicio.hour < 1:
 		return (False, 'El tiempo de reserva debe ser al menos de 1 hora')
-	if ReservaFin > HorarioCierre:
+	if ReservaFin.time() > HorarioCierre:
 		return (False, 'El horario de inicio de reserva debe estar en un horario válido')
-	if ReservaInicio < HorarioApertura:
+	if ReservaInicio.time() < HorarioApertura:
 		return (False, 'El horario de cierre de reserva debe estar en un horario válido')
 	return (True, '')
 

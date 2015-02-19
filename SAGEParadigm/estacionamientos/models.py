@@ -3,9 +3,6 @@ from django.db import models
 from math import ceil, floor
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-import pytz
-
-utc=pytz.UTC
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
@@ -29,10 +26,10 @@ class Estacionamiento(models.Model):
 
 
 	tarifa = models.CharField(max_length = 50, blank = True, null = True)
-	apertura = models.DateTimeField(blank = True, null = True)
-	cierre = models.DateTimeField(blank = True, null = True)
-	reservasInicio = models.DateTimeField(blank = True, null = True)
-	reservasCierre = models.DateTimeField(blank = True, null = True)
+	apertura = models.TimeField(blank = True, null = True)
+	cierre = models.TimeField(blank = True, null = True)
+	reservasInicio = models.TimeField(blank = True, null = True)
+	reservasCierre = models.TimeField(blank = True, null = True)
 	nroPuesto = models.IntegerField(blank = True, null = True)
 
 
@@ -44,7 +41,7 @@ class Reserva(models.Model):
 class EsquemaTarifario(models.Model):
 	# No se cuantos digitos o decimales deberiamos poner
 	tarifa = models.DecimalField(max_digits=10, decimal_places=4)
-	
+
 	class Meta:
 		abstract = True
 	def __str__(self):
@@ -57,19 +54,19 @@ class TarifaHora(EsquemaTarifario):
 		a=horaFinal.hour+horaFinal.minute/60-horaInicio.hour-horaInicio.minute/60 # De momento todo pasa a horas con float
 		a=ceil(a) #  De los segundos se calculan las horas en la funcion techo
 		return(self.tarifa*a)
-	
+
 	def  tipo(self):
 		return("Tarifa por hora")
 
 class TarifaMinuto(EsquemaTarifario):
-	
+
 	def calcularPrecio(self,horaInicio,horaFinal):
 		minutes = (horaFinal.hour-horaInicio.hour)*60+(horaFinal.minute-horaInicio.minute)
 		return (minutes*self.tarifa/60)
-	
+
 	def  tipo(self):
 		return("Tarifa por minuto")
-	
+
 class TarifaHorayFraccion(EsquemaTarifario):
 
 	def calcularPrecio(self,horaInicio,horaFinal):
@@ -85,6 +82,6 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		else:
 			valor = self.tarifa
 		return valor
-	
+
 	def  tipo(self):
 		return("Tarifa por fraccion")
