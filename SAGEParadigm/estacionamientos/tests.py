@@ -9,6 +9,7 @@ from estacionamientos.controller import HorarioEstacionamiento, validarHorarioRe
 from estacionamientos.models import Estacionamiento, Reserva
 from estacionamientos.forms import EstacionamientoForm, EstacionamientoExtendedForm, EstacionamientoReserva
 from estacionamientos.models import TarifaMinuto,TarifaHora,TarifaHorayFraccion
+from decimal import Decimal
 
 
 ###################################################################
@@ -872,4 +873,26 @@ class RateTestCase(TestCase):
         final_time=datetime.datetime(2015,2,25,0,0)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, 24*7)
-
+        
+    # Casos de decimales
+    
+    def testDecimalHourRate(self):
+        rate=TarifaHora(tarifa=0.3)
+        initial_time=datetime.datetime(2015,2,20,15,0)
+        final_time=datetime.datetime(2015,2,20,18,0)
+        value = rate.calcularPrecio(initial_time, final_time)
+        self.assertEqual(value, Decimal('0.9'))
+    
+    def testDecimalMinuteRate(self):
+        rate=TarifaMinuto(tarifa=0.3)
+        initial_time=datetime.datetime(2015,2,20,15,0)
+        final_time=datetime.datetime(2015,2,20,18,30)
+        value = rate.calcularPrecio(initial_time, final_time)
+        self.assertEqual(value, Decimal('1.05'))
+        
+    def testDecimalHourAndFractionRate(self):
+        rate=TarifaHorayFraccion(tarifa=0.3)
+        initial_time=datetime.datetime(2015,2,20,15,0)
+        final_time=datetime.datetime(2015,2,20,17,25)
+        value = rate.calcularPrecio(initial_time, final_time)
+        self.assertEqual(value, Decimal('0.75'))
