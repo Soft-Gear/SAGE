@@ -3,6 +3,7 @@ from django.db import models
 from math import ceil, floor
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from decimal import Decimal
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
@@ -23,9 +24,7 @@ class Estacionamiento(models.Model):
 	content_type = models.ForeignKey(ContentType, null = True)
 	object_id = models.PositiveIntegerField(null = True)
 	esquemaTarifa = GenericForeignKey()
-
-
-	tarifa = models.CharField(max_length = 50, blank = True, null = True)
+	tarifa = models.DecimalField(decimal_places = 2, max_digits = 256, blank = True, null = True)
 	apertura = models.TimeField(blank = True, null = True)
 	cierre = models.TimeField(blank = True, null = True)
 	reservasInicio = models.TimeField(blank = True, null = True)
@@ -57,26 +56,28 @@ class EsquemaTarifario(models.Model):
 class TarifaHora(EsquemaTarifario):
 
 	def calcularPrecio(self,horaInicio,horaFinal):
-		a=horaFinal.hour+horaFinal.minute/60-horaInicio.hour-horaInicio.minute/60 # De momento todo pasa a horas con float
-		a=ceil(a) #  De los segundos se calculan las horas en la funcion techo
-		return(self.tarifa*a)
-
+		a=horaFinal-horaInicio
+		a=a.days*24+a.seconds/3600
+		a=ceil(a) #  De las horas se calcula el techo de ellas
+		return(Decimal(self.tarifa*a).quantize(Decimal('1.00')))
 	def  tipo(self):
 		return("Tarifa por hora")
 
 class TarifaMinuto(EsquemaTarifario):
 
 	def calcularPrecio(self,horaInicio,horaFinal):
-		minutes = (horaFinal.hour-horaInicio.hour)*60+(horaFinal.minute-horaInicio.minute)
-		return (minutes*self.tarifa/60)
-
+		minutes = horaFinal-horaInicio
+		minutes = minutes.days*24*60+minutes.seconds/60
+		return (Decimal(minutes)*Decimal(self.tarifa/60)).quantize(Decimal('1.00'))
+	
 	def  tipo(self):
 		return("Tarifa por minuto")
 
 class TarifaHorayFraccion(EsquemaTarifario):
 
 	def calcularPrecio(self,horaInicio,horaFinal):
-		time = (horaFinal.hour-horaInicio.hour)*3600+(horaFinal.minute-horaInicio.minute)*60
+		time = horaFinal-horaInicio
+		time = time.days*24*3600+time.seconds
 		if(time>3600):
 			valor = (floor(time/3600)*self.tarifa)
 			if((time%3600)==0):
@@ -87,7 +88,7 @@ class TarifaHorayFraccion(EsquemaTarifario):
 				valor += self.tarifa/2
 		else:
 			valor = self.tarifa
-		return valor
-
+		return(Decimal(valor).quantize(Decimal('1.00')))
+	
 	def  tipo(self):
 		return("Tarifa por fraccion")
