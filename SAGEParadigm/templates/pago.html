@@ -78,27 +78,55 @@
         <table class="table table-striped">
           <thead>
 
-          <table width="300" border="0" cellspacing="0">
-            <tr>
-              <td><font size="32" color="blue"><i class="fa fa-cc-visa"> </i></font></td>
-              <td><font size="32" color="red"><i class="fa fa-cc-mastercard"> </i></font></td>
-              <td><font size="32" color="gray"><i class="fa fa-cc-amex"> </i></font></td>
-            </tr>
-          </table>
+
           <br>
               
           </thead>
           <tbody>
             <form  method="post" class="form form-vertical">
               {% csrf_token %}
-              {% for field in form %}
                 <div class="control-group">
                   <div class="controls">
-                    <input type="text" class="form-control" name="{{field.name}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
-                    {{ field.errors }}
+                        <p>
+                            <input type="text" class="form-control" name="{{form.nombre.name}}" placeholder="{{form.nombre.label}}" for="id_{{form.nombre.name}}">
+                        </p>
+                        {{ form.nombre.errors }}
+                        <p>
+                            <input type="text" class="form-control" name="{{form.apellido.name}}" placeholder="{{form.apellido.label}}" for="id_{{form.apellido.name}}">
+                        </p>
+                        {{ form.apellido.errors }}
+                        <p>
+                            <select  name="{{form.cedulaTipo.name}}" placeholder="{{form.cedulaTipo.label}}">
+                                <option value='V'>V</option>
+                                <option value="E">E</option>
+                            </select>
+                            <input type="text" name="{{form.cedula.name}}" 
+                            placeholder="{{form.cedula.label}}" for="id_{{form.cedula.name}}">
+                            {{ form.cedula.errors }}
+                        
+                        </p>
+                        
+                        <table width="300" border="0" cellspacing="0">
+                            <tr>
+                              <td><font size="32" color="blue"><i class="fa fa-cc-visa"> </i></font></td>
+                              <td><font size="32" color="red"><i class="fa fa-cc-mastercard"> </i></font></td>
+                              <td><font size="32" color="gray"><i class="fa fa-cc-amex"> </i></font></td>
+                            </tr>
+                        </table>
+                        <table width="300" border="0" cellspacing="0">
+                            <tr>
+                                {% for choice in form.tarjetaTipo %}
+                                     <td>{{ choice }}    </td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                        {{ form.tarjetaTipo.errors }}
+                        <p>
+                            <input type="text" class="form-control" name="{{form.tarjeta.name}}" placeholder="{{form.tarjeta.label}}" for="id_{{form.tarjeta.name}}">
+                        </p>
+                        {{ form.tarjeta.errors }}
                   </div>
                 </div> 
-              {% endfor %}
 
             <button type="submit" class="btn btn-primary">Realizar Pago</button>
 
