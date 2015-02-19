@@ -3,9 +3,8 @@ from django.db import models
 from math import ceil, floor
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-#import pytz
-
-#utc=pytz.UTC
+from decimal import Decimal, getcontext
+getcontext().prec=6
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
@@ -28,7 +27,7 @@ class Estacionamiento(models.Model):
 	esquemaTarifa = GenericForeignKey()
 
 
-	tarifa = models.CharField(max_length = 50, blank = True, null = True)
+	tarifa = models.DecimalField(decimal_places = 2, max_digits = 256, blank = True, null = True)
 	apertura = models.TimeField(blank = True, null = True)
 	cierre = models.TimeField(blank = True, null = True)
 	reservasInicio = models.TimeField(blank = True, null = True)
@@ -67,7 +66,7 @@ class TarifaMinuto(EsquemaTarifario):
 	def calcularPrecio(self,horaInicio,horaFinal):
 		minutes = horaFinal-horaInicio
 		minutes =minutes.days*24*60+minutes.seconds/60
-		return (minutes*self.tarifa/60)
+		return(Decimal(minutes)*self.tarifa/60)
 	
 	def  tipo(self):
 		return("Tarifa por minuto")
@@ -87,7 +86,7 @@ class TarifaHorayFraccion(EsquemaTarifario):
 				valor += self.tarifa/2
 		else:
 			valor = self.tarifa
-		return valor
+		return(valor)
 	
 	def  tipo(self):
 		return("Tarifa por fraccion")
