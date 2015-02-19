@@ -21,15 +21,15 @@ def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
 
 def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCierre):
 	
+	
 	if ReservaInicio >= ReservaFin:
 		return (False, 'El horario de apertura debe ser menor al horario de cierre')
 	if ReservaFin - ReservaInicio < timedelta(hours=1):
 			return (False, 'El tiempo de reserva debe ser al menos de 1 hora')
-	'''if ReservaFin > HorarioCierre:
-		return (False, 'El horario de inicio de reserva debe estar en un horario válido')
-	if ReservaInicio < HorarioApertura:
-		return (False, 'El horario de cierre de reserva debe estar en un horario válido')
-	return (True, '')'''
+	if ReservaInicio < datetime.now():
+		return (False, 'La reserva no puede tener lugar en el pasado.')
+	if ReservaFin > datetime.now()+timedelta(days=7):
+		return (False, 'La reserva no puede ser por mas de 7 dias')
 	if HorarioApertura.hour==0 and HorarioApertura.minute==0 \
 		and HorarioCierre.hour==23 and HorarioCierre.minute==59:
 		seven_days=timedelta(days=7)
@@ -38,12 +38,18 @@ def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCie
 		else:
 			return(False,'Se puede reservar un puesto por un maximo de 7 dias')
 	else:
-		hora_inicio=time(ReservaInicio.hour,ReservaInicio.minute)
-		hora_final=time(ReservaFin.hour,ReservaFin.minute)
-		if hora_inicio<HorarioApertura:
+		delta=timedelta(hours=HorarioCierre.hour,minutes=HorarioCierre.minute)
+		delta=delta-timedelta(hours=HorarioApertura.hour,minutes=HorarioApertura.minute)
+		
+		if ReservaFin-ReservaInicio>delta:
 			return (False, 'El horario de inicio de reserva debe estar en un horario válido')
-		if hora_final > HorarioCierre:
-			return (False, 'El horario de cierre de reserva debe estar en un horario válido')
+		else:
+			hora_inicio=time(hour = ReservaInicio.hour, minute = ReservaInicio.minute)
+			hora_final=time(hour = ReservaFin.hour, minute = ReservaFin.minute)
+			if hora_inicio<HorarioApertura:
+				return (False, 'El horario de inicio de reserva debe estar en un horario válido')
+			if hora_final > HorarioCierre:
+				return (False, 'El horario de cierre de reserva debe estar en un horario válido')
 		return (True,'')
 
 def marzullo(idEstacionamiento, hIn, hOut):

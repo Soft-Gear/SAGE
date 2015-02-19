@@ -563,6 +563,14 @@ class ReservaFormControllerTestCase(TestCase):
         form_data = {'inicio':datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0), 'final':datetime.datetime(year = 2000, month = 6, day = 15, hour = 12,  minute = 0)}
         form = EstacionamientoReserva(data = form_data)
         self.assertEqual(form.is_valid(), True)
+        
+    def test_Reservacion_MasDeUnDia_NoPermitido(self):
+        ReservaInicio = datetime.datetime(year=2000,month=2,day=6,hour = 11, minute = 59, second = 59)
+        ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 15, minute = 0, second = 1)
+        HoraApertura = datetime.time(hour = 12, minute = 0, second = 0)
+        HoraCierre = datetime.time(hour = 18, minute = 0, second = 0)
+        x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
+        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
 
 ###############################################################################
 # Marzullo
