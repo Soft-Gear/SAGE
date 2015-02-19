@@ -845,9 +845,31 @@ class RateTestCase(TestCase):
         value = rate.calcularPrecio(initial_datetime, final_datetime)
         self.assertEquals(value, 800)
 
-    def testCompleteDay(self):
+    def testCompleteDayMinusOneMinute(self):
         rate=TarifaHora(tarifa=1)
         initial_time=datetime.datetime(2015,2,18,0,0)
         final_time=datetime.datetime(2015,2,18,23,59)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, 24)
+        
+    def testCompleteDay(self):
+        rate=TarifaHora(tarifa=1)
+        initial_time=datetime.datetime(2015,2,18,0,0)
+        final_time=datetime.datetime(2015,2,19,0,0)
+        value = rate.calcularPrecio(initial_time, final_time)
+        self.assertEqual(value, 24)
+        
+    def testCompleteDayPlusOneMinute(self):
+        rate=TarifaHora(tarifa=1)
+        initial_time=datetime.datetime(2015,2,18,0,0)
+        final_time=datetime.datetime(2015,2,19,0,1)
+        value = rate.calcularPrecio(initial_time, final_time)
+        self.assertEqual(value, 25)
+        
+    def testSevenDaysHourRate(self):
+        rate=TarifaHora(tarifa=1)
+        initial_time=datetime.datetime(2015,2,18,0,0)
+        final_time=datetime.datetime(2015,2,25,0,0)
+        value = rate.calcularPrecio(initial_time, final_time)
+        self.assertEqual(value, 24*7)
+
