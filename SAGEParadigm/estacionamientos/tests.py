@@ -204,23 +204,23 @@ class ExtendedFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoExtendedForm_DosCampos(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0)}
+                                'horarioin': datetime.time(hour = 6,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
     def test_EstacionamientoExtendedForm_TresCampos(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0)}
+                                'horarioin': datetime.time( hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
     def test_EstacionamientoExtendedForm_CuatroCampos(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioin': datetime.time(hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
@@ -228,8 +228,8 @@ class ExtendedFormTestCase(TestCase):
     # caso borde
     def test_EstacionamientoExtendedForm_CincoCampos(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioin': datetime.time(hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
@@ -238,8 +238,8 @@ class ExtendedFormTestCase(TestCase):
     # caso borde
     def test_EstacionamientoExtendedForm_TodosCamposBien(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioin': datetime.time(hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
@@ -249,8 +249,8 @@ class ExtendedFormTestCase(TestCase):
     # caso borde
     def test_EstacionamientoExtendedForm_Puestos0(self):
         form_data = { 'puestos': 0,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioin': datetime.time(hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
@@ -260,8 +260,8 @@ class ExtendedFormTestCase(TestCase):
     # caso borde
     def test_EstacionamientoExtendedForm_HoraInicioIgualHoraCierre(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
+                                'horarioin': datetime.time(hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 6,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
@@ -271,8 +271,8 @@ class ExtendedFormTestCase(TestCase):
     # caso borde
     def test_EstacionamientoExtendedForm_HoraIniReserIgualHoraFinReser(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioin': datetime.time(hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'tarifa': '12'}
@@ -282,8 +282,8 @@ class ExtendedFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoExtendedForm_StringEnPuesto(self):
         form_data = { 'puestos': 'hola',
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioin': datetime.time(hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
@@ -294,7 +294,7 @@ class ExtendedFormTestCase(TestCase):
     def test_EstacionamientoExtendedForm_StringHoraInicio(self):
         form_data = { 'puestos': 2,
                                 'horarioin': 'holaa',
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
@@ -305,7 +305,7 @@ class ExtendedFormTestCase(TestCase):
     def test_EstacionamientoExtendedForm_NumeroNegativoHoraInicio(self):
         form_data = { 'puestos': 2,
                                 'horarioin':-1,
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
@@ -315,8 +315,8 @@ class ExtendedFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoExtendedForm_NoneEntarifa(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioin': datetime.time( hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': None}
@@ -327,7 +327,7 @@ class ExtendedFormTestCase(TestCase):
     def test_EstacionamientoExtendedForm_NoneEnHorarioReserva(self):
         form_data = { 'puestos': 2,
                                 'horarioin': 'holaa',
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': None,
                                 'horario_reserout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0),
                                 'tarifa': '12'}
@@ -337,8 +337,8 @@ class ExtendedFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoExtendedForm_listaEnHoraReserva(self):
         form_data = { 'puestos': 2,
-                                'horarioin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 6,  minute = 0),
-                                'horarioout': datetime.datetime(year = 2000, month = 6, day = 15, hour = 19,  minute = 0),
+                                'horarioin': datetime.time( hour = 6,  minute = 0),
+                                'horarioout': datetime.time(hour = 19,  minute = 0),
                                 'horario_reserin': datetime.datetime(year = 2000, month = 6, day = 15, hour = 7,  minute = 0),
                                 'horario_reserout': [datetime.datetime(year = 2000, month = 6, day = 15, hour = 14,  minute = 0)],
                                 'tarifa': 12}
@@ -514,8 +514,8 @@ class ReservaFormControllerTestCase(TestCase):
 # HorarioReserva, pruebas Unitarias
     # normal
     def test_HorarioReservaValido(self):
-        ReservaInicio = datetime.time(hour = 13, minute = 0, second = 0)
-        ReservaFin = datetime.time(hour = 15, minute = 0, second = 0)
+        ReservaInicio = datetime.datetime(year=2000,month=2,day=6,hour = 13, minute = 0, second = 0)
+        ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 15, minute = 0, second = 0)
         HoraApertura = datetime.time(hour = 12, minute = 0, second = 0)
         HoraCierre = datetime.time(hour = 18, minute = 0, second = 0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
@@ -523,8 +523,8 @@ class ReservaFormControllerTestCase(TestCase):
 
     # caso borde
     def test_HorarioReservaInvalido_InicioReservacion_Mayor_FinalReservacion(self):
-        ReservaInicio = datetime.time(hour = 13, minute = 0, second = 0)
-        ReservaFin = datetime.time(hour = 12, minute = 59, second = 59)
+        ReservaInicio = datetime.datetime(year=2000,month=2,day=6,hour = 13, minute = 0, second = 0)
+        ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 12, minute = 59, second = 59)
         HoraApertura = datetime.time(hour = 12, minute = 0, second = 0)
         HoraCierre = datetime.time(hour = 18, minute = 0, second = 0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
@@ -532,8 +532,8 @@ class ReservaFormControllerTestCase(TestCase):
 
     # caso borde
     def test_HorarioReservaInvalido_TiempoTotalMenor1h(self):
-        ReservaInicio = datetime.time(hour = 13, minute = 0, second = 0)
-        ReservaFin = datetime.time(hour = 13, minute = 59, second = 59)
+        ReservaInicio = datetime.datetime(year=2000,month=2,day=6,hour = 13, minute = 0, second = 0)
+        ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 13, minute = 59, second = 59)
         HoraApertura = datetime.time(hour = 12, minute = 0, second = 0)
         HoraCierre = datetime.time(hour = 18, minute = 0, second = 0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
@@ -541,21 +541,21 @@ class ReservaFormControllerTestCase(TestCase):
 
     # caso borde
     def test_HorarioReservaInvalido_ReservaFinal_Mayor_HorarioCierre(self):
-        ReservaInicio = datetime.time(hour = 13, minute = 0, second = 0)
-        ReservaFin = datetime.time(hour = 18, minute = 0, second = 1)
-        HoraApertura = datetime.time(hour = 12, minute = 0, second = 0)
-        HoraCierre = datetime.time(hour = 18, minute = 0, second = 0)
-        x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
-
-    # caso borde
-    def test_HorarioReservaInvalido_ReservaInicial_Menor_HorarioApertura(self):
-        ReservaInicio = datetime.time(hour = 11, minute = 59, second = 59)
-        ReservaFin = datetime.time(hour = 15, minute = 0, second = 1)
+        ReservaInicio = datetime.datetime(year=2000,month=2,day=6,hour = 13, minute = 0, second = 0)
+        ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 18, minute = 0, second = 1)
         HoraApertura = datetime.time(hour = 12, minute = 0, second = 0)
         HoraCierre = datetime.time(hour = 18, minute = 0, second = 0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de cierre de reserva debe estar en un horario válido'))
+
+    # caso borde
+    def test_HorarioReservaInvalido_ReservaInicial_Menor_HorarioApertura(self):
+        ReservaInicio = datetime.datetime(year=2000,month=2,day=6,hour = 11, minute = 59, second = 59)
+        ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 15, minute = 0, second = 1)
+        HoraApertura = datetime.time(hour = 12, minute = 0, second = 0)
+        HoraCierre = datetime.time(hour = 18, minute = 0, second = 0)
+        x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
+        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
 
     # malicia
     def test_Reservacion_CamposVacios(self):
