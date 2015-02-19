@@ -539,16 +539,16 @@ class ReservaFormControllerTestCase(TestCase):
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El tiempo de reserva debe ser al menos de 1 hora'))
 
-    # caso borde
+    # caso borde (18/02/2015): Modificado para el granulado en minutos 
     def test_HorarioReservaInvalido_ReservaFinal_Mayor_HorarioCierre(self):
         ReservaInicio = datetime.datetime(year=2000,month=2,day=6,hour = 13, minute = 0, second = 0)
-        ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 18, minute = 0, second = 1)
+        ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 18, minute = 1, second = 0)
         HoraApertura = datetime.time(hour = 12, minute = 0, second = 0)
         HoraCierre = datetime.time(hour = 18, minute = 0, second = 0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de cierre de reserva debe estar en un horario válido'))
 
-    # caso borde
+    # Caso borde 
     def test_HorarioReservaInvalido_ReservaInicial_Menor_HorarioApertura(self):
         ReservaInicio = datetime.datetime(year=2000,month=2,day=6,hour = 11, minute = 59, second = 59)
         ReservaFin = datetime.datetime(year=2000,month=2,day=6,hour = 15, minute = 0, second = 1)
