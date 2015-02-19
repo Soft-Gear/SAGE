@@ -569,6 +569,10 @@ class ReservaFormControllerTestCase(TestCase):
 
 class TestMarzullo(unittest.TestCase):
     '''
+        Bordes:   7
+        Esquinas: 6
+        Malicia:  5
+
         Es importante definir el dominio de los datos que recibe Marzullo:
 
           cap. del est. +----------------------+
@@ -582,7 +586,7 @@ class TestMarzullo(unittest.TestCase):
                         |                      |
                         |                      |
                       0 +----------------------+
-                        |  <duración reserva>  |
+                        |       <reserva>      |
                         |                      hora de cierre
                         |
                         hora de apertura
@@ -591,16 +595,16 @@ class TestMarzullo(unittest.TestCase):
         a las 6am y cierre a las 6pm, con capacidades que varían en cada caso.
         De esta forma, el dominio se vuelve:
 
-          cap. del est. +-----------------------------------+
-                        |                                   |
-                        |                                   |
-                        |                                   |
-                /\      |                                   |
-        cant. vehiculos |                                   |
-                \/      |                                   |
-                        |            zzzzzzzzzzzzzzzzz      |
-                        |         yyyyyyyyyyy               |
-                        |xxxxxxxxxxxxxx                     |
+          cap. del est. +--+--+--+--+--+--+--+--+--+--+--+--+
+                        |  |  |  |  |  |  |  |  |  |  |  |  |
+                        |  |  |  |  |  |  |  |  |  |  |  |  |
+                        |  |  |  |  |  |  |  |  |  |  |  |  |
+                /\      |  |  |  |  |  |  |  |  |  |  |  |  |
+        cant. vehiculos |  |  |  |  |  |  |  |  |  |  |  |  |
+                \/      |  |  |  |  |  |  |  |  |  |  |  |  |
+                        |  |  |  |  |zz|zz|zz|zz|zz|zz|  |  |
+                        |  |  |  |yy|yy|yy|yy|  |  |  |  |  |
+                        |xx|xx|xx|xx|xx|  |  |  |  |  |  |  |
                       0 +--+--+--+--+--+--+--+--+--+--+--+--+
                         |  |  |  |  |  |  |  |  |  |  |  |  |
                         06 07 08 09 10 11 12 13 14 15 16 17 18
@@ -628,9 +632,39 @@ class TestMarzullo(unittest.TestCase):
         e.save()
         return e
 
-    def testOneReservation(self): #borde, ocupación = capacidad
+    def testOneReservationMax(self): #borde, ocupación = capacidad
         e = self.crearEstacionamiento(1)
         self.assertTrue(marzullo(e.id, datetime(2015,1,20,9), datetime(2015,1,20,15)))
+
+    def testOneReservationEarly(self): #borde, inicio = aprtura
+        e = self.crearEstacionamiento(2)
+        self.assertTrue(marzullo(e.id, datetime(2015,1,20,6), datetime(2015,1,20,10)))
+
+    def testOneReservationLate(self): #borde, fin = cierre
+        e = self.crearEstacionamiento(2)
+        self.assertTrue(marzullo(e.id, datetime(2015,1,20,15), datetime(2015,1,20,18)))
+
+    def testOneReservationFullDay(self): #esquina, inicio = aprtura y fin = cierre
+        e = self.crearEstacionamiento(1)
+        self.assertTrue(marzullo(e.id, datetime(2015,1,20,6), datetime(2015,1,20,18)))
+
+    def testSmallestReservation(self): #borde, fin - inicio = 1hora
+        e = self.crearEstacionamiento(1)
+        self.assertTrue(marzullo(e.id, datetime(2015,1,20,8), datetime(2015,1,20,9)))
+
+    def testAllSmallestReservations(self): #malicia, fin - inicio = 1hora, doce veces
+        e = self.crearEstacionamiento(1)
+        for i in range(12):
+            Reserva(estacionamiento = e, inicioReserva = datetime(2015, 1, 20, 6+i), finalReserva = datetime(2015, 1, 20, 7+i)).save()
+        for i in range(12):
+            self.assertFalse(marzullo(e.id, datetime(2015,1,20,6+i), datetime(2015,1,20,7+i)))
+
+    def testFullPlusOne(self): #malicia, fin - inicio = 1hora, doce veces +
+                               #         una reserva FullDay
+        e = self.crearEstacionamiento(1)
+        for i in range(12):
+            Reserva(estacionamiento = e, inicioReserva = datetime(2015, 1, 20, 6+i), finalReserva = datetime(2015, 1, 20, 7+i)).save()
+        self.assertFalse(marzullo(e.id, datetime(2015, 1, 20, 6), datetime(2015, 1, 20, 18)))
 
     def testNoSpotParking(self): #borde, capacidad = 0
         e = self.crearEstacionamiento(0)
@@ -640,18 +674,17 @@ class TestMarzullo(unittest.TestCase):
         e = self.crearEstacionamiento(10)
         self.assertTrue(marzullo(e.id, datetime(2015,1,20,9), datetime(2015,1,20,15)))
 
-    def testAddTwoReservation(self): #borde (esquina?), dos reservaciones con fin = cierre estac.
+    def testAddTwoReservation(self): #esquina, dos reservaciones con fin = cierre estac.
         e = self.crearEstacionamiento(10)
-        # Reserva(estacionamiento = e, inicioReserva = "2015-01-20 09:00", finalReserva = "2015-01-20 18:00").save()
         Reserva(estacionamiento = e, inicioReserva = datetime(2015, 1, 20, 9), finalReserva = datetime(2015, 1, 20, 18)).save()
         self.assertTrue(marzullo(e.id, datetime(2015,1,20,12), datetime(2015,1,20,18)))
 
-    def testAddTwoReservation2(self): #borde (esquina?), dos reservaciones con incio = apertura estac.
+    def testAddTwoReservation2(self): #esquina, dos reservaciones con incio = apertura estac.
         e = self.crearEstacionamiento(10)
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 6), finalReserva=datetime(2015, 1, 20, 15)).save()
         self.assertTrue(marzullo(e.id, datetime(2015,1,20,6), datetime(2015,1,20,14)))
 
-    def testAddThreeReservations(self): #esquina maliciosa, reserva cubre todo el horario, y ocupación = capacidad
+    def testAddThreeReservations(self): #malicia, reserva cubre todo el horario, y ocupación = capacidad
         e = self.crearEstacionamiento(3)
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20,  9), finalReserva=datetime(2015, 1, 20, 15)).save()
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 10), finalReserva=datetime(2015, 1, 20, 15)).save()
@@ -710,7 +743,7 @@ class TestMarzullo(unittest.TestCase):
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 10), finalReserva=datetime(2015, 1, 20, 15)).save()
         self.assertTrue(marzullo(e.id, datetime(2015,1,20,10), datetime(2015,1,20,15)))
 
-    def testManyReservationsOneOverlap(self): #malicia y esquinas, count = (capacidad+1) en la hora (9am - 10am)
+    def testManyReservationsOneOverlap(self): #malicia, count = (capacidad+1) en la hora (9am - 10am)
                                               #                    algunas reservas tienen inicio = apertura
         e = self.crearEstacionamiento(10)
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 6), finalReserva=datetime(2015, 1, 20, 10)).save()
