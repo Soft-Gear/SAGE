@@ -504,8 +504,222 @@ class ReservaFormTestCase(TestCase):
         self.assertEqual(form.is_valid(), False)
 
 ###################################################################
-# PRUEBAS DE FUNCIONES DEL CONTROLADOR
+# Pago Tarjeta de Credito Form
 ###################################################################
+class PagoTarjetaDeCreditoFormTestCase(TestCase):
+
+    # borde
+    def test_PagoTarjetaForm_Vacio(self):
+        form_data = {}
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    # borde
+    def test_PagoTarjetaForm_UnCampo(self):
+        form_data = {
+            'nombre': 'Pedro',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_DosCampos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_TresCampos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_CuatroCampos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())        
+
+    #borde
+    def test_PagoTarjetaForm_CincoCampos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_PagoTarjetaForm_SeisCampos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_NombreInvalidoDigitos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_NombreInvalidoSimbolos(self):
+        form_data = {
+            'nombre': 'Pedro*',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_ApellidoInvalidoDigitos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez1',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_ApellidoInvalidoSimbolos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': '¡Perez!',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_CedulaTipoInvalido(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedulaTipo': 'J',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_CedulaInvalida(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+            'cedula': 'V12345',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_TipoTarjetaInvalido(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+            'tarjetaTipo': 'American',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #borde
+    def test_PagoTarjetaForm_TarjetaInvalido(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedulaTipo': 'V',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': 'ab12345',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #malicia
+    def test_PagoTarjetaForm_DosCamposErroneos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedulaTipo': 'foo',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #malicia
+    def test_PagoTarjetaForm_CuatroCamposErroneos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedulaTipo': 'foo',
+            'cedula': '12345sda6789',
+            'tarjetaTipo': 'American',
+            'tarjeta': '1234',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #malicia
+    def test_PagoTarjetaForm_TodosCamposErroneos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez2',
+            'cedulaTipo': 'foo',
+            'cedula': '12345678as9',
+            'tarjetaTipo': 'American',
+            'tarjeta': 'prueba',
+        }
+        form = PagoTarjetaDeCredito(data = form_data)
+        self.assertFalse(form.is_valid())
+
 
 ##############################################################
 # Estacionamiento Reserva Controlador
