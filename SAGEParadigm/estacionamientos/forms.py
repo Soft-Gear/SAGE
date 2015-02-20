@@ -68,7 +68,7 @@ class EstacionamientoExtendedForm2(forms.Form):
     choices_esquema = [
                        ('TarifaHora', 'Por hora'),
                        ('TarifaMinuto', 'Por minuto'),
-                       ('TarifaHorayFraccion', 'Por hora y ')
+                       ('TarifaHorayFraccion', 'Por hora y Fraccion')
     ]
     
     esquema = forms.ChoiceField(
