@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 import datetime
 from decimal import Decimal
-from estacionamientos.controller import HorarioEstacionamiento, validarHorarioReserva, marzullo
+from estacionamientos.controller import *
 from estacionamientos.forms import EstacionamientoExtendedForm, EstacionamientoExtendedForm2
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
@@ -80,12 +80,15 @@ def estacionamiento_detail(request, _id):
             reservaOut = form.cleaned_data['horario_reserout']
             tipo = form2.cleaned_data['esquema']
             tmonto = form.cleaned_data['tarifa']
-            if(tipo=='Por hora'):
-                t = TarifaHora(tarifa = tmonto)
-            elif(tipo=='Por minuto'):
-                t = TarifaMinuto(tarifa = tmonto)
-            elif(tipo=='Por fraccion'):
-                t = TarifaHorayFraccion(tarifa = tmonto)
+            # if(tipo=='Por hora'):
+            #     t = TarifaHora(tarifa = tmonto)
+            # elif(tipo=='Por minuto'):
+            #     t = TarifaMinuto(tarifa = tmonto)
+            # elif(tipo=='Por fraccion'):
+            #     t = TarifaHorayFraccion(tarifa = tmonto)
+            
+            t = eval(tipo+'(tarifa = tmonto)')
+
             t.save()
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
@@ -146,13 +149,6 @@ def estacionamiento_reserva(request, _id):
                 request.session['finalReservaMinuto'] = finalReserva.minute
                 request.session['inicioReservaHora'] = inicioReserva.hour
                 request.session['inicioReservaMinuto'] = inicioReserva.minute
-                request.session['anioinicial']=inicioReserva.year
-                request.session['mesinicial']=inicioReserva.month
-                request.session['diainicial']=inicioReserva.day
-                request.session['aniofinal']=finalReserva.year
-                request.session['mesfinal']=finalReserva.month
-                request.session['diafinal']=finalReserva.day
-        
                 return render(request, 'estacionamientoPagarReserva.html', {'id': _id,'monto': monto,'reserva': reservaFinal,'color':'green', 'mensaje':'Existe un puesto disponible'})
             else:
                 # Cambiar mensaje
@@ -169,10 +165,10 @@ def estacionamiento_pago(request,_id):
                 estacionamiento = Estacionamiento.objects.get(id = _id)
             except ObjectDoesNotExist:
                 return render(request, '404.html')
-            inicioReserva = datetime.datetime(year=request.session['anioinicial'], month=request.session['mesinicial'], day=request.session['diainicial'], hour = request.session['inicioReservaHora'],
+            inicioReserva = datetime.time(hour = request.session['inicioReservaHora'],
                                         minute = request.session['inicioReservaMinuto']
                                     )
-            finalReserva  = datetime.datetime(year=request.session['aniofinal'], month=request.session['mesfinal'], day=request.session['diafinal'], hour = request.session['finalReservaHora'],
+            finalReserva  = datetime.time(hour = request.session['finalReservaHora'],
                                         minute = request.session['finalReservaMinuto']
                                     )
 

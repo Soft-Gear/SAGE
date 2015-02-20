@@ -201,18 +201,16 @@
                   </div>
                 </div>
               {% endfor %}
-              {% for field in form2 %}
                 <div class="control-group">
                   <div class="controls">
-                      <select class="form-control" name="{{field.name}}" placeholder="{{field.label}}">
-                     	<option value='Por hora'>Por hora</option>
-                     	<option value="Por minuto">Por minuto</option>
-                     	<option value="Por fraccion">Por fraccion</option>
+                      <select class="form-control" name="esquema">
+                     	{% for op in form2.choices_esquema %}
+                        <option value={{ op.0 }}> {{ op.1 }}</option>option>
+                      {% endfor %}
                       </select>
-                      {{ field.errors }}
+                      {{ form2.esquema.errors }}
                   </div>
                 </div>
-              {% endfor %}
                 
               <form action="." method="post" class="form form-vertical">
                 <div class="control-group">

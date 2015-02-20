@@ -64,13 +64,13 @@ class EstacionamientoExtendedForm(forms.Form):
     tarifa = forms.CharField(required = True, validators = [tarifa_validator])
 
 class EstacionamientoExtendedForm2(forms.Form):
-
-    choices_esquema = (
-                       ('Por hora', 'hora'),
-                       ('Por minuto', 'minuto'),
-                       ('Por fraccion', 'fraccion')
-    )
-
+    
+    choices_esquema = [
+                       ('TarifaHora', 'Por hora'),
+                       ('TarifaMinuto', 'Por minuto'),
+                       ('TarifaHorayFraccion', 'Por hora y ')
+    ]
+    
     esquema = forms.ChoiceField(
                                 required = True,
                                 choices = choices_esquema
