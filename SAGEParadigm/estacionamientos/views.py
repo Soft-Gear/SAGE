@@ -64,7 +64,6 @@ def estacionamiento_detail(request, _id):
         return render(request, '404.html')
 
     if request.method == 'GET':
-
         form = EstacionamientoExtendedForm()
 
     elif request.method == 'POST':

@@ -4,6 +4,7 @@ from django import forms
 from django.core.validators import RegexValidator
 from estacionamientos.models import *
 from estacionamientos.controller import FindAllSubclasses
+from django.template.defaultfilters import default
 
 
 class EstacionamientoForm(forms.Form):
@@ -76,12 +77,12 @@ class EstacionamientoExtendedForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(EstacionamientoExtendedForm,self).__init__(*args, **kwargs)
-        self.fields['puestos'].widget.attrs = {'class':'form-control'}
-        self.fields['horarioin'].widget.attrs = {'class':'form-control'}
-        self.fields['horarioout'].widget.attrs = {'class':'form-control'}
-        self.fields['horario_reserin'].widget.attrs = {'class':'form-control'}
-        self.fields['horario_reserout'].widget.attrs = {'class':'form-control'}
-        self.fields['tarifa'].widget.attrs = {'class':'form-control'}
+        self.fields['puestos'].widget.attrs = {'class':'form-control', 'placeholder':'Número de Puestos'}
+        self.fields['horarioin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Apertura'}
+        self.fields['horarioout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Cierre'}
+        self.fields['horario_reserin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Inicio Reserva'}
+        self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva'}
+        self.fields['tarifa'].widget.attrs = {'class':'form-control', 'placeholder':'Tarifa'}
         self.fields['esquema'].widget.attrs = {'class':'form-control'}
 
 class EstacionamientoExtendedForm2(forms.Form):
