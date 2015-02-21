@@ -61,7 +61,7 @@ class TarifaHora(EsquemaTarifario):
 		a=ceil(a) #  De las horas se calcula el techo de ellas
 		return(Decimal(self.tarifa*a).quantize(Decimal('1.00')))
 	def  tipo(self):
-		return("Tarifa por hora")
+		return("Por Hora")
 
 class TarifaMinuto(EsquemaTarifario):
 
@@ -71,7 +71,7 @@ class TarifaMinuto(EsquemaTarifario):
 		return (Decimal(minutes)*Decimal(self.tarifa/60)).quantize(Decimal('1.00'))
 	
 	def  tipo(self):
-		return("Tarifa por minuto")
+		return("Por Minuto")
 
 class TarifaHorayFraccion(EsquemaTarifario):
 
@@ -91,4 +91,4 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		return(Decimal(valor).quantize(Decimal('1.00')))
 	
 	def  tipo(self):
-		return("Tarifa por hora y fraccion")
+		return("Por Hora y Fraccion")
