@@ -76,8 +76,8 @@ def estacionamiento_detail(request, _id):
             reservaIn = form.cleaned_data['horario_reserin']
             reservaOut = form.cleaned_data['horario_reserout']
             tmonto = form.cleaned_data['tarifa']
-            t = form.tarifas[int(form.cleaned_data['esquema'])][0](tarifa = tmonto)
-            t.save()
+            esquema = form.lista_de_esquemas[int(form.cleaned_data['esquema'])][0](tarifa = tmonto)
+            esquema.save()
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
             m_validado = HorarioEstacionamiento(horaIn, horaOut, reservaIn, reservaOut)
@@ -90,7 +90,7 @@ def estacionamiento_detail(request, _id):
             estacionamiento.cierre = horaOut
             estacionamiento.reservasInicio = reservaIn
             estacionamiento.reservasCierre = reservaOut
-            estacionamiento.esquemaTarifa = t
+            estacionamiento.esquemaTarifa = esquema
             estacionamiento.nroPuesto = form.cleaned_data['puestos']
 
             estacionamiento.save()

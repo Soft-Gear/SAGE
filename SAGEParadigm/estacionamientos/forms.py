@@ -66,10 +66,10 @@ class EstacionamientoExtendedForm(forms.Form):
 
     tarifa = forms.CharField(required = True, validators = [tarifa_validator])
     
-    tarifas = FindAllSubclasses(EsquemaTarifario)
+    lista_de_esquemas = FindAllSubclasses(EsquemaTarifario)
     choices_esquema = []
-    for i in range(len(tarifas)):
-        choices_esquema.append((i,tarifas[i][0].tipo(None)))
+    for i in range(len(lista_de_esquemas)):
+        choices_esquema.append((i,lista_de_esquemas[i][0].tipo(None)))
     esquema = forms.ChoiceField(
                                 required = True,
                                 choices = choices_esquema
