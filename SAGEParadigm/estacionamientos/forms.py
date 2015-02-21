@@ -2,6 +2,8 @@
 
 from django import forms
 from django.core.validators import RegexValidator
+from estacionamientos.models import *
+from estacionamientos.controller import FindAllSubclasses
 
 
 class EstacionamientoForm(forms.Form):
@@ -62,6 +64,18 @@ class EstacionamientoExtendedForm(forms.Form):
     horario_reserout = forms.TimeField(required = True, label = 'Horario Fin Reserva')
 
     tarifa = forms.CharField(required = True, validators = [tarifa_validator])
+    
+    tarifas = FindAllSubclasses(EsquemaTarifario)
+    choices_esquema = []
+    for i in range(len(tarifas)):
+        choices_esquema.append((i,tarifas[i][0].tipo(None)))
+    esquema = forms.ChoiceField(
+                                required = True,
+                                choices = choices_esquema
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super(EstacionamientoExtendedForm,self).__init__(*args, **kwargs)
 
 class EstacionamientoExtendedForm2(forms.Form):
 

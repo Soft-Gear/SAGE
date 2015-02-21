@@ -186,33 +186,35 @@
             <div class="panel-body">
 
 
-
               <form action="." method="post" class="form form-vertical">
+                  {% for field in form %}
+                    <div class="control-group">
+                       <div class="controls">
+                        {% if not field.value or field.errors %}
+                             {{ field }}
+                        {% else %}
+                             {{ field }}
+                        {% endif %}
+                             {{ field.errors }}
+                        </div>
+                    </div>
+                 {% endfor %}
+              </form>
+              
+              <!--<form action="." method="post" class="form form-vertical">
               {% csrf_token %}
               {% for field in form %}
                 <div class="control-group">
                   <div class="controls">
                     {% if not field.value or field.errors %}
-                      <input type="text" class="form-control" name="{{field.name}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
+                      {{ field }}
                     {% else %}
-                      <input type="text" class="form-control" name="{{field.name}}" value="{{field.value}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
+                      {{ field }}
                     {% endif %}
                     {{ field.errors }}
                   </div>
                 </div>
-              {% endfor %}
-              {% for field in form2 %}
-                <div class="control-group">
-                  <div class="controls">
-                      <select class="form-control" name="{{field.name}}" placeholder="{{field.label}}">
-                     	<option value='Por hora'>Por hora</option>
-                     	<option value="Por minuto">Por minuto</option>
-                     	<option value="Por fraccion">Por fraccion</option>
-                      </select>
-                      {{ field.errors }}
-                  </div>
-                </div>
-              {% endfor %}
+              {% endfor %}-->
                 
               <form action="." method="post" class="form form-vertical">
                 <div class="control-group">

@@ -91,4 +91,4 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		return(Decimal(valor).quantize(Decimal('1.00')))
 	
 	def  tipo(self):
-		return("Tarifa por fraccion")
+		return("Tarifa por hora y fraccion")
