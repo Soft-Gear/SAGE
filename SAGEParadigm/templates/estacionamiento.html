@@ -186,7 +186,7 @@
               <form action="." method="post" class="form form-vertical">
               	  {% csrf_token %}
                   {% for field in form %}
-                    <div class="control-group">
+                    <div class="control-group" style='margin: 0 5px;'>
                        <div class="controls">
                         {% if not field.value or field.errors %}
                              {{ field }}
@@ -196,7 +196,7 @@
                              {{ field.errors }}
                         </div>
                     </div>
-                    <br />
+                    <p>
                  {% endfor %}
                 
               <form action="." method="post" class="form form-vertical">
