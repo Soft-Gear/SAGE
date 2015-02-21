@@ -124,9 +124,6 @@
         </tbody>
       </table>
 
-      <hr>
-      <hr>
-
 
 
 
@@ -187,6 +184,7 @@
 
 
               <form action="." method="post" class="form form-vertical">
+              	  {% csrf_token %}
                   {% for field in form %}
                     <div class="control-group">
                        <div class="controls">
