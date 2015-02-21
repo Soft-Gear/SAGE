@@ -6,12 +6,12 @@ from django.shortcuts import render
 import datetime
 from decimal import Decimal
 from estacionamientos.controller import HorarioEstacionamiento, validarHorarioReserva, marzullo
-from estacionamientos.forms import EstacionamientoExtendedForm, EstacionamientoExtendedForm2
+from estacionamientos.forms import EstacionamientoExtendedForm
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
 
-from estacionamientos.models import *
+from estacionamientos.models import * # No tocar esta linea
 
 
 # Usamos esta vista para procesar todos los estacionamientos

@@ -2,9 +2,9 @@
 
 from django import forms
 from django.core.validators import RegexValidator
-from estacionamientos.models import *
 from estacionamientos.controller import FindAllSubclasses
-from django.template.defaultfilters import default
+
+from estacionamientos.models import * # No tocar esta linea
 
 
 class EstacionamientoForm(forms.Form):
@@ -84,19 +84,6 @@ class EstacionamientoExtendedForm(forms.Form):
         self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva'}
         self.fields['tarifa'].widget.attrs = {'class':'form-control', 'placeholder':'Tarifa'}
         self.fields['esquema'].widget.attrs = {'class':'form-control'}
-
-class EstacionamientoExtendedForm2(forms.Form):
-
-    choices_esquema = (
-                       ('Por hora', 'hora'),
-                       ('Por minuto', 'minuto'),
-                       ('Por fraccion', 'fraccion')
-    )
-
-    esquema = forms.ChoiceField(
-                                required = True,
-                                choices = choices_esquema
-    )
 
 class EstacionamientoReserva(forms.Form):
     inicio = forms.DateTimeField(label = 'Horario Inicio Reserva')
