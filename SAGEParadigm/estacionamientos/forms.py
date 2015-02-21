@@ -76,6 +76,13 @@ class EstacionamientoExtendedForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(EstacionamientoExtendedForm,self).__init__(*args, **kwargs)
+        self.fields['puestos'].widget.attrs = {'class':'form-control'}
+        self.fields['horarioin'].widget.attrs = {'class':'form-control'}
+        self.fields['horarioout'].widget.attrs = {'class':'form-control'}
+        self.fields['horario_reserin'].widget.attrs = {'class':'form-control'}
+        self.fields['horario_reserout'].widget.attrs = {'class':'form-control'}
+        self.fields['tarifa'].widget.attrs = {'class':'form-control'}
+        self.fields['esquema'].widget.attrs = {'class':'form-control'}
 
 class EstacionamientoExtendedForm2(forms.Form):
 
