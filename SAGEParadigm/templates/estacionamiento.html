@@ -11,6 +11,7 @@
     <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
     <link href="{% static 'css/base.css'%}" rel="stylesheet">
     <link href="{% static 'css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/styles.css'%}" rel="stylesheet">
 
    </head>
 
@@ -189,7 +190,8 @@
                     <div class="control-group" style='margin: 0 5px;'>
                        <div class="controls">
                         {% if not field.value or field.errors %}
-                             {{ field }}
+                    		 {{ field }}
+                    		 <span class='error' id='{{field.name}}_error' aria-live="polite"></span>
                         {% else %}
                              {{ field }}
                         {% endif %}
@@ -211,6 +213,47 @@
 
 
               </form>
+              
+			<script>
+			
+			   	var inputs = document.getElementsByTagName("input");
+			    var inputs_len = inputs.length;
+			    var addDirtyClass = function(evt) {
+				  evt.srcElement.classList.toggle("dirty", true);
+			    };
+			    for (var i = 0; i < inputs_len; i++) {
+			      var input = inputs[i];
+			      input.addEventListener("focus", addDirtyClass);
+			      input.addEventListener("invalid", addDirtyClass);
+			      input.addEventListener("valid", addDirtyClass);
+			    }
+			
+				function verifyPattern(field, error, error_message) {
+					if (field.validity.valid) {
+						error.innerHTML = ""; // Reset the content of the message
+						error.className = "error"; // Reset the visual state of the message
+					} else {
+						error.innerHTML = error_message;
+						error.className = "error active";
+					}
+				};
+			
+			
+				{% for field in form %}
+					var error_{{ field.name}} = document.getElementById('{{ field.name }}_error')
+					var {{ field.name }} = document.getElementById('id_{{ field.name }}');
+					{{ field.name }}.addEventListener('blur', function (event) {
+						verifyPattern({{ field.name }}, error_{{ field.name}}, "Mensaje generico");
+					}, false);
+					
+					{{ field.name }}.addEventListener('focus', function (event) {
+						error_{{ field.name}}.innerHTML = ""; // Reset the content of the message
+						error_{{ field.name}}.className = "error"; // Reset the visual state of the message
+					}, false);
+					
+				{% endfor %}
+			
+			</script>
 
 
             </div>

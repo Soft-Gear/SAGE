@@ -3,8 +3,13 @@
 from django import forms
 from django.core.validators import RegexValidator
 from estacionamientos.controller import FindAllSubclasses
-
+from django.forms.widgets import SplitDateTimeWidget
 from estacionamientos.models import * # No tocar esta linea
+
+class MySplitDateTimeWidget(SplitDateTimeWidget):
+    
+    def format_output(self, rendered_widgets):
+        return u'<p></p>'.join(rendered_widgets)
 
 
 class EstacionamientoForm(forms.Form):
@@ -51,7 +56,7 @@ class EstacionamientoForm(forms.Form):
 class EstacionamientoExtendedForm(forms.Form):
 
 
-    puestos = forms.IntegerField(min_value = 0, label = 'Número de Puestos')
+    puestos = forms.IntegerField(required=True, min_value = 0, label = 'Número de Puestos')
 
     tarifa_validator = RegexValidator(
                             regex = '^([0-9]+(\.[0-9]+)?)$',
@@ -77,17 +82,22 @@ class EstacionamientoExtendedForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(EstacionamientoExtendedForm,self).__init__(*args, **kwargs)
-        self.fields['puestos'].widget.attrs = {'class':'form-control', 'placeholder':'Número de Puestos'}
-        self.fields['horarioin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Apertura'}
-        self.fields['horarioout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Cierre'}
-        self.fields['horario_reserin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Inicio Reserva'}
-        self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva'}
-        self.fields['tarifa'].widget.attrs = {'class':'form-control', 'placeholder':'Tarifa'}
+        self.fields['puestos'].widget.attrs = {'class':'form-control', 'placeholder':'Número de Puestos', 'min':"0", 'pattern':'^[0-9]+', 'required':'true'}
+        self.fields['horarioin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Apertura', 'pattern':'^[0-1][0-9]|2[0-3]:[0-5][0-9]', 'required':'true'}
+        self.fields['horarioout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Cierre', 'pattern':'^[0-1][0-9]|2[0-3]:[0-5][0-9]', 'required':'true'}
+        self.fields['horario_reserin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Inicio Reserva', 'pattern':'^[0-1][0-9]|2[0-3]:[0-5][0-9]', 'required':'true'}
+        self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva', 'pattern':'^[0-1][0-9]|2[0-3]:[0-5][0-9]', 'required':'true'}
+        self.fields['tarifa'].widget.attrs = {'class':'form-control', 'placeholder':'Tarifa', 'pattern':'^([0-9]+(\.[0-9]+)?)$', 'required':'true'}
         self.fields['esquema'].widget.attrs = {'class':'form-control'}
 
 class EstacionamientoReserva(forms.Form):
-    inicio = forms.DateTimeField(label = 'Horario Inicio Reserva')
-    final = forms.DateTimeField(label = 'Horario Final Reserva')
+    inicio = forms.SplitDateTimeField(label = 'Horario Inicio Reserva')
+    final = forms.SplitDateTimeField(label = 'Horario Final Reserva')
+    
+    def __init__(self, *args, **kwargs):
+        super(EstacionamientoReserva,self).__init__(*args, **kwargs)
+        self.fields['inicio'].widget = MySplitDateTimeWidget(attrs={'class':'form-control', 'type':'date','placeholder':'Hora Inicio Reserva'})
+        self.fields['final'].widget = MySplitDateTimeWidget(attrs={'class':'form-control', 'type':'date','placeholder':'Hora Final Reserva'})
 
 class PagoTarjetaDeCredito(forms.Form):
     nombre = forms.CharField( required = True, 
