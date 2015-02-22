@@ -28,19 +28,77 @@ class EstacionamientoForm(forms.Form):
                                 regex = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ ]+$',
                                 message = 'Sólo debe contener letras.'
                         )
-                    ]
+                    ],
+                    widget = forms.TextInput(attrs = {
+                        'class':'form-control',
+                        'placeholder':'Propietario',
+                        'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ ]+$',
+                        'required':'true',
+                        'message':'La entrada debe ser un nombre sin numeros.'
+                    })
                 )
 
-    nombre = forms.CharField(required = True, label = "Nombre")
+    nombre = forms.CharField(required = True, label = "Nombre",
+                            widget = forms.TextInput(attrs = {
+                                'class':'form-control',
+                                'placeholder':'Nombre',
+                                'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ ]+$',
+                                'required':'true',
+                                'message':'La entrada debe ser un nombre sin numeros.'
+                            })
+                        )
 
-    direccion = forms.CharField(required = True)
+    direccion = forms.CharField(required = True, label = "Direccion",
+                            widget = forms.TextInput(attrs = {
+                                'class':'form-control',
+                                'placeholder':'Direccion',
+                                'required':'true',
+                                'message':'La entrada no puede quedar vacia.'
+                            })
+                        )
 
-    telefono_1 = forms.CharField(required = False, validators = [phone_validator])
-    telefono_2 = forms.CharField(required = False, validators = [phone_validator])
-    telefono_3 = forms.CharField(required = False, validators = [phone_validator])
+    telefono_1 = forms.CharField(required = False, validators = [phone_validator],
+                            widget = forms.TextInput(attrs = {
+                                'class':'form-control',
+                                'placeholder':'Telefono 1',
+                                'pattern':'^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}',
+                                'message':'La entrada debe ser un telefono valido.'
+                            })
+                        )
+    
+    telefono_2 = forms.CharField(required = False, validators = [phone_validator],
+                            widget = forms.TextInput(attrs = {
+                                'class':'form-control',
+                                'placeholder':'Telefono 2',
+                                'pattern':'^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}',
+                                'message':'La entrada debe ser un telefono valido.'
+                            })
+                        )
+    
+    telefono_3 = forms.CharField(required = False, validators = [phone_validator],
+                            widget = forms.TextInput(attrs = {
+                                'class':'form-control',
+                                'placeholder':'Telefono 3',
+                                'pattern':'^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}',
+                                'message':'La entrada debe ser un telefono valido.'
+                            })
+                        )
 
-    email_1 = forms.EmailField(required = False)
-    email_2 = forms.EmailField(required = False)
+    email_1 = forms.EmailField(required = False,
+                            widget = forms.EmailInput(attrs = {
+                                'class':'form-control',
+                                'placeholder':'E-mail 1',
+                                'message':'La entrada debe ser un e-mail valido.'
+                            })
+                        )
+    
+    email_2 = forms.EmailField(required = False,
+                            widget = forms.EmailInput(attrs = {
+                                'class':'form-control',
+                                'placeholder':'E-mail 2',
+                                'message':'La entrada debe ser un e-mail valido.'
+                            })
+                        )
 
     rif = forms.CharField(
                     required = True,
@@ -50,7 +108,14 @@ class EstacionamientoForm(forms.Form):
                                 regex = '^[JVD]-?\d{8}-?\d$',
                                 message = 'Introduzca un RIF con un formato válido.'
                         )
-                    ]
+                    ],
+                    widget = forms.TextInput(attrs = {
+                        'class':'form-control',
+                        'placeholder':'RIF',
+                        'pattern':'^[JVD]-?\d{8}-?\d$',
+                        'required':'true',
+                        'message':'La entrada debe ser un RIF valido'
+                    })
                 )
 
 class EstacionamientoExtendedForm(forms.Form):
@@ -82,12 +147,12 @@ class EstacionamientoExtendedForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(EstacionamientoExtendedForm,self).__init__(*args, **kwargs)
-        self.fields['puestos'].widget.attrs = {'class':'form-control', 'placeholder':'Número de Puestos', 'min':"0", 'pattern':'^[0-9]+', 'required':'true'}
-        self.fields['horarioin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Apertura', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true'}
-        self.fields['horarioout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Cierre', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true'}
-        self.fields['horario_reserin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Inicio Reserva', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true'}
-        self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true'}
-        self.fields['tarifa'].widget.attrs = {'class':'form-control', 'placeholder':'Tarifa', 'pattern':'^([0-9]+(\.[0-9]+)?)$', 'required':'true'}
+        self.fields['puestos'].widget.attrs = {'class':'form-control', 'placeholder':'Número de Puestos', 'min':"0", 'pattern':'^[0-9]+', 'required':'true', 'message':'La entrada solo debe contener un numero entero.'}
+        self.fields['horarioin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Apertura', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true', 'message':'La entrada debe ser una hora valida'}
+        self.fields['horarioout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Cierre', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true', 'message':'La entrada debe ser una hora valida'}
+        self.fields['horario_reserin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Inicio Reserva', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true', 'message':'La entrada debe ser una hora valida'}
+        self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true', 'message':'La entrada debe ser una hora valida'}
+        self.fields['tarifa'].widget.attrs = {'class':'form-control', 'placeholder':'Tarifa', 'pattern':'^([0-9]+(\.[0-9]+)?)$', 'required':'true', 'message':'La entrada solo puede ser un numero decimal'}
         self.fields['esquema'].widget.attrs = {'class':'form-control'}
 
 class EstacionamientoReserva(forms.Form):
@@ -106,15 +171,32 @@ class PagoTarjetaDeCredito(forms.Form):
                                        regex = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
                                        message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos'
                                        )
-                                    ]
+                                    ],
+                            widget = forms.TextInput(attrs = {
+                                        'class':'form-control',
+                                        'placeholder':'Nombre',
+                                        'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+                                        'required':'true',
+                                        'message':'La entrada no puede contener numeros o estar vacia'
+                                    }
+                                )
                             )
     apellido = forms.CharField( required = True, 
                             label = "Apellido",
                             validators = [ RegexValidator( 
                                        regex = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
                                        message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos')
-                                    ]
+                                    ],
+                            widget = forms.TextInput(attrs = {
+                                        'class':'form-control',
+                                        'placeholder':'Nombre',
+                                        'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+                                        'required':'true',
+                                        'message':'La entrada no puede contener numeros o estar vacia'
+                                    }
+                                )
                             )
+    
     cedulaTipo = forms.ChoiceField(required = True,
                                 label = 'cedulaTipo',
                                 choices = (
@@ -122,12 +204,21 @@ class PagoTarjetaDeCredito(forms.Form):
                                     ('E', 'E')
                                 )                       
                             )
+    
     cedula = forms.CharField( required = True, 
                         label = "Cédula",
                         validators = [ RegexValidator( 
                                    regex = '^[0-9]+$',
                                    message = 'La cédula solo puede contener caracteres numéricos')
-                                ]
+                                ],
+                        widget = forms.TextInput(attrs = {
+                                        'class':'form-control',
+                                        'placeholder':'Nombre',
+                                        'pattern':'^[0-9]+$',
+                                        'required':'true',
+                                        'message':'La entrada debe ser un numero de cedula valido y no puede estar vacia'
+                                    }
+                                )
                         )
 
     tarjetaTipo = forms.ChoiceField(required = True,
@@ -139,6 +230,7 @@ class PagoTarjetaDeCredito(forms.Form):
                                 ),
                                 widget = forms.RadioSelect()
                             )
+    
     tarjeta = forms.CharField(
                             required = True,
                             label = "Tarjeta de Credito",
@@ -147,5 +239,13 @@ class PagoTarjetaDeCredito(forms.Form):
                                         regex = '^[0-9]{16}$',
                                         message = 'Introduzca un numero de tarjeta válido.'
                                 )
-                            ]
+                            ],
+                            widget = forms.TextInput(attrs = {
+                                    'class':'form-control',
+                                    'placeholder':'Nombre',
+                                    'pattern':'^[0-9]{16}$',
+                                    'required':'true',
+                                    'message':'La entrada debe ser un numero de tarjeta valido'
+                                }
+                            )
                         )

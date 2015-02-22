@@ -88,11 +88,11 @@
                 <div class="control-group">
                   <div class="controls">
                         <p>
-                            <input type="text" class="form-control" name="{{form.nombre.name}}" placeholder="{{form.nombre.label}}" for="id_{{form.nombre.name}}">
+                        	{{ form.nombre }}
                         </p>
                         {{ form.nombre.errors }}
                         <p>
-                            <input type="text" class="form-control" name="{{form.apellido.name}}" placeholder="{{form.apellido.label}}" for="id_{{form.apellido.name}}">
+                            {{ form.apellido }}
                         </p>
                         {{ form.apellido.errors }}
                         <p>
@@ -100,8 +100,7 @@
                                 <option value='V'>V</option>
                                 <option value="E">E</option>
                             </select>
-                            <input type="text" name="{{form.cedula.name}}" 
-                            placeholder="{{form.cedula.label}}" for="id_{{form.cedula.name}}">
+                            {{ form.cedula }}
                             {{ form.cedula.errors }}
                         
                         </p>
@@ -122,9 +121,9 @@
                         </table>
                         {{ form.tarjetaTipo.errors }}
                         <p>
-                            <input type="text" class="form-control" name="{{form.tarjeta.name}}" placeholder="{{form.tarjeta.label}}" for="id_{{form.tarjeta.name}}">
+                            {{ form.tarjeta }}
                         </p>
-                        {{ form.tarjeta.errors }}
+                        	{{ form.tarjeta.errors }}
                   </div>
                 </div> 
 

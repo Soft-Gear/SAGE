@@ -11,6 +11,7 @@
     <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
     <link href="{% static 'css/base.css'%}" rel="stylesheet">
     <link href="{% static 'css/font-awesome.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/styles.css'%}" rel="stylesheet">
     
    </head>
     
@@ -126,14 +127,69 @@
                 <div class="control-group">
                   <div class="controls">
                     {% if not field.value or field.errors %}
-                      <input type="text" class="form-control" name="{{field.name}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
+                      {{ field }}
+                      <span class='error' id='{{field.name}}_error' aria-live="polite">{{ field.errors }}</span>
+                      <p>
                     {% else %}
-                      <input type="text" class="form-control" name="{{field.name}}" value="{{field.value}}" placeholder="{{field.label}}" for="id_{{field.name}}"><p>
+                      {{ field }}
                     {% endif %}
                     {{ field.errors }}
                   </div>
                 </div> 
               {% endfor %}
+              
+            <script>
+			
+			   	var inputs = document.getElementsByTagName("input");
+			    var inputs_len = inputs.length;
+			    var addDirtyClass = function(evt) {
+				  evt.srcElement.classList.toggle("dirty", true);
+			    };
+			    for (var i = 0; i < inputs_len; i++) {
+			      var input = inputs[i];
+			      input.addEventListener("focus", addDirtyClass);
+			      input.addEventListener("invalid", addDirtyClass);
+			      input.addEventListener("valid", addDirtyClass);
+			    }
+			
+				function verifyPattern(input, error, error_message) {
+					if (input.validity.valid) {
+						error.innerHTML = ""; // Reset the content of the message
+						error.className = "error"; // Reset the visual state of the message
+					}
+					else {
+						if (input.validity.rangeUnderflow) {
+							error.innerHTML = "El minimo valor de este campo debe ser " + input.getAttribute('min');
+						}
+						else if (input.validity.rangeOverflow) {
+							error.innerHTML = "El maximo valor de este campo debe ser " + input.getAttribute('min');
+						}
+						else if (input.validity.tooLong) {
+							error.innerHTML = "Este campo debe tener un maximo de " + input.getAttribute('maxlength') + "caracteres";
+						}
+						else {
+							error.innerHTML = error_message;
+						}
+						error.className = "error active";
+					}
+				};
+			
+			
+				{% for field in form %}
+					var error_{{ field.name }} = document.getElementById('{{ field.name }}_error')
+					var {{ field.name }} = document.getElementById('id_{{ field.name }}');
+					{{ field.name }}.addEventListener('blur', function (event) {
+						verifyPattern({{ field.name }}, error_{{ field.name }}, {{ field.name }}.getAttribute('message'));
+					}, false);
+					
+					{{ field.name }}.addEventListener('focus', function (event) {
+						error_{{ field.name}}.innerHTML = ""; // Reset the content of the message
+						error_{{ field.name}}.className = "error"; // Reset the visual state of the message
+					}, false);
+					
+				{% endfor %}
+			
+			</script>
                 
                 <div class="control-group">
                   <label>
