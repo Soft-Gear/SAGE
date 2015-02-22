@@ -83,10 +83,10 @@ class EstacionamientoExtendedForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(EstacionamientoExtendedForm,self).__init__(*args, **kwargs)
         self.fields['puestos'].widget.attrs = {'class':'form-control', 'placeholder':'Número de Puestos', 'min':"0", 'pattern':'^[0-9]+', 'required':'true'}
-        self.fields['horarioin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Apertura', 'pattern':'^[0-1][0-9]|2[0-3]:[0-5][0-9]', 'required':'true'}
-        self.fields['horarioout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Cierre', 'pattern':'^[0-1][0-9]|2[0-3]:[0-5][0-9]', 'required':'true'}
-        self.fields['horario_reserin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Inicio Reserva', 'pattern':'^[0-1][0-9]|2[0-3]:[0-5][0-9]', 'required':'true'}
-        self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva', 'pattern':'^[0-1][0-9]|2[0-3]:[0-5][0-9]', 'required':'true'}
+        self.fields['horarioin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Apertura', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true'}
+        self.fields['horarioout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Cierre', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true'}
+        self.fields['horario_reserin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Inicio Reserva', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true'}
+        self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true'}
         self.fields['tarifa'].widget.attrs = {'class':'form-control', 'placeholder':'Tarifa', 'pattern':'^([0-9]+(\.[0-9]+)?)$', 'required':'true'}
         self.fields['esquema'].widget.attrs = {'class':'form-control'}
 
