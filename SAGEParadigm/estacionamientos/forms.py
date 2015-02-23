@@ -137,7 +137,7 @@ class EstacionamientoExtendedForm(forms.Form):
                         )
 
     horarioin = forms.TimeField(required = True, label = 'Horario Apertura',
-                                widget = forms.NumberInput(attrs = {'class':'form-control', 
+                                widget = forms.TextInput(attrs = {'class':'form-control', 
                                      'placeholder':'Horario Apertura', 
                                      'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
                                      'required':'true', 
