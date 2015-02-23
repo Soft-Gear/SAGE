@@ -189,7 +189,7 @@ class PagoTarjetaDeCredito(forms.Form):
                                     ],
                             widget = forms.TextInput(attrs = {
                                         'class':'form-control',
-                                        'placeholder':'Nombre',
+                                        'placeholder':'Apellido',
                                         'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
                                         'required':'true',
                                         'message':'La entrada no puede contener numeros o estar vacia'
@@ -212,11 +212,11 @@ class PagoTarjetaDeCredito(forms.Form):
                                    message = 'La cédula solo puede contener caracteres numéricos')
                                 ],
                         widget = forms.TextInput(attrs = {
-                                        'class':'form-control',
-                                        'placeholder':'Nombre',
+                                        'placeholder':'Cédula',
                                         'pattern':'^[0-9]+$',
                                         'required':'true',
-                                        'message':'La entrada debe ser un numero de cedula valido y no puede estar vacia'
+                                        'message':'La entrada debe ser un numero de cedula valido',
+                                        'maxlength':'9'
                                     }
                                 )
                         )
@@ -242,7 +242,7 @@ class PagoTarjetaDeCredito(forms.Form):
                             ],
                             widget = forms.TextInput(attrs = {
                                     'class':'form-control',
-                                    'placeholder':'Nombre',
+                                    'placeholder':'Tarjeta de Credito',
                                     'pattern':'^[0-9]{16}$',
                                     'required':'true',
                                     'message':'La entrada debe ser un numero de tarjeta valido'

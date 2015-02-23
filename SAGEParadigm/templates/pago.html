@@ -8,6 +8,7 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/base.css" rel="stylesheet">
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
 
 
     <script type="text/javascript">
@@ -89,20 +90,22 @@
                   <div class="controls">
                         <p>
                         	{{ form.nombre }}
+                        	<span class='error' id='{{form.nombre.name}}_error' aria-live="polite"></span>
                         </p>
                         {{ form.nombre.errors }}
                         <p>
                             {{ form.apellido }}
+                            <span class='error' id='{{form.apellido.name}}_error' aria-live="polite"></span>
                         </p>
                         {{ form.apellido.errors }}
                         <p>
-                            <select  name="{{form.cedulaTipo.name}}" placeholder="{{form.cedulaTipo.label}}">
+                            <select  id="id_{{form.cedulaTipo.name}}" name="{{form.cedulaTipo.name}}" placeholder="{{form.cedulaTipo.label}}">
                                 <option value='V'>V</option>
                                 <option value="E">E</option>
                             </select>
                             {{ form.cedula }}
+                            <span class='error' id='{{form.cedula.name}}_error' aria-live="polite"></span>
                             {{ form.cedula.errors }}
-                        
                         </p>
                         
                         <table width="300" border="0" cellspacing="0">
@@ -112,16 +115,17 @@
                               <td><font size="32" color="gray"><i class="fa fa-cc-amex"> </i></font></td>
                             </tr>
                         </table>
-                        <table width="300" border="0" cellspacing="0">
+                        <table width="300" border="0" cellspacing="0" id="id_{{form.tarjetaTipo.name}}">
                             <tr>
                                 {% for choice in form.tarjetaTipo %}
-                                     <td>{{ choice }}    </td>
+                                     <td> {{ choice }}    </td>
                                 {% endfor %}
                             </tr>
                         </table>
                         {{ form.tarjetaTipo.errors }}
                         <p>
                             {{ form.tarjeta }}
+                        	<span class='error' id='{{form.tarjeta.name}}_error' aria-live="polite"></span>
                         </p>
                         	{{ form.tarjeta.errors }}
                   </div>
@@ -132,7 +136,58 @@
               <input type="button" value="Volver" onclick="self.close()" class="btn btn-primary">
             </form>
 
-
+            <script>
+			
+			   	var inputs = document.getElementsByTagName("input");
+			    var inputs_len = inputs.length;
+			    var addDirtyClass = function(evt) {
+				  evt.srcElement.classList.toggle("dirty", true);
+			    };
+			    for (var i = 0; i < inputs_len; i++) {
+			      var input = inputs[i];
+			      input.addEventListener("focus", addDirtyClass);
+			      input.addEventListener("invalid", addDirtyClass);
+			      input.addEventListener("valid", addDirtyClass);
+			    }
+			
+				function verifyPattern(input, error, error_message) {
+					if (input.validity.valid) {
+						error.innerHTML = ""; // Reset the content of the message
+						error.className = "error"; // Reset the visual state of the message
+					}
+					else {
+						if (input.validity.rangeUnderflow) {
+							error.innerHTML = "El minimo valor de este campo debe ser " + input.getAttribute('min');
+						}
+						else if (input.validity.rangeOverflow) {
+							error.innerHTML = "El maximo valor de este campo debe ser " + input.getAttribute('min');
+						}
+						else if (input.validity.tooLong) {
+							error.innerHTML = "Este campo debe tener un maximo de " + input.getAttribute('maxlength') + "caracteres";
+						}
+						else {
+							error.innerHTML = error_message;
+						}
+						error.className = "error active";
+					}
+				};
+			
+			
+				{% for field in form %}
+					var error_{{ field.name }} = document.getElementById('{{ field.name }}_error')
+					var {{ field.name }} = document.getElementById('id_{{ field.name }}');
+					{{ field.name }}.addEventListener('blur', function (event) {
+						verifyPattern({{ field.name }}, error_{{ field.name }}, {{ field.name }}.getAttribute('message'));
+					}, false);
+					
+					{{ field.name }}.addEventListener('focus', function (event) {
+						error_{{ field.name}}.innerHTML = ""; // Reset the content of the message
+						error_{{ field.name}}.className = "error"; // Reset the visual state of the message
+					}, false);
+					
+				{% endfor %}
+			
+			</script>
         
             
           </tbody>
