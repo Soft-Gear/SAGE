@@ -121,20 +121,62 @@ class EstacionamientoForm(forms.Form):
 class EstacionamientoExtendedForm(forms.Form):
 
 
-    puestos = forms.IntegerField(required=True, min_value = 0, label = 'Número de Puestos')
+    puestos = forms.IntegerField(required=True, min_value = 0, label = 'Número de Puestos',
+                                    widget = forms.NumberInput(attrs= {    
+                                        'class':'form-control', 
+                                        'placeholder':'Número de Puestos', 
+                                        'min':"0", 'pattern':'^[0-9]+', 
+                                        'required':'true', 
+                                        'message':'La entrada debe ser un numero no negativo.'}
+                                        )
+                                )
 
     tarifa_validator = RegexValidator(
                             regex = '^([0-9]+(\.[0-9]+)?)$',
                             message = 'Sólo debe contener dígitos.'
                         )
 
-    horarioin = forms.TimeField(required = True, label = 'Horario Apertura')
-    horarioout = forms.TimeField(required = True, label = 'Horario Cierre')
+    horarioin = forms.TimeField(required = True, label = 'Horario Apertura',
+                                widget = forms.NumberInput(attrs = {'class':'form-control', 
+                                     'placeholder':'Horario Apertura', 
+                                     'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
+                                     'required':'true', 
+                                     'message':'La entrada debe ser una hora valida'})
+                                )
+    
+    horarioout = forms.TimeField(required = True, label = 'Horario Cierre',
+                                widget = forms.TextInput(attrs = {
+                                      'class':'form-control', 
+                                      'placeholder':'Horario Cierre', 
+                                      'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
+                                      'required':'true', 
+                                      'message':'La entrada debe ser una hora valida'})
+                                )
 
-    horario_reserin = forms.TimeField(required = True, label = 'Horario Inicio Reserva')
-    horario_reserout = forms.TimeField(required = True, label = 'Horario Fin Reserva')
+    horario_reserin = forms.TimeField(required = True, label = 'Horario Inicio Reserva', 
+                                    widget = forms.TextInput(attrs = {
+                                                       'class':'form-control', 
+                                                       'placeholder':'Horario Inicio Reserva', 
+                                                       'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
+                                                       'required':'true', 
+                                                       'message':'La entrada debe ser una hora valida'})  
+                                    )
+    
+    horario_reserout = forms.TimeField(required = True, label = 'Horario Fin Reserva',
+                                       widget = forms.TextInput(attrs = {'class':'form-control', 
+                                                        'placeholder':'Horario Fin Reserva', 
+                                                        'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
+                                                        'required':'true', 
+                                                        'message':'La entrada debe ser una hora valida'})
+                                        )
 
-    tarifa = forms.CharField(required = True, validators = [tarifa_validator])
+    tarifa = forms.CharField(required = True, validators = [tarifa_validator], 
+                                            widget = forms.TextInput(attrs = {'class':'form-control', 
+                                              'placeholder':'Tarifa', 
+                                              'pattern':'^([0-9]+(\.[0-9]+)?)$', 
+                                              'required':'true', 
+                                              'message':'La entrada debe ser un numero decimal'})
+                            )
     
     lista_de_esquemas = FindAllSubclasses(EsquemaTarifario)
     choices_esquema = []
@@ -142,27 +184,26 @@ class EstacionamientoExtendedForm(forms.Form):
         choices_esquema.append((i,lista_de_esquemas[i][0].tipo(None)))
     esquema = forms.ChoiceField(
                                 required = True,
-                                choices = choices_esquema
+                                choices = choices_esquema,
+                                widget = forms.Select(attrs = {'class':'form-control'})
     )
-    
-    def __init__(self, *args, **kwargs):
-        super(EstacionamientoExtendedForm,self).__init__(*args, **kwargs)
-        self.fields['puestos'].widget.attrs = {'class':'form-control', 'placeholder':'Número de Puestos', 'min':"0", 'pattern':'^[0-9]+', 'required':'true', 'message':'La entrada solo debe contener un numero entero.'}
-        self.fields['horarioin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Apertura', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true', 'message':'La entrada debe ser una hora valida'}
-        self.fields['horarioout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Cierre', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true', 'message':'La entrada debe ser una hora valida'}
-        self.fields['horario_reserin'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Inicio Reserva', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true', 'message':'La entrada debe ser una hora valida'}
-        self.fields['horario_reserout'].widget.attrs = {'class':'form-control', 'placeholder':'Horario Fin Reserva', 'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 'required':'true', 'message':'La entrada debe ser una hora valida'}
-        self.fields['tarifa'].widget.attrs = {'class':'form-control', 'placeholder':'Tarifa', 'pattern':'^([0-9]+(\.[0-9]+)?)$', 'required':'true', 'message':'La entrada solo puede ser un numero decimal'}
-        self.fields['esquema'].widget.attrs = {'class':'form-control'}
 
 class EstacionamientoReserva(forms.Form):
-    inicio = forms.SplitDateTimeField(label = 'Horario Inicio Reserva')
-    final = forms.SplitDateTimeField(label = 'Horario Final Reserva')
+    inicio = forms.SplitDateTimeField(label = 'Horario Inicio Reserva',
+                                        widget= MySplitDateTimeWidget(attrs={
+                                                                             'class':'form-control', 
+                                                                             'type':'date',
+                                                                             'placeholder':'Hora Inicio Reserva'}
+                                                                    )
+                                    )
     
-    def __init__(self, *args, **kwargs):
-        super(EstacionamientoReserva,self).__init__(*args, **kwargs)
-        self.fields['inicio'].widget = MySplitDateTimeWidget(attrs={'class':'form-control', 'type':'date','placeholder':'Hora Inicio Reserva'})
-        self.fields['final'].widget = MySplitDateTimeWidget(attrs={'class':'form-control', 'type':'date','placeholder':'Hora Final Reserva'})
+    final = forms.SplitDateTimeField(label = 'Horario Final Reserva',
+                                     widget = MySplitDateTimeWidget(attrs={
+                                                                           'class':'form-control', 
+                                                                           'type':'date',
+                                                                           'placeholder':'Hora Final Reserva'}
+                                                                    )
+                                     )
 
 class PagoTarjetaDeCredito(forms.Form):
     nombre = forms.CharField( required = True, 
