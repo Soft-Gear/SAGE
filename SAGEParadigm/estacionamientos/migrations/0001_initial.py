@@ -14,7 +14,6 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Estacionamiento',
             fields=[
-<<<<<<< HEAD
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('propietario', models.CharField(help_text='Nombre Propio', max_length=50)),
                 ('nombre', models.CharField(max_length=50)),
