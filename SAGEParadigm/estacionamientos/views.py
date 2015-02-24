@@ -180,8 +180,17 @@ def estacionamiento_pago(request,_id):
                                     inicioReserva   = inicioReserva,
                                     finalReserva    = finalReserva)
             monto = Decimal(request.session['monto'])
+            pago = Pago(fechaTransaccion = datetime.datetime.now(),
+                        cedula           = form.cedula,
+                        cedulaTipo       = form.cedulaTipo,
+                        monto            = monto,
+                        tarjetaTipo      = form.tarjetaTipo,
+                        tarjeta          = form.tarjeta,
+                        reseva           = reservaFinal)
             reservaFinal.save()
+            pago.save()
             return render(request,'pago.html',{"id": _id,
+                                            "pago": pago,
                                             "color": "green",
                                             'mensaje' : "Se realizo el pago de reserva satisfactoriamente. Id de pago:" + str(reservaFinal.id)})
     return render(request, 'pago.html', {'form':form})

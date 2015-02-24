@@ -161,7 +161,32 @@
         <div class="col-md-8" style="color:{{color}}"> 
           {{mensaje}}
           <hr>              
-        </div><div class="col-md-4">
+        </div>
+
+        <div class="col-md-4">
+          <table>
+            <tbody>
+              <tr><td><b><i class="fa fa-clock-o"></i> Horario inicio de reserva:</b></td></tr>
+              <tr><td>{{pago.inicioReserva}}</td></tr>
+
+              <tr><td><b><i class="fa fa-clock-o"></i> Horario fin de reserva:</b></td></tr>
+              <tr><td>{{pago.finalReserva}}</td></tr>
+
+              <tr><td><b><i class="fa fa-clock-o"></i> Cédula:</b></td></tr>
+              <tr><td>{{page.cedulaTipo}}-{{pago.cedula}}</td></tr>
+
+              <tr><td><b><i class="fa fa-money"></i> Tarjeta de Crédito:</b></td></tr>
+              <tr><td>{{pago.tarjetaTipo}}: {{pago.tarjeta}} </td></tr>
+
+              <tr><td><b><i class="fa fa-money"></i> Monto:</b></td></tr>
+              <tr><td>{{pago.monto}} Bs.</td></tr>
+
+              <tr><td><b><i class="fa fa-clock-o"></i> Fecha de Transacción:</b></td></tr>
+              <tr><td>{{pago.fechaTransaccion}}</td></tr>
+
+              <tr><td>               
+            </tbody>
+          </table>
         <div>
           <input type="button" value="Volver" onclick="javascript: closepopup();" class="btn btn-primary">
         </div>
