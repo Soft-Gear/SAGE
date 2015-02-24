@@ -6,11 +6,10 @@ from django.shortcuts import render
 import datetime
 from decimal import Decimal
 from estacionamientos.controller import HorarioEstacionamiento, validarHorarioReserva, marzullo
-from estacionamientos.forms import EstacionamientoExtendedForm, EstacionamientoExtendedForm2
+from estacionamientos.forms import EstacionamientoExtendedForm
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
-
 from estacionamientos.models import Estacionamiento, Reserva, Pago, TarifaHora, TarifaMinuto, TarifaHorayFraccion
 
 
@@ -64,22 +63,19 @@ def estacionamiento_detail(request, _id):
         return render(request, '404.html')
 
     if request.method == 'GET':
-
         form = EstacionamientoExtendedForm()
-        form2 = EstacionamientoExtendedForm2()
 
     elif request.method == 'POST':
         # Leemos el formulario
         form = EstacionamientoExtendedForm(request.POST)
-        form2 = EstacionamientoExtendedForm2(request.POST)
         # Si el formulario
-        if form.is_valid() and form2.is_valid():
+        if form.is_valid():
             horaIn = form.cleaned_data['horarioin']
             horaOut = form.cleaned_data['horarioout']
             reservaIn = form.cleaned_data['horario_reserin']
             reservaOut = form.cleaned_data['horario_reserout']
-            tipo = form2.cleaned_data['esquema']
             tmonto = form.cleaned_data['tarifa']
+            tipo = form.cleaned_data['esquema']
             # if(tipo=='Por hora'):
             #     t = TarifaHora(tarifa = tmonto)
             # elif(tipo=='Por minuto'):
@@ -108,7 +104,7 @@ def estacionamiento_detail(request, _id):
             estacionamiento.save()
             form = EstacionamientoExtendedForm()
 
-    return render(request, 'estacionamiento.html', {'form': form, 'form2': form2, 'estacionamiento': estacionamiento})
+    return render(request, 'estacionamiento.html', {'form': form, 'estacionamiento': estacionamiento})
 
 
 def estacionamiento_reserva(request, _id):

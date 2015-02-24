@@ -1,4 +1,4 @@
-.navbar-static-top {
+/*.navbar-static-top {
   margin-bottom:20px;
 }
 
@@ -28,4 +28,36 @@ footer {
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
   border-radius: 10px;
+}*/
+
+/* Estilo para los campos invalidos */
+input.dirty:invalid{
+  background-color: #FDD;
 }
+
+input.dirty:focus:invalid {
+  background-color: white;
+}
+
+/*input.dirty:valid {
+  background-color: #D9FFD9;
+}*/
+
+/* Estilo para los mensajes de error */
+.error {
+  /*width  : 100%;
+  padding: 0;*/
+ 
+  font-size: 80%;
+  color: red;
+  /*background-color: #900;
+  border-radius: 0 0 5px 5px;*/
+ 
+  /*-moz-box-sizing: border-box;
+  box-sizing: border-box;*/
+}
+
+.error.active {
+  padding: 0.3em;
+}
+

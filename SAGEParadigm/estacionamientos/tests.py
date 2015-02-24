@@ -882,8 +882,7 @@ class TestMarzullo(unittest.TestCase):
         for i in range(12):
             self.assertFalse(marzullo(e.id, datetime(2015,1,20,6+i), datetime(2015,1,20,7+i)))
 
-    def testFullPlusOne(self): #malicia, fin - inicio = 1hora, doce veces +
-                               #         una reserva FullDay
+    def testFullPlusOne(self): #malicia, fin - inicio = 1hora, doce veces + una reserva FullDay
         e = self.crearEstacionamiento(1)
         for i in range(12):
             Reserva(estacionamiento = e, inicioReserva = datetime(2015, 1, 20, 6+i), finalReserva = datetime(2015, 1, 20, 7+i)).save()
@@ -944,8 +943,7 @@ class TestMarzullo(unittest.TestCase):
         self.assertFalse(marzullo(e.id, datetime(2015,1,20,9), datetime(2015,1,20,18)))
         #De todos modos, la segunda falla, porque count = capacidad+1 a partir de las 12m
 
-    def testManyReservationsMaxOverlapping(self): #esquina, count = capacidad en una hora (10am - 11am),
-                                                  #         algunas reservas tienen inicio = apertura
+    def testManyReservationsMaxOverlapping(self): #esquina, count = capacidad en una hora (10am - 11am), algunas reservas tienen inicio = apertura
         e = self.crearEstacionamiento(10)
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20,  6), finalReserva=datetime(2015, 1, 20, 10)).save()
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20,  7), finalReserva=datetime(2015, 1, 20, 10)).save()
@@ -966,8 +964,7 @@ class TestMarzullo(unittest.TestCase):
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 10), finalReserva=datetime(2015, 1, 20, 15)).save()
         self.assertTrue(marzullo(e.id, datetime(2015,1,20,10), datetime(2015,1,20,15)))
 
-    def testManyReservationsOneOverlap(self): #malicia, count = (capacidad+1) en la hora (9am - 10am)
-                                              #                    algunas reservas tienen inicio = apertura
+    def testManyReservationsOneOverlap(self): #malicia, count = (capacidad+1) en la hora (9am - 10am), algunas reservas tienen inicio = apertura
         e = self.crearEstacionamiento(10)
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 6), finalReserva=datetime(2015, 1, 20, 10)).save()
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 7), finalReserva=datetime(2015, 1, 20, 10)).save()

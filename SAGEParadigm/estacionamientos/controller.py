@@ -1,6 +1,6 @@
 # Archivo con funciones de control para SAGE
 from estacionamientos.models import Estacionamiento
-from datetime import date, datetime, timedelta, time
+from datetime import datetime, timedelta, time
 
 # chequeo de horarios de extended
 def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
@@ -65,3 +65,13 @@ def marzullo(idEstacionamiento, hIn, hOut):
 		if count > capacidad:
 			return False
 	return True
+
+def FindAllSubclasses(classType):
+	import sys, inspect
+	subclasses = []
+	callers_module = sys._getframe(1).f_globals['__name__']
+	classes = inspect.getmembers(sys.modules[callers_module], inspect.isclass)
+	for name, obj in classes:
+		if (obj is not classType) and (classType in inspect.getmro(obj)):
+			subclasses.append((obj, name))
+	return subclasses
