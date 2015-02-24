@@ -11,7 +11,7 @@ from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
 
-from estacionamientos.models import Estacionamiento, Reserva, TarifaHora, TarifaMinuto, TarifaHorayFraccion
+from estacionamientos.models import Estacionamiento, Reserva, Pago, TarifaHora, TarifaMinuto, TarifaHorayFraccion
 
 
 # Usamos esta vista para procesar todos los estacionamientos
@@ -179,18 +179,18 @@ def estacionamiento_pago(request,_id):
             reservaFinal = Reserva( estacionamiento = estacionamiento,
                                     inicioReserva   = inicioReserva,
                                     finalReserva    = finalReserva)
+            reservaFinal.save()
             monto = Decimal(request.session['monto'])
             pago = Pago(fechaTransaccion = datetime.datetime.now(),
-                        cedula           = form.cedula,
-                        cedulaTipo       = form.cedulaTipo,
+                        cedula           = form.cleaned_data['cedula'],
+                        cedulaTipo       = form.cleaned_data['cedulaTipo'],
                         monto            = monto,
-                        tarjetaTipo      = form.tarjetaTipo,
-                        tarjeta          = form.tarjeta,
-                        reseva           = reservaFinal)
-            reservaFinal.save()
+                        tarjetaTipo      = form.cleaned_data['tarjetaTipo'],
+                        reserva          = reservaFinal,
+                        )
             pago.save()
             return render(request,'pago.html',{"id": _id,
                                             "pago": pago,
                                             "color": "green",
-                                            'mensaje' : "Se realizo el pago de reserva satisfactoriamente. Id de pago:" + str(reservaFinal.id)})
+                                            'mensaje' : "Se realizo el pago de reserva satisfactoriamente."})
     return render(request, 'pago.html', {'form':form})

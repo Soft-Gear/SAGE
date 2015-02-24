@@ -46,10 +46,12 @@ class Pago(models.Model):
 	fechaTransaccion = models.DateTimeField()
 	cedulaTipo = models.CharField(max_length = 1)
 	cedula = models.CharField(max_length = 10)
-	tipoTajeta = models.CharField(max_length = 6)
-	tarjeta = models.CharField(max_length = 16)
-	reserva = models.ForeignKey(Reserva) 
+	tarjetaTipo = models.CharField(max_length = 6)
+	reserva = models.ForeignKey(Reserva)
 	monto   = models.DecimalField(decimal_places = 2, max_digits = 256)
+
+	def __str__(self):
+		return str(self.cedula)
 
 class EsquemaTarifario(models.Model):
 
