@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Estacionamiento',
             fields=[
+<<<<<<< HEAD
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('propietario', models.CharField(help_text='Nombre Propio', max_length=50)),
                 ('nombre', models.CharField(max_length=50)),
@@ -32,6 +33,22 @@ class Migration(migrations.Migration):
                 ('reservasCierre', models.TimeField(null=True, blank=True)),
                 ('nroPuesto', models.IntegerField(null=True, blank=True)),
                 ('content_type', models.ForeignKey(to='contenttypes.ContentType', null=True)),
+
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Pago',
+            fields=[
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('fechaTransaccion', models.DateTimeField()),
+                ('cedulaTipo', models.CharField(max_length=1)),
+                ('cedula', models.CharField(max_length=10)),
+                ('tarjetaTipo', models.CharField(max_length=6)),
+                ('tarjeta', models.CharField(max_length=16)),
+                ('monto', models.DecimalField(max_digits=256, decimal_places=2)),
             ],
             options={
             },
@@ -81,5 +98,11 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
             bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='pago',
+            name='reserva',
+            field=models.ForeignKey(to='estacionamientos.Reserva'),
+            preserve_default=True,
         ),
     ]

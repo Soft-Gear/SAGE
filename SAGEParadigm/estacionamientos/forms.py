@@ -114,9 +114,9 @@ class PagoTarjetaDeCredito(forms.Form):
     tarjetaTipo = forms.ChoiceField(required = True,
                                 label = 'tarjetaTipo',
                                 choices = (
-                                    ('Vista', ' VISTA '),
-                                    ('Mister', ' MISTER '),
-                                    ('Xpress', ' XPRESS ')
+                                    ('VISTA', 'VISTA'),
+                                    ('MISTER', 'MISTER'),
+                                    ('XPRESS', 'XPRESS')
                                 ),
                                 widget = forms.RadioSelect()
                             )

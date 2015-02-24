@@ -153,22 +153,50 @@
       <!--/upper section -->
       
       <!-- lower section -->
-      <div class="row">
-      </div>
+      
+      
       <!--/row-->
       {% endif %}
-      {% if mensaje %}
-        <div class="col-md-8" style="color:{{color}}"> 
+      {% if pago %}
+      <div class="row">
+        <div class="col-md-7" style="color:{{color}}"> 
           {{mensaje}}
           <hr>              
-        </div><div class="col-md-4">
+        </div>
+
+        <div class="col-md-4">
+          <table class="table table-striped">
+            <tbody>
+              <tr><td><b><i class="fa fa-clock-o"></i> Horario inicio de reserva:</b></td></tr>
+              <tr><td>{{pago.reserva.inicioReserva}}</td></tr>
+
+              <tr><td><b><i class="fa fa-clock-o"></i> Horario fin de reserva:</b></td></tr>
+              <tr><td>{{pago.reserva.finalReserva}}</td></tr>
+
+              <tr><td><b><i class="fa fa-user"></i> Cédula:</b></td></tr>
+              <tr><td>{{pago.cedulaTipo}}-{{pago.cedula}}</td></tr>
+
+              <tr><td><b><i class="fa fa-money"></i> Tarjeta de Crédito:</b></td></tr>
+              <tr><td>{{pago.tarjetaTipo}} </td></tr>
+
+              <tr><td><b><i class="fa fa-money"></i> Monto:</b></td></tr>
+              <tr><td>{{pago.monto}} Bs.</td></tr>
+
+              <tr><td><b><i class="fa fa-money"></i> Fecha de Transacción:</b></td></tr>
+              <tr><td>{{pago.fechaTransaccion}}</td></tr>
+
+              <tr><td><b><i class="fa fa-clock-o"></i> Número de Transacción:</b></td></tr>
+              <tr><td>{{pago.id}}</td></tr>
+             
+            </tbody>
+          </table>
         <div>
           <input type="button" value="Volver" onclick="javascript: closepopup();" class="btn btn-primary">
         </div>
       {% endif %}
 
     </div>
-
+    </div>
     <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 
