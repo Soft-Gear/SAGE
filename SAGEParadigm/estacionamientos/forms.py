@@ -33,7 +33,6 @@ class EstacionamientoForm(forms.Form):
                         'class':'form-control',
                         'placeholder':'Propietario',
                         'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ ]+$',
-                        'required':'true',
                         'message':'La entrada debe ser un nombre sin numeros.'
                     })
                 )
@@ -43,7 +42,6 @@ class EstacionamientoForm(forms.Form):
                                 'class':'form-control',
                                 'placeholder':'Nombre',
                                 'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ ]+$',
-                                'required':'true',
                                 'message':'La entrada debe ser un nombre sin numeros.'
                             })
                         )
@@ -52,7 +50,6 @@ class EstacionamientoForm(forms.Form):
                             widget = forms.TextInput(attrs = {
                                 'class':'form-control',
                                 'placeholder':'Direccion',
-                                'required':'true',
                                 'message':'La entrada no puede quedar vacia.'
                             })
                         )
@@ -113,7 +110,6 @@ class EstacionamientoForm(forms.Form):
                         'class':'form-control',
                         'placeholder':'RIF',
                         'pattern':'^[JVD]-?\d{8}-?\d$',
-                        'required':'true',
                         'message':'La entrada debe ser un RIF valido'
                     })
                 )
@@ -126,7 +122,6 @@ class EstacionamientoExtendedForm(forms.Form):
                                         'class':'form-control', 
                                         'placeholder':'Número de Puestos', 
                                         'min':"0", 'pattern':'^[0-9]+', 
-                                        'required':'true', 
                                         'message':'La entrada debe ser un numero no negativo.'}
                                         )
                                 )
@@ -140,7 +135,6 @@ class EstacionamientoExtendedForm(forms.Form):
                                 widget = forms.TextInput(attrs = {'class':'form-control', 
                                      'placeholder':'Horario Apertura', 
                                      'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
-                                     'required':'true', 
                                      'message':'La entrada debe ser una hora valida'})
                                 )
     
@@ -149,7 +143,6 @@ class EstacionamientoExtendedForm(forms.Form):
                                       'class':'form-control', 
                                       'placeholder':'Horario Cierre', 
                                       'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
-                                      'required':'true', 
                                       'message':'La entrada debe ser una hora valida'})
                                 )
 
@@ -158,7 +151,6 @@ class EstacionamientoExtendedForm(forms.Form):
                                                        'class':'form-control', 
                                                        'placeholder':'Horario Inicio Reserva', 
                                                        'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
-                                                       'required':'true', 
                                                        'message':'La entrada debe ser una hora valida'})  
                                     )
     
@@ -166,7 +158,6 @@ class EstacionamientoExtendedForm(forms.Form):
                                        widget = forms.TextInput(attrs = {'class':'form-control', 
                                                         'placeholder':'Horario Fin Reserva', 
                                                         'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
-                                                        'required':'true', 
                                                         'message':'La entrada debe ser una hora valida'})
                                         )
 
@@ -174,7 +165,6 @@ class EstacionamientoExtendedForm(forms.Form):
                                             widget = forms.TextInput(attrs = {'class':'form-control', 
                                               'placeholder':'Tarifa', 
                                               'pattern':'^([0-9]+(\.[0-9]+)?)$', 
-                                              'required':'true', 
                                               'message':'La entrada debe ser un numero decimal'})
                             )
     
@@ -217,7 +207,6 @@ class PagoTarjetaDeCredito(forms.Form):
                                         'class':'form-control',
                                         'placeholder':'Nombre',
                                         'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
-                                        'required':'true',
                                         'message':'La entrada no puede contener numeros o estar vacia'
                                     }
                                 )
@@ -232,7 +221,6 @@ class PagoTarjetaDeCredito(forms.Form):
                                         'class':'form-control',
                                         'placeholder':'Apellido',
                                         'pattern':'^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
-                                        'required':'true',
                                         'message':'La entrada no puede contener numeros o estar vacia'
                                     }
                                 )
@@ -255,7 +243,6 @@ class PagoTarjetaDeCredito(forms.Form):
                         widget = forms.TextInput(attrs = {
                                         'placeholder':'Cédula',
                                         'pattern':'^[0-9]+$',
-                                        'required':'true',
                                         'message':'La entrada debe ser un numero de cedula valido',
                                         'maxlength':'9'
                                     }
@@ -285,7 +272,6 @@ class PagoTarjetaDeCredito(forms.Form):
                                     'class':'form-control',
                                     'placeholder':'Tarjeta de Credito',
                                     'pattern':'^[0-9]{16}$',
-                                    'required':'true',
                                     'message':'La entrada debe ser un numero de tarjeta valido'
                                 }
                             )

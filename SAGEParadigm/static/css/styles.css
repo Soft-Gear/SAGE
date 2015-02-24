@@ -39,9 +39,9 @@ input.dirty:focus:invalid {
   background-color: white;
 }
 
-input.dirty:valid {
+/*input.dirty:valid {
   background-color: #D9FFD9;
-}
+}*/
 
 /* Estilo para los mensajes de error */
 .error {
