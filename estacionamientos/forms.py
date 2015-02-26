@@ -3,6 +3,11 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.forms.widgets import SplitDateTimeWidget
 
+class CustomSplitDateTimeWidget(SplitDateTimeWidget):
+
+    def format_output(self, rendered_widgets):
+        return '<p></p>'.join(rendered_widgets)
+
 class EstacionamientoForm(forms.Form):
 
     phone_validator = RegexValidator(
@@ -30,7 +35,7 @@ class EstacionamientoForm(forms.Form):
                 )
 
     nombre = forms.CharField(
-                        required = True, 
+                        required = True,
                         label = "Nombre",
                         widget = forms.TextInput(attrs = {
                             'class':'form-control',
@@ -42,7 +47,7 @@ class EstacionamientoForm(forms.Form):
                 )
 
     direccion = forms.CharField(
-                        required = True, 
+                        required = True,
                         label = "Direccion",
                         widget = forms.TextInput(attrs = {
                             'class':'form-control',
@@ -53,7 +58,7 @@ class EstacionamientoForm(forms.Form):
                 )
 
     telefono_1 = forms.CharField(
-                        required = False, 
+                        required = False,
                         validators = [phone_validator],
                         widget = forms.TextInput(attrs = {
                             'class':'form-control',
@@ -63,9 +68,9 @@ class EstacionamientoForm(forms.Form):
                         }
                     )
                 )
-    
+
     telefono_2 = forms.CharField(
-                        required = False, 
+                        required = False,
                         validators = [phone_validator],
                         widget = forms.TextInput(attrs = {
                             'class':'form-control',
@@ -75,9 +80,9 @@ class EstacionamientoForm(forms.Form):
                         }
                     )
                 )
-    
+
     telefono_3 = forms.CharField(
-                        required = False, 
+                        required = False,
                         validators = [phone_validator],
                         widget = forms.TextInput(attrs = {
                             'class':'form-control',
@@ -97,7 +102,7 @@ class EstacionamientoForm(forms.Form):
                         }
                     )
                 )
-    
+
     email_2 = forms.EmailField(
                         required = False,
                         widget = forms.EmailInput(attrs = {
@@ -127,16 +132,14 @@ class EstacionamientoForm(forms.Form):
                 )
 
 class EstacionamientoExtendedForm(forms.Form):
-
-
     puestos = forms.IntegerField(
-                        required = True, 
-                        min_value = 0, 
+                        required = True,
+                        min_value = 0,
                         label = 'Número de Puestos',
-                        widget = forms.NumberInput(attrs= {    
-                            'class':'form-control', 
-                            'placeholder':'Número de Puestos', 
-                            'min':"0", 'pattern':'^[0-9]+', 
+                        widget = forms.NumberInput(attrs= {
+                            'class':'form-control',
+                            'placeholder':'Número de Puestos',
+                            'min':"0", 'pattern':'^[0-9]+',
                             'message':'La entrada debe ser un número no negativo.'
                         }
                     )
@@ -148,66 +151,57 @@ class EstacionamientoExtendedForm(forms.Form):
                     )
 
     horarioin = forms.TimeField(
-                        required = True, 
+                        required = True,
                         label = 'Horario Apertura',
-                        widget = forms.TextInput(attrs = {'class':'form-control', 
-                            'placeholder':'Horario Apertura', 
-                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
+                        widget = forms.TextInput(attrs = {'class':'form-control',
+                            'placeholder':'Horario Apertura',
+                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]',
                             'message':'La entrada debe ser una hora válida.'
                         }
                     )
                 )
-    
+
     horarioout = forms.TimeField(
                         required = True,
                         label = 'Horario Cierre',
                         widget = forms.TextInput(attrs = {
-                            'class':'form-control', 
-                            'placeholder':'Horario Cierre', 
-                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
+                            'class':'form-control',
+                            'placeholder':'Horario Cierre',
+                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]',
                             'message':'La entrada debe ser una hora válida.'
                         }
                     )
                 )
 
     horario_reserin = forms.TimeField(
-                        required = True, 
-                        label = 'Horario Inicio Reserva', 
+                        required = True,
+                        label = 'Horario Inicio Reserva',
                         widget = forms.TextInput(attrs = {
-                            'class':'form-control', 
-                            'placeholder':'Horario Inicio Reserva', 
-                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
-                            'message':'La entrada debe ser una hora válida.'
-                        }
-                    )  
-                )
-    
-    horario_reserout = forms.TimeField(
-                        required = True, label = 'Horario Fin Reserva',
-                        widget = forms.TextInput(attrs = {
-                            'class':'form-control', 
-                            'placeholder':'Horario Fin Reserva', 
-                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]', 
+                            'class':'form-control',
+                            'placeholder':'Horario Inicio Reserva',
+                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]',
                             'message':'La entrada debe ser una hora válida.'
                         }
                     )
                 )
 
-    tarifa = forms.CharField(
-                        required = True, 
-                        validators = [tarifa_validator], 
-                        widget = forms.TextInput(attrs = {'class':'form-control', 
-                            'placeholder':'Tarifa', 
-                            'pattern':'^([0-9]+(\.[0-9]+)?)$', 
-                            'message':'La entrada debe ser un número decimal.'
+    horario_reserout = forms.TimeField(
+                        required = True, label = 'Horario Fin Reserva',
+                        widget = forms.TextInput(attrs = {
+                            'class':'form-control',
+                            'placeholder':'Horario Fin Reserva',
+                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]',
+                            'message':'La entrada debe ser una hora válida.'
                         }
                     )
                 )
-    
+
     choices_esquema = [
         ('TarifaHora', 'Por hora'),
         ('TarifaMinuto', 'Por minuto'),
-        ('TarifaHorayFraccion', 'Por hora y Fraccion')
+        ('TarifaHorayFraccion', 'Por hora y fracción'),
+        ('TarifaHoraPico', 'Diferenciada por horario pico'),
+        ('TarifaFinDeSemana', 'Diferenciada para fines de semana')
     ]
 
     esquema = forms.ChoiceField(
@@ -216,23 +210,69 @@ class EstacionamientoExtendedForm(forms.Form):
         widget = forms.Select(attrs = {'class':'form-control'})
     )
 
+    tarifa = forms.DecimalField(
+                        required = True,
+                        validators = [tarifa_validator],
+                        widget = forms.TextInput(attrs = {'class':'form-control',
+                            'placeholder':'Tarifa',
+                            'pattern':'^([0-9]+(\.[0-9]+)?)$',
+                            'message':'La entrada debe ser un número decimal.'
+                        }
+                    )
+                )
+
+    tarifa2 = forms.DecimalField(
+                        required = False,
+                        validators = [tarifa_validator],
+                        widget = forms.TextInput(attrs = {'class':'form-control',
+                            'placeholder':'Tarifa 2',
+                            'pattern':'^([0-9]+(\.[0-9]+)?)$',
+                            'message':'La entrada debe ser un número decimal.'
+                        }
+                    )
+                )
+
+    inicioTarifa2 = forms.TimeField(
+                        required = False,
+                        label = 'Inicio Horario Especial',
+                        widget = forms.TextInput(attrs = {
+                            'class':'form-control',
+                            'placeholder':'Horario Inicio Reserva',
+                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]',
+                            'message':'La entrada debe ser una hora válida.'
+                        }
+                    )
+                )
+
+    finTarifa2 = forms.TimeField(
+                        required = False,
+                        label = 'Fin Horario Especial',
+                        widget = forms.TextInput(attrs = {
+                            'class':'form-control',
+                            'placeholder':'Horario Fin Reserva',
+                            'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]',
+                            'message':'La entrada debe ser una hora válida.'
+                        }
+                    )
+                )
+
 class EstacionamientoReserva(forms.Form):
     inicio = forms.SplitDateTimeField(
                         required = True,
                         label = 'Horario Inicio Reserva',
-                        widget = SplitDateTimeWidget(attrs={
-                            'class':'form-control', 
+                        widget= CustomSplitDateTimeWidget(attrs={
+                            'class':'form-control',
                             'type':'date',
                             'placeholder':'Hora Inicio Reserva'
                         }
                     )
                 )
-    
+
     final = forms.SplitDateTimeField(
                         required = True,
                         label = 'Horario Final Reserva',
-                        widget = SplitDateTimeWidget(attrs={
-                            'class':'form-control', 
+                        widget = CustomSplitDateTimeWidget(attrs={
+                            'class':'form-control',
                             'type':'date',
                             'placeholder':'Hora Final Reserva'
                         }
@@ -240,12 +280,12 @@ class EstacionamientoReserva(forms.Form):
                 )
 
 class PagoTarjetaDeCredito(forms.Form):
-    
+
     nombre = forms.CharField(
-                        required = True, 
+                        required = True,
                         label = "Nombre",
-                        validators = [ 
-                            RegexValidator( 
+                        validators = [
+                            RegexValidator(
                                 regex = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
                                 message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
                             )
@@ -258,12 +298,12 @@ class PagoTarjetaDeCredito(forms.Form):
                         }
                     )
                 )
-    
+
     apellido = forms.CharField(
-                        required = True, 
+                        required = True,
                         label = "Apellido",
-                        validators = [ 
-                            RegexValidator( 
+                        validators = [
+                            RegexValidator(
                                 regex = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
                                 message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos')
                         ],
@@ -275,21 +315,21 @@ class PagoTarjetaDeCredito(forms.Form):
                         }
                     )
                 )
-    
+
     cedulaTipo = forms.ChoiceField(
                         required = True,
                         label = 'cedulaTipo',
                         choices = (
                             ('V', 'V'),
                             ('E', 'E')
-                        )                       
+                        )
                     )
-    
-    cedula = forms.CharField( 
-                        required = True, 
+
+    cedula = forms.CharField(
+                        required = True,
                         label = "Cédula",
-                        validators = [ 
-                            RegexValidator( 
+                        validators = [
+                            RegexValidator(
                                 regex = '^[0-9]+$',
                                 message = 'La cédula solo puede contener caracteres numéricos')
                             ],

@@ -10,7 +10,16 @@ from estacionamientos.forms import EstacionamientoExtendedForm
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
-from estacionamientos.models import Estacionamiento, Reserva, Pago, TarifaHora, TarifaMinuto, TarifaHorayFraccion
+from estacionamientos.models import (
+    Estacionamiento,
+    Reserva,
+    Pago,
+    TarifaHora,
+    TarifaMinuto,
+    TarifaHorayFraccion,
+    TarifaFinDeSemana,
+    TarifaHoraPico
+)
 
 
 # Usamos esta vista para procesar todos los estacionamientos
@@ -76,14 +85,18 @@ def estacionamiento_detail(request, _id):
             reservaOut = form.cleaned_data['horario_reserout']
             tmonto = form.cleaned_data['tarifa']
             tipo = form.cleaned_data['esquema']
+            inicioTarifa2 = form.cleaned_data['inicioTarifa2']
+            finTarifa2 = form.cleaned_data['finTarifa2']
+            tarifa2 = form.cleaned_data['tarifa2']
+
             # if(tipo=='Por hora'):
             #     t = TarifaHora(tarifa = tmonto)
             # elif(tipo=='Por minuto'):
             #     t = TarifaMinuto(tarifa = tmonto)
             # elif(tipo=='Por fraccion'):
             #     t = TarifaHorayFraccion(tarifa = tmonto)
-            
-            t = eval(tipo+'(tarifa = tmonto)')
+
+            t = eval(tipo)(tarifa = tmonto,tarifa2 = tarifa2, inicioEspecial = inicioTarifa2, finEspecial = finTarifa2)
 
             t.save()
             # debería funcionar con excepciones, y el mensaje debe ser mostrado

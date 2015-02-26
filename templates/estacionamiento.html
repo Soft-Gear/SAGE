@@ -12,7 +12,6 @@
     <link href="{% static 'css/base.css'%}" rel="stylesheet">
     <link href="{% static 'css/font-awesome.min.css'%}" rel="stylesheet">
     <link href="{% static 'css/styles.css'%}" rel="stylesheet">
-
    </head>
 
  <body>
@@ -139,30 +138,36 @@
       {% if estacionamiento.nroPuesto %}
         <tr><td><b><i class="fa fa-car"></i> Puestos:</b></td></tr>
         <tr><td>{{estacionamiento.nroPuesto}}</td></tr>
-      {% endif %}
-      {% if estacionamiento.reservasInicio %}
         <tr><td><b><i class="fa fa-clock-o"></i> Horario inicio de reserva:</b></td></tr>
         <tr><td>{{estacionamiento.reservasInicio}}</td></tr>
-      {% endif %}
-      {% if estacionamiento.reservasCierre %}
         <tr><td><b><i class="fa fa-clock-o"></i> Horario fin de reserva:</b></td></tr>
         <tr><td>{{estacionamiento.reservasCierre}}</td></tr>
-      {% endif %}
-      {% if estacionamiento.apertura %}
         <tr><td><b><i class="fa fa-clock-o"></i> Horario apertura:</b></td></tr>
         <tr><td>{{estacionamiento.apertura}}</td></tr>
-      {% endif %}
-      {% if estacionamiento.cierre %}
         <tr><td><b><i class="fa fa-clock-o"></i> Horario cierre:</b></td></tr>
         <tr><td>{{estacionamiento.cierre}}</td></tr>
-      {% endif %}
- 	  {% if estacionamiento.tarifa %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa:</b></td></tr>
-        <tr><td>{{estacionamiento.tarifa}} Bsf.</td></tr>
       {% endif %}
    	  {% if estacionamiento.esquemaTarifa %}
         <tr><td><b><i class="fa fa-circle"></i></i> Esquema:</b></td></tr>
         <tr><td>{{estacionamiento.esquemaTarifa.tipo}} </td></tr>
+      {% endif %}
+      {% if estacionamiento.esquemaTarifa.tipo == "Tarifa diferenciada para fines de semana" %}
+        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular:</b></td></tr>
+        <tr><td>BsF. {{estacionamiento.tarifa}}</td></tr>
+        <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana:</b></td></tr>
+        <tr><td>BsF. {{estacionamiento.esquemaTarifa.tarifa2}}</td></tr>
+      {% elif estacionamiento.esquemaTarifa.tipo == "Tarifa diferenciada por hora pico" %}
+        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular:</b></td></tr>
+        <tr><td>BsF. {{estacionamiento.tarifa}}</td></tr>
+        <tr><td><b><i class="fa fa-money"></i></i> Tarifa especial:</b></td></tr>
+        <tr><td>BsF. {{estacionamiento.esquemaTarifa.tarifa2}}</td></tr>
+        <tr><td><b><i class="fa fa-clock-o"></i> Inicio tarifa especial:</b></td></tr>
+        <tr><td>{{estacionamiento.esquemaTarifa.inicioEspecial}}</td></tr>
+        <tr><td><b><i class="fa fa-clock-o"></i> Fin tarifa especial:</b></td></tr>
+        <tr><td>{{estacionamiento.esquemaTarifa.finEspecial}}</td></tr>
+      {% elif estacionamiento.nroPuesto %}
+        <tr><td><b><i class="fa fa-money"></i></i> Tarifa:</b></td></tr>
+        <tr><td>BsF. {{estacionamiento.tarifa}}</td></tr>
       {% endif %}
 
 
@@ -200,7 +205,7 @@
                     </div>
                     <p>
                  {% endfor %}
-                
+
                 <div class="control-group">
                   <label>
                   </label>
@@ -213,9 +218,9 @@
 
 
               </form>
-              
+
 			<script>
-			
+
 			   	var inputs = document.getElementsByTagName("input");
 			    var inputs_len = inputs.length;
 			    var addDirtyClass = function(evt) {
@@ -227,7 +232,7 @@
 			      input.addEventListener("invalid", addDirtyClass);
 			      input.addEventListener("valid", addDirtyClass);
 			    }
-			
+
 				function verifyPattern(input, error, error_message) {
 					if (input.validity.valid) {
 						error.innerHTML = ""; // Reset the content of the message
@@ -249,22 +254,22 @@
 						error.className = "error active";
 					}
 				};
-			
-			
+
+
 				{% for field in form %}
 					var error_{{ field.name }} = document.getElementById('{{ field.name }}_error')
 					var {{ field.name }} = document.getElementById('id_{{ field.name }}');
 					{{ field.name }}.addEventListener('blur', function (event) {
 						verifyPattern({{ field.name }}, error_{{ field.name }}, {{ field.name }}.getAttribute('message'));
 					}, false);
-					
+
 					{{ field.name }}.addEventListener('focus', function (event) {
 						error_{{ field.name}}.innerHTML = ""; // Reset the content of the message
 						error_{{ field.name}}.className = "error"; // Reset the visual state of the message
 					}, false);
-					
+
 				{% endfor %}
-			
+
 			</script>
 
 
@@ -289,6 +294,46 @@
 
     <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js'%}"></script>
+
+  <script type="text/javascript">
+    esquema = document.getElementById('id_esquema');
+    tarifa1 = document.getElementById('id_tarifa');
+    tarifa2 = document.getElementById('id_tarifa2');
+    inicio  = document.getElementById('id_inicioTarifa2');
+    fin     = document.getElementById('id_finTarifa2');
+    tarifa2.style.display='none';
+    inicio.style.display='none';
+    fin.style.display='none';
+    if (esquema) {
+      esquema.onchange=function() {
+        if (this.value == "TarifaHoraPico") {
+          inicio.style.display='';
+          inicio.placeholder = "Inicio horario pico"
+          fin.style.display='';
+          fin.placeholder = "Fin horario pico"
+          tarifa2.style.display = '';
+          tarifa1.placeholder="Tarifa normal";
+          tarifa2.placeholder="Tarifa pico";
+        } else if (this.value == "TarifaFinDeSemana") {
+          inicio.style.display='none';
+          inicio.value = ""
+          fin.style.display='none';
+          fin.value = ""
+          tarifa1.placeholder="Tarifa normal";
+          tarifa2.style.display = '';
+          tarifa2.placeholder="Tarifa fin de semana";
+        } else {
+          tarifa1.placeholder="Tarifa";
+          inicio.style.display='none';
+          inicio.value = ""
+          fin.style.display='none';
+          fin.value = ""
+          tarifa2.style.display='none';
+          tarifa2.value = ""
+        }
+      }
+    }
+  </script>
 
 </body>
 

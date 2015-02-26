@@ -4,12 +4,22 @@ from datetime import datetime, time, timedelta, date
 from django.test import Client
 from django.test import TestCase
 import unittest
-
 from estacionamientos.controller import HorarioEstacionamiento, validarHorarioReserva, marzullo
-from estacionamientos.models import Estacionamiento, Reserva
-from estacionamientos.forms import EstacionamientoForm, EstacionamientoExtendedForm, EstacionamientoReserva,\
+from estacionamientos.forms import (
+    EstacionamientoForm,
+    EstacionamientoExtendedForm,
+    EstacionamientoReserva,
     PagoTarjetaDeCredito
-from estacionamientos.models import TarifaMinuto,TarifaHora,TarifaHorayFraccion
+)
+from estacionamientos.models import (
+    Estacionamiento,
+    Reserva,
+    TarifaMinuto,
+    TarifaHora,
+    TarifaHorayFraccion,
+    TarifaFinDeSemana,
+    TarifaHoraPico
+)
 from decimal import Decimal
 from _datetime import timedelta
 
@@ -470,8 +480,8 @@ class ReservaFormTestCase(TestCase):
 
     # caso borde
     def test_EstacionamientoReserva_UnCampo(self):
-        form_data = {'inicio_1': time(hour = 6, minute = 0), 
-                     'final_1': time(hour = 15, minute = 0), 
+        form_data = {'inicio_1': time(hour = 6, minute = 0),
+                     'final_1': time(hour = 15, minute = 0),
                      'final_0': date(year=2015,month=2,day=27)
         }
         form = EstacionamientoReserva(data = form_data)
@@ -479,9 +489,9 @@ class ReservaFormTestCase(TestCase):
 
     # normal
     def test_EstacionamientoReserva_TodosCamposBien(self):
-        form_data = {'inicio_1': time(hour = 6, minute = 0), 
-                     'final_1': time(hour = 15, minute = 0), 
-                     'final_0': date(year=2015,month=2,day=27), 
+        form_data = {'inicio_1': time(hour = 6, minute = 0),
+                     'final_1': time(hour = 15, minute = 0),
+                     'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27)
         }
         form = EstacionamientoReserva(data = form_data)
@@ -489,9 +499,9 @@ class ReservaFormTestCase(TestCase):
 
     # malicia
     def test_EstacionamientoReserva_InicioString(self):
-        form_data = {'inicio_1': 'teruel', 
-                     'final_1': time(hour = 15, minute = 0), 
-                     'final_0': date(year=2015,month=2,day=27), 
+        form_data = {'inicio_1': 'teruel',
+                     'final_1': time(hour = 15, minute = 0),
+                     'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27)
         }
         form = EstacionamientoReserva(data = form_data)
@@ -499,9 +509,9 @@ class ReservaFormTestCase(TestCase):
 
     # malicia
     def test_EstacionamientoReserva_FinString(self):
-        form_data = {'inicio_1': time(hour = 6, minute = 0), 
-                     'final_1': 'Reinoza', 
-                     'final_0': date(year=2015,month=2,day=27), 
+        form_data = {'inicio_1': time(hour = 6, minute = 0),
+                     'final_1': 'Reinoza',
+                     'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27)
         }
         form = EstacionamientoReserva(data = form_data)
@@ -509,9 +519,9 @@ class ReservaFormTestCase(TestCase):
 
     # malicia
     def test_EstacionamientoReserva_InicioNone(self):
-        form_data = {'inicio_1': None, 
-                     'final_1': time(hour = 15, minute = 0), 
-                     'final_0': date(year=2015,month=2,day=27), 
+        form_data = {'inicio_1': None,
+                     'final_1': time(hour = 15, minute = 0),
+                     'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27)
         }
         form = EstacionamientoReserva(data = form_data)
@@ -519,9 +529,9 @@ class ReservaFormTestCase(TestCase):
 
     # malicia
     def test_EstacionamientoReserva_finalNone(self):
-        form_data = {'inicio_1': time(hour = 6, minute = 0), 
-                     'final_1': time(hour = 15, minute = 0), 
-                     'final_0': None, 
+        form_data = {'inicio_1': time(hour = 6, minute = 0),
+                     'final_1': time(hour = 15, minute = 0),
+                     'final_0': None,
                      'inicio_0': date(year=2015,month=2,day=27)
         }
         form = EstacionamientoReserva(data = form_data)
@@ -574,7 +584,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'cedula': '123456789',
         }
         form = PagoTarjetaDeCredito(data = form_data)
-        self.assertFalse(form.is_valid())        
+        self.assertFalse(form.is_valid())
 
     #borde
     def test_PagoTarjetaForm_CincoCampos(self):
@@ -587,7 +597,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
         }
         form = PagoTarjetaDeCredito(data = form_data)
         self.assertFalse(form.is_valid())
-        
+
     #borde
     def test_PagoTarjetaForm_SeisCampos(self):
         form_data = {
@@ -760,7 +770,7 @@ class ReservaFormControllerTestCase(TestCase):
         HoraCierre = time(hour = 18, minute = 0, second = 0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (True, ''))
-        
+
     # borde
     def test_UnDiaDeReserva_Estacionamiento_No_24_horas(self):
         hoy=datetime.now()
@@ -770,7 +780,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day+2,15)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
-    #Borde    
+    #Borde
     def test_reservaHorarioCompleto(self):
         hoy=datetime.now()
         HoraApertura=time(6,0)
@@ -779,7 +789,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day+2,18)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
-    
+
     def test_reservaHorarioCompletoYUnMinuto(self):
         hoy=datetime.now()
         HoraApertura=time(6,0)
@@ -788,9 +798,9 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day+2,18,1)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
-    
-    
-    #Normal    
+
+
+    #Normal
     def test_UnDiaDeReserva_Estacionamiento_24_horas(self):
         hoy=datetime.now()
         HoraApertura=time(0,0)
@@ -799,8 +809,8 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day+2,15)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (True, ''))
-        
-    #Esquina     
+
+    #Esquina
     def test_SieteDiasDeReserva(self):
         hoy=datetime.now()
         HoraApertura=time(0,0)
@@ -809,7 +819,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaFin=hoy + timedelta(7)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (True, ''))
-        
+
     def test_SieteDiasDeReservaYUnMinuto(self):
         hoy=datetime.now()
         HoraApertura=time(0,0)
@@ -837,7 +847,7 @@ class ReservaFormControllerTestCase(TestCase):
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El tiempo de reserva debe ser al menos de 1 hora'))
 
-    # caso borde.  
+    # caso borde.
     def test_HorarioReservaInvalido_ReservaFinal_Mayor_HorarioCierre(self):
         HoraApertura = time(hour = 10, minute = 0, second = 0)
         HoraCierre = time(hour = 22, minute = 0, second = 0)
@@ -847,7 +857,7 @@ class ReservaFormControllerTestCase(TestCase):
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de fin de la reserva debe estar en un horario válido'))
 
-    # Caso borde 
+    # Caso borde
     def test_HorarioReservaInvalido_ReservaInicial_Menor_HorarioApertura(self):
         hoy=datetime.now()
         ReservaInicio = datetime(hoy.year,hoy.month,hoy.day+1,7)
@@ -1056,6 +1066,10 @@ class TestMarzullo(unittest.TestCase):
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 6), finalReserva=datetime(2015, 1, 20, 10)).save()
         self.assertFalse(marzullo(e.id, datetime(2015,1,20,9), datetime(2015,1,20,10)))
 
+###################################################################
+# Casos de prueba de tipos de tarifa
+###################################################################
+
 class RateTestCase(TestCase):
 
     #Pruebas para tarifa de hora y fraccion
@@ -1101,66 +1115,66 @@ class RateTestCase(TestCase):
         final_time = datetime(2015,2,18,23,59)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),48)
-        
+
     def test_oneDayFractionPay(self):
         initial_time = datetime(2015,2,18,0,0)
         final_time = datetime(2015,2,19,0,0)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),48)
-    
+
     def test_oneDayPlusAMinuteFractionPay(self):
         initial_time = datetime(2015,2,18,0,0)
         final_time = datetime(2015,2,19,0,1)
         rate = TarifaHorayFraccion(tarifa = 2)
-        self.assertEqual(rate.calcularPrecio(initial_time,final_time),49) 
-        
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),49)
+
     def test_oneDayPlusHalfAnHourFractionPay(self):
         initial_time = datetime(2015,2,18,0,0)
         final_time = datetime(2015,2,19,0,30)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),49)
-    
+
     def test_oneDayPlusThirtyOneMinutes(self):
         initial_time = datetime(2015,2,18,0,0)
         final_time = datetime(2015,2,19,0,31)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),50)
-        
+
     def testOneDayBeforeMidnightPlusAMinute(self):
         initial_time = datetime(2015,2,18,23,59)
         final_time = datetime(2015,2,20,0,0)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),49)
-        
+
     def testOneDayThirtyMinutesBeforeMidnight_PusThirtyMinutes(self):
         initial_time = datetime(2015,2,18,23,30)
         final_time = datetime(2015,2,20,0,0)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),49)
-    
+
     def testOneDayThirtyMinutesBeforeMidnight_PusThirtyOneMinutes(self):
         initial_time = datetime(2015,2,18,23,30)
         final_time = datetime(2015,2,20,0,1)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),50)
-        
+
     def testTwoDays(self):
         initial_time = datetime(2015,2,18,6,30)
         final_time = datetime(2015,2,20,6,30)
         rate = TarifaHorayFraccion(tarifa = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),96)
-    
+
     def testTwoDaysPlusOneMinute(self):
         initial_time = datetime(2015,2,18,6,30)
         final_time = datetime(2015,2,20,6,31)
         rate = TarifaHorayFraccion(tarifa = 2)
-        self.assertEqual(rate.calcularPrecio(initial_time,final_time),97)    
-        
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),97)
+
     def testSevenDays(self):
         initial_time = datetime(2015,2,18,6,30)
         final_time = datetime(2015,2,25,6,30)
         rate = TarifaHorayFraccion(tarifa = 2)
-        self.assertEqual(rate.calcularPrecio(initial_time,final_time),7*24*2) 
+        self.assertEqual(rate.calcularPrecio(initial_time,final_time),7*24*2)
 
     # Pruebas para la tarifa por minuto
 
@@ -1175,7 +1189,7 @@ class RateTestCase(TestCase):
         final_time = datetime(2015,2,18,15,3)
         rate = TarifaMinuto(tarifa = 60)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),2)
-        
+
     def test_oneHourMinutePay(self):
         initial_time = datetime(2015,2,18,15,0)
         final_time = datetime(2015,2,18,16,0)
@@ -1188,7 +1202,7 @@ class RateTestCase(TestCase):
         final_time = datetime(2015,2,18,23,59)
         rate = TarifaMinuto(tarifa = 60)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),1439)
-        
+
     def test_oneDayMinutePay(self):
         initial_time = datetime(2015,2,18,0,0)
         final_time = datetime(2015,2,19,0,0)
@@ -1200,20 +1214,20 @@ class RateTestCase(TestCase):
         final_time = datetime(2015,2,19,0,1)
         rate = TarifaMinuto(tarifa = 60)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),1441)
-        
+
     def test_oneDayBeforeMidnightPlusOneMinute(self):
         initial_time = datetime(2015,2,18,23,59)
         final_time = datetime(2015,2,20,0,0)
         rate = TarifaMinuto(tarifa = 60)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),1441)
-        
+
     def test_sevenDays(self):
         initial_time = datetime(2015,2,18,23,59)
         final_time = datetime(2015,2,25,23,59)
         rate = TarifaMinuto(tarifa = 60)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time),7*24*60)
-    
-    # Pruebas para la clase tarifa	
+
+    # Pruebas para la clase tarifa
 
     def test_OneHourRate(self):
         rate = TarifaHora(tarifa = 800)
@@ -1242,47 +1256,285 @@ class RateTestCase(TestCase):
         final_time=datetime(2015,2,18,23,59)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, 24)
-        
+
     def testCompleteDay(self):
         rate=TarifaHora(tarifa=1)
         initial_time=datetime(2015,2,18,0,0)
         final_time=datetime(2015,2,19,0,0)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, 24)
-        
+
     def testCompleteDayPlusOneMinute(self):
         rate=TarifaHora(tarifa=1)
         initial_time=datetime(2015,2,18,0,0)
         final_time=datetime(2015,2,19,0,1)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, 25)
-        
+
     def testSevenDaysHourRate(self):
         rate=TarifaHora(tarifa=1)
         initial_time=datetime(2015,2,18,0,0)
         final_time=datetime(2015,2,25,0,0)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, 24*7)
-        
+
     # Casos de decimales
-    
+
     def testDecimalHourRate(self):
         rate=TarifaHora(tarifa=0.3)
         initial_time=datetime(2015,2,20,15,0)
         final_time=datetime(2015,2,20,18,0)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, Decimal('0.9'))
-    
+
     def testDecimalMinuteRate(self):
         rate=TarifaMinuto(tarifa=0.3)
         initial_time=datetime(2015,2,20,15,0)
         final_time=datetime(2015,2,20,18,30)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, Decimal('1.05'))
-        
+
     def testDecimalHourAndFractionRate(self):
         rate=TarifaHorayFraccion(tarifa=0.3)
         initial_time=datetime(2015,2,20,15,0)
         final_time=datetime(2015,2,20,17,25)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, Decimal('0.75'))
+
+###################################################################
+# Tarifa por minuto con hora pico
+###################################################################
+
+class HoraPicoTestCase(TestCase):
+
+    def testOneHourValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=120,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,4)
+        finReserva = datetime(2015,1,1,5)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,60)
+
+    def testHalfHourValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=120,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,4,30)
+        finReserva = datetime(2015,1,1,5)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,30)
+
+    def testQuarterHourValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=120,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,4,45)
+        finReserva = datetime(2015,1,1,5)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,15)
+
+    def testOneHourPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=120,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,7)
+        finReserva = datetime(2015,1,1,8)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,120)
+
+    def testHalfHourPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,7,30)
+        finReserva = datetime(2015,1,1,8)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,50)
+
+    def testQuarterHourPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,7,45)
+        finReserva = datetime(2015,1,1,8)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,25)
+
+    def testOneHourHalfAndHalf(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,5,30)
+        finReserva = datetime(2015,1,1,6,30)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,80)
+
+    def testOneHourQuarterAndThreeQuarters(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,5,45)
+        finReserva = datetime(2015,1,1,6,45)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,90)
+
+    def testTwoHoursDifferentDays(self):
+        inicio = time(0,0)
+        fin = time(12,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,23)
+        finReserva = datetime(2015,1,2,1)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,160)
+
+    ###################
+    #      Bordes
+    ###################
+
+    def testInfBorderValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,5)
+        finReserva = datetime(2015,1,1,6)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,60)
+
+    def testSupBorderValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,18)
+        finReserva = datetime(2015,1,1,19)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,60)
+
+    def testInfBorderPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,6)
+        finReserva = datetime(2015,1,1,7)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,100)
+
+    def testSupBorderPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=100,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,17)
+        finReserva = datetime(2015,1,1,18)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,100)
+
+    def testOneMinuteValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=120,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,5,59)
+        finReserva = datetime(2015,1,1,6,59)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,119)
+
+    def testOneMinutePeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifa2=120,inicioEspecial=inicio,finEspecial=fin)
+        inicioReserva = datetime(2015,1,1,5,1)
+        finReserva = datetime(2015,1,1,6,1)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,61)
+
+###################################################################
+# Tarifa diferenciada para fines de semana
+###################################################################
+
+class FinDeSemanaTestCase(TestCase):
+    # Bordes:   6 * 11
+    # Esquinas: 2
+    # Malicia:  2 * 10
+
+    # Semana 2015-03-(09..15):
+    # Lu Ma Mi Ju Vi Sá Do
+    # 09 10 11 12 13 14 15
+    # Semana 2015-03-(16..15):
+    # Lu Ma Mi Ju Vi Sá Do
+    # 16 17 18 19 20 21 22
+    def testNHoursFromMidnightBeforeMonday(self): #(11) bordes
+        for n in range(11):
+            tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+            inicioReserva = datetime(2015,3,9,0,0) #medianoche domingo-lunes
+            finReserva = inicioReserva + timedelta(hours=n+1) # n+1 horas más tarde
+            valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+            self.assertEqual(valor,2*(n+1))
+
+    def testNHoursTillMidnightBeforeSaturday(self): #(11) bordes
+        for n in range(11):
+            tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+            finReserva = datetime(2015,3,14,0,0) #medianoche viernes-sábado
+            inicioReserva = finReserva - timedelta(hours=n+1) # n+1 horas más temprano
+            valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+            self.assertEqual(valor,2*(n+1))
+
+    def testNHoursFromMidnightBeforeSaturday(self): #(11) bordes
+        for n in range(11):
+            tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+            inicioReserva = datetime(2015,3,14,0,0) #medianoche viernes-sábado
+            finReserva = inicioReserva + timedelta(hours=n+1) # n+1 horas más tarde
+            valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+            self.assertEqual(valor,5*(n+1))
+
+    def testNHoursTillMidnightBeforeMonday(self): #(11) bordes
+        for n in range(11):
+            tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+            finReserva = datetime(2015,3,9,0,0) #medianoche domingo-lunes
+            inicioReserva = finReserva - timedelta(hours=n+1) # n+1 horas más temprano
+            valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+            self.assertEqual(valor,5*(n+1))
+
+    def testFullWorkWeek(self): #esquina
+        tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+        inicioReserva = datetime(2015,3,9,0,0) #medianoche domingo-lunes
+        finReserva = datetime(2015,3,14,0,0) #medianoche viernes-sábado
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,2*24*5)
+
+    def testFullWeekend(self): #esquina
+        tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+        inicioReserva = datetime(2015,3,14,0,0) #medianoche viernes-sábado
+        finReserva = datetime(2015,3,16,0,0) #medianoche domingo-lunes
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,5*24*2)
+
+    def testNHoursSundayMonday(self): #(11) bordes
+        for n in range(11):
+            tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+            inicioReserva = datetime(2015,3,15,14,0) + timedelta(hours=n) #domingo en la tarde
+            finReserva = inicioReserva + timedelta(hours=10) # diez horas más tarde
+            valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+            self.assertEqual(valor, 5*(10-n) + 2*n)
+
+    def testNHoursFridaySaturday(self): #(11) bordes
+        for n in range(11):
+            tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+            inicioReserva = datetime(2015,3,13,14,0) + timedelta(hours=n) #viernes en la tarde
+            finReserva = inicioReserva + timedelta(hours=10) # diez horas más tarde
+            valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+            self.assertEqual(valor, 2*(10-n) + 5*n)
+
+    def testNHoursSundayMondayStartingOnQuarter(self): #(10) malicia
+        for n in range(10):
+            tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+            inicioReserva = datetime(2015,3,15,14,15) + timedelta(hours=n) #domingo en la tarde
+            finReserva = inicioReserva + timedelta(hours=10) # diez horas más tarde
+            valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+            self.assertEqual(valor, 5*(9.75-n) + 2*(n+.25))
+
+    def testNHoursFridaySaturdayStartingOnQuarter(self): #(10) malicia
+        for n in range(10):
+            tarifa = TarifaFinDeSemana(tarifa=2,tarifa2=5)
+            inicioReserva = datetime(2015,3,13,14,15) + timedelta(hours=n) #viernes en la tarde
+            finReserva = inicioReserva + timedelta(hours=10) # diez horas más tarde
+            valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+            self.assertEqual(valor, 2*(9.75-n) + 5*(n+.25))

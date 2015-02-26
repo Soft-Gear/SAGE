@@ -4,6 +4,7 @@ from math import ceil, floor
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
+from datetime import timedelta
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
@@ -57,6 +58,9 @@ class EsquemaTarifario(models.Model):
 
 	# No se cuantos digitos deberiamos poner
 	tarifa = models.DecimalField(max_digits=10, decimal_places=2)
+	tarifa2 = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
+	inicioEspecial = models.TimeField(blank = True, null = True)
+	finEspecial = models.TimeField(blank = True, null = True)
 
 	class Meta:
 		abstract = True
@@ -65,27 +69,23 @@ class EsquemaTarifario(models.Model):
 
 
 class TarifaHora(EsquemaTarifario):
-
 	def calcularPrecio(self,horaInicio,horaFinal):
 		a=horaFinal-horaInicio
 		a=a.days*24+a.seconds/3600
 		a=ceil(a) #  De las horas se calcula el techo de ellas
 		return(Decimal(self.tarifa*a).quantize(Decimal('1.00')))
-	def  tipo(self):
+	def tipo(self):
 		return("Por Hora")
 
 class TarifaMinuto(EsquemaTarifario):
-
 	def calcularPrecio(self,horaInicio,horaFinal):
 		minutes = horaFinal-horaInicio
 		minutes = minutes.days*24*60+minutes.seconds/60
 		return (Decimal(minutes)*Decimal(self.tarifa/60)).quantize(Decimal('1.00'))
-	
-	def  tipo(self):
+	def tipo(self):
 		return("Por Minuto")
 
 class TarifaHorayFraccion(EsquemaTarifario):
-
 	def calcularPrecio(self,horaInicio,horaFinal):
 		time = horaFinal-horaInicio
 		time = time.days*24*3600+time.seconds
@@ -100,6 +100,53 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		else:
 			valor = self.tarifa
 		return(Decimal(valor).quantize(Decimal('1.00')))
-	
-	def  tipo(self):
+
+	def tipo(self):
 		return("Por Hora y Fraccion")
+
+class TarifaFinDeSemana(EsquemaTarifario):
+	def calcularPrecio(self,inicio,final):
+		minutosNormales = 0
+		minutosFinDeSemana = 0
+		tiempoActual = inicio
+		minuto = timedelta(minutes=1)
+		while tiempoActual < final:
+			# weekday() devuelve un numero del 0 al 6 tal que
+			# 0 = Lunes
+			# 1 = Martes
+			# ..
+			# 5 = Sabado
+			# 6 = Domingo
+			if tiempoActual.weekday() < 5:
+				minutosNormales += 1
+			else:
+				minutosFinDeSemana += 1
+			tiempoActual += minuto
+		return Decimal(
+			minutosNormales*self.tarifa/60 +
+			minutosFinDeSemana*self.tarifa2/60
+		).quantize(Decimal('1.00'))
+
+	def tipo(self):
+		return("Tarifa diferenciada para fines de semana")
+
+class TarifaHoraPico(EsquemaTarifario):
+	def calcularPrecio(self,reservaInicio,reservaFinal):
+		minutosPico = 0
+		minutosValle = 0
+		tiempoActual = reservaInicio
+		minuto = timedelta(minutes=1)
+		while tiempoActual < reservaFinal:
+			horaActual = tiempoActual.time()
+			if horaActual >= self.inicioEspecial and horaActual < self.finEspecial:
+				minutosPico += 1
+			elif horaActual < self.inicioEspecial or horaActual >= self.finEspecial:
+				minutosValle += 1
+			tiempoActual += minuto
+		return Decimal(
+			minutosPico*self.tarifa2/60 +
+			minutosValle*self.tarifa/60
+		).quantize(Decimal('1.00'))
+
+	def tipo(self):
+		return("Tarifa diferenciada por hora pico")
