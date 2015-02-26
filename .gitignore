@@ -54,6 +54,5 @@ target/
 
 # PyBuilder
 
-SAGEParadigm/db.sqlite3
 .pydevproject
 .project

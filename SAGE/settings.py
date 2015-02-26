@@ -1,5 +1,5 @@
 """
-Django settings for SAGEParadigm project.
+Django settings for SAGE project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -50,9 +50,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'SAGEParadigm.urls'
+ROOT_URLCONF = 'SAGE.urls'
 
-WSGI_APPLICATION = 'SAGEParadigm.wsgi.application'
+WSGI_APPLICATION = 'SAGE.wsgi.application'
 
 
 # Database
