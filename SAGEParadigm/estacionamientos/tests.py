@@ -9,7 +9,7 @@ from estacionamientos.controller import HorarioEstacionamiento, validarHorarioRe
 from estacionamientos.models import Estacionamiento, Reserva
 from estacionamientos.forms import EstacionamientoForm, EstacionamientoExtendedForm, EstacionamientoReserva,\
     PagoTarjetaDeCredito
-from estacionamientos.models import TarifaMinuto,TarifaHora,TarifaHorayFraccion
+from estacionamientos.models import TarifaMinuto,TarifaHora,TarifaHorayFraccion,TarifaHoraPico
 from decimal import Decimal
 
 
@@ -979,6 +979,10 @@ class TestMarzullo(unittest.TestCase):
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 6), finalReserva=datetime(2015, 1, 20, 10)).save()
         self.assertFalse(marzullo(e.id, datetime(2015,1,20,9), datetime(2015,1,20,10)))
 
+################################################################### 
+# Casos de prueba de tipos de tarifa
+################################################################### 
+
 class RateTestCase(TestCase):
 
     #Pruebas para tarifa de hora y fraccion
@@ -1209,3 +1213,148 @@ class RateTestCase(TestCase):
         final_time=datetime(2015,2,20,17,25)
         value = rate.calcularPrecio(initial_time, final_time)
         self.assertEqual(value, Decimal('0.75'))
+
+################################################################### 
+# Tarifa por minuto con hora pico 
+################################################################### 
+    
+class HoraPicoTestCase(TestCase):
+
+    def testOneHourValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=120,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,4)
+        finReserva = datetime(2015,1,1,5)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,60)
+
+    def testHalfHourValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=120,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,4,30)
+        finReserva = datetime(2015,1,1,5)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,30)
+
+    def testQuarterHourValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=120,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,4,45)
+        finReserva = datetime(2015,1,1,5)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,15)
+
+    def testOneHourPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=120,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,7)
+        finReserva = datetime(2015,1,1,8)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,120)
+
+    def testHalfHourPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,7,30)
+        finReserva = datetime(2015,1,1,8)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,50)
+
+    def testQuarterHourPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,7,45)
+        finReserva = datetime(2015,1,1,8)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,25)
+
+    def testOneHourHalfAndHalf(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,5,30)
+        finReserva = datetime(2015,1,1,6,30)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,80)
+
+    def testOneHourQuarterAndThreeQuarters(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,5,45)
+        finReserva = datetime(2015,1,1,6,45)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,90)
+
+    def testTwoHoursDifferentDays(self):
+        inicio = time(0,0)
+        fin = time(12,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,23)
+        finReserva = datetime(2015,1,2,1)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,160)
+
+    ###################
+    #      Bordes
+    ###################
+
+    def testInfBorderValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,5)
+        finReserva = datetime(2015,1,1,6)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,60)
+
+    def testSupBorderValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,18)
+        finReserva = datetime(2015,1,1,19)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,60)
+
+    def testInfBorderPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,6)
+        finReserva = datetime(2015,1,1,7)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,100)
+
+    def testSupBorderPeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=100,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,17)
+        finReserva = datetime(2015,1,1,18)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,100)
+
+    def testOneMinuteValley(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=120,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,5,59)
+        finReserva = datetime(2015,1,1,6,59)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,119)
+
+    def testOneMinutePeak(self):
+        inicio = time(6,0)
+        fin = time(18,0)
+        tarifa = TarifaHoraPico(tarifa=60,tarifaPico=120,inicioPico=inicio,finPico=fin)
+        inicioReserva = datetime(2015,1,1,5,1)
+        finReserva = datetime(2015,1,1,6,1)
+        valor = tarifa.calcularPrecio(inicioReserva,finReserva)
+        self.assertEqual(valor,61)

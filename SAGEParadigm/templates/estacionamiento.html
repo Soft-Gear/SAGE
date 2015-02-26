@@ -300,14 +300,14 @@
     fin.style.display='none';
     if (esquema) {
       esquema.onchange=function() {
-        if (this.value == "TarifaDiferenciada") {
+        if (this.value == "TarifaHoraPico") {
           inicio.style.display='';
-          inicio.placeholder = "Inicio horario especial"
+          inicio.placeholder = "Inicio horario pico"
           fin.style.display='';
-          fin.placeholder = "Fin horario especial"
+          fin.placeholder = "Fin horario pico"
           tarifa2.style.display = '';
           tarifa1.placeholder="Tarifa normal";
-          tarifa2.placeholder="Tarifa especial";
+          tarifa2.placeholder="Tarifa pico";
         } else if (this.value == "TarifaFinDeSemana") {
           inicio.style.display='none';
           inicio.value = ""

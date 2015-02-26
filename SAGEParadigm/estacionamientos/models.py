@@ -4,6 +4,7 @@ from math import ceil, floor
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
+from datetime import timedelta
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
@@ -103,25 +104,6 @@ class TarifaHorayFraccion(EsquemaTarifario):
 	def tipo(self):
 		return("Por Hora y Fraccion")
 
-class TarifaDiferenciada(EsquemaTarifario):
-	def calcularPrecio(self,horaInicio,horaFinal):
-		time = horaFinal-horaInicio
-		time = time.days*24*3600+time.seconds
-		if(time>3600):
-			valor = (floor(time/3600)*self.tarifa)
-			if((time%3600)==0):
-				pass
-			elif((time%3600)>1800):
-				valor += self.tarifa
-			else:
-				valor += self.tarifa/2
-		else:
-			valor = self.tarifa
-		return(Decimal(valor).quantize(Decimal('1.00')))
-
-	def tipo(self):
-		return("Con horarios diferenciados")
-
 class TarifaFinDeSemana(EsquemaTarifario):
 	def calcularPrecio(self,horaInicio,horaFinal):
 		time = horaFinal-horaInicio
@@ -140,3 +122,27 @@ class TarifaFinDeSemana(EsquemaTarifario):
 
 	def tipo(self):
 		return("Con tarifa especial para fines de semana")
+
+class TarifaHoraPico(EsquemaTarifario):
+	tarifaPico = models.DecimalField(max_digits=10, decimal_places=2)
+	inicioPico = models.TimeField(blank= True, null = True)
+	finPico = models.TimeField(blank= True, null = True)
+
+	def calcularPrecio(self,reservaInicio,reservaFinal):
+		# delta = horaFinal - horaInicio
+		# days = delta.days
+		minutosPico = 0
+		minutosValle = 0
+		tiempoActual = reservaInicio
+		minuto = timedelta(minutes=1)
+		while tiempoActual < reservaFinal:
+			horaActual = tiempoActual.time()
+			if horaActual >= self.inicioPico and horaActual < self.finPico:
+				minutosPico += 1
+			elif horaActual < self.inicioPico or horaActual >= self.finPico:
+				minutosValle += 1
+			tiempoActual += minuto
+		return minutosPico*self.tarifaPico/60 + minutosValle*self.tarifa/60
+
+	def  tipo(self):
+		return("Tarifa diferenciada por hora pico.")

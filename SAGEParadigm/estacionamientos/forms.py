@@ -7,7 +7,7 @@ from django.forms.widgets import SplitDateTimeWidget
 class CustomSplitDateTimeWidget(SplitDateTimeWidget):
 
     def format_output(self, rendered_widgets):
-        return u'<p></p>'.join(rendered_widgets)
+        return '<p></p>'.join(rendered_widgets)
 
 
 class EstacionamientoForm(forms.Form):
@@ -202,7 +202,7 @@ class EstacionamientoExtendedForm(forms.Form):
         ('TarifaHora', 'Por hora'),
         ('TarifaMinuto', 'Por minuto'),
         ('TarifaHorayFraccion', 'Por hora y fracción'),
-        ('TarifaDiferenciada', 'Diferenciada por horario'),
+        ('TarifaHoraPico', 'Diferenciada por horario pico'),
         ('TarifaFinDeSemana', 'Diferenciada para fines de semana')
     ]
 
