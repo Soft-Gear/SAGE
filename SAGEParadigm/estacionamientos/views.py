@@ -122,9 +122,12 @@ def estacionamiento_reserva(request, _id):
     # Si es un POST estan mandando un request
     elif request.method == 'POST':
         form = EstacionamientoReserva(request.POST)
+        print(request.POST)
         # Verificamos si es valido con los validadores del formulario
         if form.is_valid():
+            
             inicioReserva = form.cleaned_data['inicio']
+            print(form.cleaned_data)
             finalReserva = form.cleaned_data['final']
 
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
@@ -178,7 +181,7 @@ def estacionamiento_pago(request,_id):
                                     inicioReserva   = inicioReserva,
                                     finalReserva    = finalReserva)
             reservaFinal.save()
-            monto = Decimal(request.session['monto'])
+            monto = Decimal(request.session['monto']).quantize(Decimal('1.00'))
             pago = Pago(fechaTransaccion = datetime.datetime.now(),
                         cedula           = form.cleaned_data['cedula'],
                         cedulaTipo       = form.cleaned_data['cedulaTipo'],

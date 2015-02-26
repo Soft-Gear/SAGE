@@ -21,7 +21,7 @@ def HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin):
 
 def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCierre):
 	if ReservaInicio >= ReservaFin:
-		return (False, 'El horario de apertura debe ser menor al horario de cierre')
+		return (False, 'El horario de inicio de reservacion debe ser menor al horario de fin de la reserva')
 	if ReservaFin - ReservaInicio < timedelta(hours=1):
 			return (False, 'El tiempo de reserva debe ser al menos de 1 hora')
 	if ReservaInicio < datetime.now():
@@ -47,7 +47,7 @@ def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCie
 			if hora_inicio<HorarioApertura:
 				return (False, 'El horario de inicio de reserva debe estar en un horario válido')
 			if hora_final > HorarioCierre:
-				return (False, 'El horario de cierre de reserva debe estar en un horario válido')
+				return (False, 'El horario de fin de la reserva debe estar en un horario válido')
 		return (True,'')
 
 def marzullo(idEstacionamiento, hIn, hOut):
@@ -65,13 +65,3 @@ def marzullo(idEstacionamiento, hIn, hOut):
 		if count > capacidad:
 			return False
 	return True
-
-def FindAllSubclasses(classType):
-	import sys, inspect
-	subclasses = []
-	callers_module = sys._getframe(1).f_globals['__name__']
-	classes = inspect.getmembers(sys.modules[callers_module], inspect.isclass)
-	for name, obj in classes:
-		if (obj is not classType) and (classType in inspect.getmro(obj)):
-			subclasses.append((obj, name))
-	return subclasses

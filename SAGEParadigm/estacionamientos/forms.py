@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-
 from django import forms
 from django.core.validators import RegexValidator
 from django.forms.widgets import SplitDateTimeWidget
-
-class CustomSplitDateTimeWidget(SplitDateTimeWidget):
-    
-    def format_output(self, rendered_widgets):
-        return u'<p></p>'.join(rendered_widgets)
-
 
 class EstacionamientoForm(forms.Form):
 
@@ -227,7 +220,7 @@ class EstacionamientoReserva(forms.Form):
     inicio = forms.SplitDateTimeField(
                         required = True,
                         label = 'Horario Inicio Reserva',
-                        widget= CustomSplitDateTimeWidget(attrs={
+                        widget = SplitDateTimeWidget(attrs={
                             'class':'form-control', 
                             'type':'date',
                             'placeholder':'Hora Inicio Reserva'
@@ -238,7 +231,7 @@ class EstacionamientoReserva(forms.Form):
     final = forms.SplitDateTimeField(
                         required = True,
                         label = 'Horario Final Reserva',
-                        widget = CustomSplitDateTimeWidget(attrs={
+                        widget = SplitDateTimeWidget(attrs={
                             'class':'form-control', 
                             'type':'date',
                             'placeholder':'Hora Final Reserva'
