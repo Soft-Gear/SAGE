@@ -24,7 +24,7 @@ def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCie
 		return (False, 'El horario de inicio de reservacion debe ser menor al horario de fin de la reserva')
 	if ReservaFin - ReservaInicio < timedelta(hours=1):
 			return (False, 'El tiempo de reserva debe ser al menos de 1 hora')
-	if ReservaInicio < datetime.now():
+	if ReservaInicio.replace(second=0, microsecond=0) < datetime.now().replace(second=0, microsecond=0):
 		return (False, 'La reserva no puede tener lugar en el pasado.')
 	if ReservaFin > datetime.now()+timedelta(days=7):
 		return (False, 'La reserva no puede ser por mas de 7 dias')
@@ -38,7 +38,7 @@ def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCie
 	else:
 		delta=timedelta(hours=HorarioCierre.hour,minutes=HorarioCierre.minute)
 		delta=delta-timedelta(hours=HorarioApertura.hour,minutes=HorarioApertura.minute)
-		
+
 		if ReservaFin-ReservaInicio>delta:
 			return (False, 'El horario de inicio de reserva debe estar en un horario válido')
 		else:
