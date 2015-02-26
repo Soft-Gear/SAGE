@@ -10,7 +10,16 @@ from estacionamientos.forms import EstacionamientoExtendedForm
 from estacionamientos.forms import EstacionamientoForm
 from estacionamientos.forms import EstacionamientoReserva
 from estacionamientos.forms import PagoTarjetaDeCredito
-from estacionamientos.models import Estacionamiento, Reserva, Pago, TarifaHora, TarifaMinuto, TarifaHorayFraccion, TarifaHoraPico
+from estacionamientos.models import (
+    Estacionamiento,
+    Reserva,
+    Pago,
+    TarifaHora,
+    TarifaMinuto,
+    TarifaHorayFraccion,
+    TarifaFinDeSemana,
+    TarifaHoraPico
+)
 
 
 # Usamos esta vista para procesar todos los estacionamientos
@@ -86,7 +95,7 @@ def estacionamiento_detail(request, _id):
             #     t = TarifaMinuto(tarifa = tmonto)
             # elif(tipo=='Por fraccion'):
             #     t = TarifaHorayFraccion(tarifa = tmonto)
-            
+
             t = eval(tipo)(tarifa = tmonto,tarifa2 = tarifa2, inicioEspecial = inicioTarifa2, finEspecial = finTarifa2)
 
             t.save()
