@@ -292,8 +292,19 @@
 
 
 
-    <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.min.js'%}"></script>
+  <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js'%}"></script>
+  <script type="text/javascript" src="{% static 'js/bootstrap.min.js'%}"></script>
+
+  <script type="text/javascript">
+    inicioDate = document.getElementById('id_inicio_0');
+    inicioTime = document.getElementById('id_inicio_1');
+    finDate = document.getElementById('id_final_0');
+    finTime = document.getElementById('id_final_1');
+    inicioDate.placeholder="Fecha Inicio Reserva"
+    inicioTime.placeholder="Hora Inicio Reserva"
+    finDate.placeholder="Fecha Fin Reserva"
+    finTime.placeholder="Hora Fin Reserva"
+  </script>
 
 </body>
 
