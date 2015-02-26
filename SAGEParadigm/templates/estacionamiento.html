@@ -138,30 +138,28 @@
       {% if estacionamiento.nroPuesto %}
         <tr><td><b><i class="fa fa-car"></i> Puestos:</b></td></tr>
         <tr><td>{{estacionamiento.nroPuesto}}</td></tr>
-      {% endif %}
-      {% if estacionamiento.reservasInicio %}
         <tr><td><b><i class="fa fa-clock-o"></i> Horario inicio de reserva:</b></td></tr>
         <tr><td>{{estacionamiento.reservasInicio}}</td></tr>
-      {% endif %}
-      {% if estacionamiento.reservasCierre %}
         <tr><td><b><i class="fa fa-clock-o"></i> Horario fin de reserva:</b></td></tr>
         <tr><td>{{estacionamiento.reservasCierre}}</td></tr>
-      {% endif %}
-      {% if estacionamiento.apertura %}
         <tr><td><b><i class="fa fa-clock-o"></i> Horario apertura:</b></td></tr>
         <tr><td>{{estacionamiento.apertura}}</td></tr>
-      {% endif %}
-      {% if estacionamiento.cierre %}
         <tr><td><b><i class="fa fa-clock-o"></i> Horario cierre:</b></td></tr>
         <tr><td>{{estacionamiento.cierre}}</td></tr>
-      {% endif %}
- 	  {% if estacionamiento.tarifa %}
         <tr><td><b><i class="fa fa-money"></i></i> Tarifa:</b></td></tr>
         <tr><td>{{estacionamiento.tarifa}} Bsf.</td></tr>
       {% endif %}
    	  {% if estacionamiento.esquemaTarifa %}
         <tr><td><b><i class="fa fa-circle"></i></i> Esquema:</b></td></tr>
         <tr><td>{{estacionamiento.esquemaTarifa.tipo}} </td></tr>
+      {% endif %}
+      {% if estacionamiento.esquemaTarifa.tarifa2 %}
+        <tr><td><b><i class="fa fa-money"></i></i> Tarifa especial:</b></td></tr>
+        <tr><td>{{estacionamiento.esquemaTarifa.tarifa2}} Bsf.</td></tr>
+        <tr><td><b><i class="fa fa-clock-o"></i> Inicio tarifa especial:</b></td></tr>
+        <tr><td>{{estacionamiento.esquemaTarifa.inicioEspecial}}</td></tr>
+        <tr><td><b><i class="fa fa-clock-o"></i> Fin tarifa especial:</b></td></tr>
+        <tr><td>{{estacionamiento.esquemaTarifa.finEspecial}}</td></tr>
       {% endif %}
 
 

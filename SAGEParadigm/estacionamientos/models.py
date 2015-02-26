@@ -124,25 +124,19 @@ class TarifaFinDeSemana(EsquemaTarifario):
 		return("Con tarifa especial para fines de semana")
 
 class TarifaHoraPico(EsquemaTarifario):
-	tarifaPico = models.DecimalField(max_digits=10, decimal_places=2)
-	inicioPico = models.TimeField(blank= True, null = True)
-	finPico = models.TimeField(blank= True, null = True)
-
 	def calcularPrecio(self,reservaInicio,reservaFinal):
-		# delta = horaFinal - horaInicio
-		# days = delta.days
 		minutosPico = 0
 		minutosValle = 0
 		tiempoActual = reservaInicio
 		minuto = timedelta(minutes=1)
 		while tiempoActual < reservaFinal:
 			horaActual = tiempoActual.time()
-			if horaActual >= self.inicioPico and horaActual < self.finPico:
+			if horaActual >= self.inicioEspecial and horaActual < self.finEspecial:
 				minutosPico += 1
-			elif horaActual < self.inicioPico or horaActual >= self.finPico:
+			elif horaActual < self.inicioEspecial or horaActual >= self.finEspecial:
 				minutosValle += 1
 			tiempoActual += minuto
-		return minutosPico*self.tarifaPico/60 + minutosValle*self.tarifa/60
+		return minutosPico*self.tarifa2/60 + minutosValle*self.tarifa/60
 
 	def  tipo(self):
 		return("Tarifa diferenciada por hora pico.")
