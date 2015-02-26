@@ -212,7 +212,7 @@ class EstacionamientoExtendedForm(forms.Form):
         widget = forms.Select(attrs = {'class':'form-control'})
     )
 
-    tarifa = forms.CharField(
+    tarifa = forms.DecimalField(
                         required = True,
                         validators = [tarifa_validator],
                         widget = forms.TextInput(attrs = {'class':'form-control',
@@ -247,7 +247,7 @@ class EstacionamientoExtendedForm(forms.Form):
                     )
                 )
 
-    tarifa2 = forms.CharField(
+    tarifa2 = forms.DecimalField(
                         required = False,
                         validators = [tarifa_validator],
                         widget = forms.TextInput(attrs = {'class':'form-control',
