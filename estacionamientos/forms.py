@@ -223,6 +223,17 @@ class EstacionamientoExtendedForm(forms.Form):
                     )
                 )
 
+    tarifa2 = forms.DecimalField(
+                        required = False,
+                        validators = [tarifa_validator],
+                        widget = forms.TextInput(attrs = {'class':'form-control',
+                            'placeholder':'Tarifa 2',
+                            'pattern':'^([0-9]+(\.[0-9]+)?)$',
+                            'message':'La entrada debe ser un número decimal.'
+                        }
+                    )
+                )
+
     inicioTarifa2 = forms.TimeField(
                         required = False,
                         label = 'Inicio Horario Especial',
@@ -243,17 +254,6 @@ class EstacionamientoExtendedForm(forms.Form):
                             'placeholder':'Horario Fin Reserva',
                             'pattern':'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]',
                             'message':'La entrada debe ser una hora válida.'
-                        }
-                    )
-                )
-
-    tarifa2 = forms.DecimalField(
-                        required = False,
-                        validators = [tarifa_validator],
-                        widget = forms.TextInput(attrs = {'class':'form-control',
-                            'placeholder':'Tarifa 2',
-                            'pattern':'^([0-9]+(\.[0-9]+)?)$',
-                            'message':'La entrada debe ser un número decimal.'
                         }
                     )
                 )
