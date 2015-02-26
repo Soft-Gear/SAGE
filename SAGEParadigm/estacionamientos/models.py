@@ -57,6 +57,9 @@ class EsquemaTarifario(models.Model):
 
 	# No se cuantos digitos deberiamos poner
 	tarifa = models.DecimalField(max_digits=10, decimal_places=2)
+	tarifa2 = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
+	inicioEspecial = models.TimeField(blank = True, null = True)
+	finEspecial = models.TimeField(blank = True, null = True)
 
 	class Meta:
 		abstract = True
@@ -65,27 +68,23 @@ class EsquemaTarifario(models.Model):
 
 
 class TarifaHora(EsquemaTarifario):
-
 	def calcularPrecio(self,horaInicio,horaFinal):
 		a=horaFinal-horaInicio
 		a=a.days*24+a.seconds/3600
 		a=ceil(a) #  De las horas se calcula el techo de ellas
 		return(Decimal(self.tarifa*a).quantize(Decimal('1.00')))
-	def  tipo(self):
+	def tipo(self):
 		return("Por Hora")
 
 class TarifaMinuto(EsquemaTarifario):
-
 	def calcularPrecio(self,horaInicio,horaFinal):
 		minutes = horaFinal-horaInicio
 		minutes = minutes.days*24*60+minutes.seconds/60
 		return (Decimal(minutes)*Decimal(self.tarifa/60)).quantize(Decimal('1.00'))
-	
-	def  tipo(self):
+	def tipo(self):
 		return("Por Minuto")
 
 class TarifaHorayFraccion(EsquemaTarifario):
-
 	def calcularPrecio(self,horaInicio,horaFinal):
 		time = horaFinal-horaInicio
 		time = time.days*24*3600+time.seconds
@@ -100,6 +99,44 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		else:
 			valor = self.tarifa
 		return(Decimal(valor).quantize(Decimal('1.00')))
-	
-	def  tipo(self):
+
+	def tipo(self):
 		return("Por Hora y Fraccion")
+
+class TarifaDiferenciada(EsquemaTarifario):
+	def calcularPrecio(self,horaInicio,horaFinal):
+		time = horaFinal-horaInicio
+		time = time.days*24*3600+time.seconds
+		if(time>3600):
+			valor = (floor(time/3600)*self.tarifa)
+			if((time%3600)==0):
+				pass
+			elif((time%3600)>1800):
+				valor += self.tarifa
+			else:
+				valor += self.tarifa/2
+		else:
+			valor = self.tarifa
+		return(Decimal(valor).quantize(Decimal('1.00')))
+
+	def tipo(self):
+		return("Con horarios diferenciados")
+
+class TarifaFinDeSemana(EsquemaTarifario):
+	def calcularPrecio(self,horaInicio,horaFinal):
+		time = horaFinal-horaInicio
+		time = time.days*24*3600+time.seconds
+		if(time>3600):
+			valor = (floor(time/3600)*self.tarifa)
+			if((time%3600)==0):
+				pass
+			elif((time%3600)>1800):
+				valor += self.tarifa
+			else:
+				valor += self.tarifa/2
+		else:
+			valor = self.tarifa
+		return(Decimal(valor).quantize(Decimal('1.00')))
+
+	def tipo(self):
+		return("Con tarifa especial para fines de semana")
