@@ -105,23 +105,30 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		return("Por Hora y Fraccion")
 
 class TarifaFinDeSemana(EsquemaTarifario):
-	def calcularPrecio(self,horaInicio,horaFinal):
-		time = horaFinal-horaInicio
-		time = time.days*24*3600+time.seconds
-		if(time>3600):
-			valor = (floor(time/3600)*self.tarifa)
-			if((time%3600)==0):
-				pass
-			elif((time%3600)>1800):
-				valor += self.tarifa
+	def calcularPrecio(self,inicio,final):
+		minutosNormales = 0
+		minutosFinDeSemana = 0
+		tiempoActual = inicio
+		minuto = timedelta(minutes=1)
+		while tiempoActual < final:
+			# weekday() devuelve un numero del 0 al 6 tal que
+			# 0 = Lunes
+			# 1 = Martes
+			# ..
+			# 5 = Sabado
+			# 6 = Domingo
+			if tiempoActual.weekday() < 5:
+				minutosNormales += 1
 			else:
-				valor += self.tarifa/2
-		else:
-			valor = self.tarifa
-		return(Decimal(valor).quantize(Decimal('1.00')))
+				minutosFinDeSemana += 1
+			tiempoActual += minuto
+		return Decimal(
+			minutosNormales*self.tarifa/60 +
+			minutosFinDeSemana*self.tarifa2/60
+		).quantize(Decimal('1.00'))
 
 	def tipo(self):
-		return("Con tarifa especial para fines de semana")
+		return("Tarifa diferenciada para fines de semana")
 
 class TarifaHoraPico(EsquemaTarifario):
 	def calcularPrecio(self,reservaInicio,reservaFinal):
@@ -136,7 +143,10 @@ class TarifaHoraPico(EsquemaTarifario):
 			elif horaActual < self.inicioEspecial or horaActual >= self.finEspecial:
 				minutosValle += 1
 			tiempoActual += minuto
-		return minutosPico*self.tarifa2/60 + minutosValle*self.tarifa/60
+		return Decimal(
+			minutosPico*self.tarifa2/60 +
+			minutosValle*self.tarifa/60
+		).quantize(Decimal('1.00'))
 
-	def  tipo(self):
-		return("Tarifa diferenciada por hora pico.")
+	def tipo(self):
+		return("Tarifa diferenciada por hora pico")
