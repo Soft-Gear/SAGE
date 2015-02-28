@@ -36,14 +36,14 @@ def validarHorarioReserva(ReservaInicio, ReservaFin, HorarioApertura, HorarioCie
 		else:
 			return(False,'Se puede reservar un puesto por un maximo de 7 dias')
 	else:
-		delta=timedelta(hours=HorarioCierre.hour,minutes=HorarioCierre.minute)
-		delta=delta-timedelta(hours=HorarioApertura.hour,minutes=HorarioApertura.minute)
+		delta =       timedelta(hours=HorarioCierre.hour,  minutes=HorarioCierre.minute)
+		delta = delta-timedelta(hours=HorarioApertura.hour,minutes=HorarioApertura.minute)
 
 		if ReservaFin-ReservaInicio>delta:
 			return (False, 'El horario de inicio de reserva debe estar en un horario válido')
 		else:
-			hora_inicio=time(hour = ReservaInicio.hour, minute = ReservaInicio.minute)
-			hora_final=time(hour = ReservaFin.hour, minute = ReservaFin.minute)
+			hora_inicio = time(hour = ReservaInicio.hour, minute = ReservaInicio.minute)
+			hora_final  = time(hour = ReservaFin.hour   , minute = ReservaFin.minute)
 			if hora_inicio<HorarioApertura:
 				return (False, 'El horario de inicio de reserva debe estar en un horario válido')
 			if hora_final > HorarioCierre:

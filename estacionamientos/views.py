@@ -44,8 +44,8 @@ def estacionamientos_all(request):
         # estacionamientos a 5
         if len(estacionamientos) >= 5:
             return render(request, 'templateMensaje.html',
-                                  {'color':'red', 
-                                   'mensaje':'No se pueden agregar más estacionamientos'
+                                  {'color'   : 'red', 
+                                   'mensaje' : 'No se pueden agregar más estacionamientos'
                                   }
                         )
 
@@ -171,18 +171,18 @@ def estacionamiento_reserva(request, _id):
                 request.session['finalReservaMinuto']  = finalReserva.minute
                 request.session['inicioReservaHora']   = inicioReserva.hour
                 request.session['inicioReservaMinuto'] = inicioReserva.minute
-                request.session['anioinicial'] = inicioReserva.year
-                request.session['mesinicial']  = inicioReserva.month
-                request.session['diainicial']  = inicioReserva.day
-                request.session['aniofinal']   = finalReserva.year
-                request.session['mesfinal']    = finalReserva.month
-                request.session['diafinal']    = finalReserva.day
+                request.session['anioinicial']         = inicioReserva.year
+                request.session['mesinicial']          = inicioReserva.month
+                request.session['diainicial']          = inicioReserva.day
+                request.session['aniofinal']           = finalReserva.year
+                request.session['mesfinal']            = finalReserva.month
+                request.session['diafinal']            = finalReserva.day
                 return render(request, 'estacionamientoPagarReserva.html', 
-                                       {'id'     : _id,
-                                        'monto'  : monto,
-                                        'reserva': reservaFinal,
-                                        'color'  : 'green', 
-                                        'mensaje': 'Existe un puesto disponible'
+                                       {'id'      : _id,
+                                        'monto'   : monto,
+                                        'reserva' : reservaFinal,
+                                        'color'   : 'green', 
+                                        'mensaje' : 'Existe un puesto disponible'
                                        }
                             )
             else:
@@ -253,17 +253,20 @@ def estacionamiento_ingreso(request):
     if request.method == 'POST':
         form = RifForm(request.POST)
         if form.is_valid():
-            rif = form.cleaned_data['rif']
+
+            rif                   = form.cleaned_data['rif']
             listaEstacionamientos = Estacionamiento.objects.filter(rif = rif) 
-            ingresoTotal = 0
-            listaIngresos = []
+            ingresoTotal          = 0
+            listaIngresos         = []
+
             for estacionamiento in listaEstacionamientos:
                 listaFacturas = Pago.objects.filter(reserva__estacionamiento__nombre = estacionamiento.nombre)
-                ingreso = [estacionamiento.nombre, 0]
+                ingreso       = [estacionamiento.nombre, 0]
                 for factura in listaFacturas:
                     ingreso[1] += factura.monto
                 listaIngresos += [ingreso]
                 ingresoTotal  += ingreso[1]
+
             return render(request,'estacionamientoIngreso.html',{ "ingresoTotal"  : ingresoTotal,
                                                                   "listaIngresos" : listaIngresos,
                                                                   "form"          : form,
@@ -277,12 +280,15 @@ def estacionamiento_consulta_reserva(request):
     if request.method == 'POST':
         form = CedulaForm(request.POST)
         if form.is_valid():
-            cedula = form.cleaned_data['cedula']
-            facturas = Pago.objects.filter(cedula = cedula) 
+
+            cedula        = form.cleaned_data['cedula']
+            facturas      = Pago.objects.filter(cedula = cedula) 
             listaFacturas = []
+
             for factura in facturas:
                 listaFacturas += [factura]
             listaFacturas.sort(key=lambda r: r.reserva.inicioReserva)
+
             return render(request,'estacionamientoConsultarReservas.html',
                                     { "listaFacturas" : listaFacturas,
                                       "form"          : form,
