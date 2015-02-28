@@ -8,8 +8,8 @@ from estacionamientos.controller import HorarioEstacionamiento, validarHorarioRe
 from estacionamientos.forms import (
     EstacionamientoForm,
     EstacionamientoExtendedForm,
-    EstacionamientoReserva,
-    PagoTarjetaDeCredito
+    ReservaForm,
+    PagoForm
 )
 from estacionamientos.models import (
     Estacionamiento,
@@ -475,7 +475,7 @@ class ReservaFormTestCase(TestCase):
     # malicia
     def test_EstacionamientoReserva_Vacio(self):
         form_data = {}
-        form = EstacionamientoReserva(data = form_data)
+        form = ReservaForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # caso borde
@@ -484,7 +484,7 @@ class ReservaFormTestCase(TestCase):
                      'final_1': time(hour = 15, minute = 0),
                      'final_0': date(year=2015,month=2,day=27)
         }
-        form = EstacionamientoReserva(data = form_data)
+        form = ReservaForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # normal
@@ -494,7 +494,7 @@ class ReservaFormTestCase(TestCase):
                      'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27)
         }
-        form = EstacionamientoReserva(data = form_data)
+        form = ReservaForm(data = form_data)
         self.assertEqual(form.is_valid(), True)
 
     # malicia
@@ -504,7 +504,7 @@ class ReservaFormTestCase(TestCase):
                      'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27)
         }
-        form = EstacionamientoReserva(data = form_data)
+        form = ReservaForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
@@ -514,7 +514,7 @@ class ReservaFormTestCase(TestCase):
                      'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27)
         }
-        form = EstacionamientoReserva(data = form_data)
+        form = ReservaForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
@@ -524,7 +524,7 @@ class ReservaFormTestCase(TestCase):
                      'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27)
         }
-        form = EstacionamientoReserva(data = form_data)
+        form = ReservaForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
     # malicia
@@ -534,7 +534,7 @@ class ReservaFormTestCase(TestCase):
                      'final_0': None,
                      'inicio_0': date(year=2015,month=2,day=27)
         }
-        form = EstacionamientoReserva(data = form_data)
+        form = ReservaForm(data = form_data)
         self.assertEqual(form.is_valid(), False)
 
 ###################################################################
@@ -545,7 +545,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
     # borde
     def test_PagoTarjetaForm_Vacio(self):
         form_data = {}
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     # borde
@@ -553,7 +553,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
         form_data = {
             'nombre': 'Pedro',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -562,7 +562,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'nombre': 'Pedro',
             'apellido': 'Perez',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -572,7 +572,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'apellido': 'Perez',
             'cedulaTipo': 'V',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -583,7 +583,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'cedulaTipo': 'V',
             'cedula': '123456789',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -595,7 +595,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'cedula': '123456789',
             'tarjetaTipo': 'Vista',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -608,7 +608,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234567890123456',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertTrue(form.is_valid())
 
     #borde
@@ -621,7 +621,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -634,7 +634,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -647,7 +647,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -660,7 +660,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -673,7 +673,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -686,7 +686,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -699,7 +699,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'American',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #borde
@@ -712,7 +712,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': 'ab12345',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #malicia
@@ -725,7 +725,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #malicia
@@ -738,7 +738,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'American',
             'tarjeta': '1234',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     #malicia
@@ -751,7 +751,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'tarjetaTipo': 'American',
             'tarjeta': 'prueba',
         }
-        form = PagoTarjetaDeCredito(data = form_data)
+        form = PagoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
 
@@ -870,7 +870,7 @@ class ReservaFormControllerTestCase(TestCase):
     # malicia
     def test_Reservacion_CamposVacios(self):
         form_data = {}
-        form = EstacionamientoReserva(data = form_data)
+        form = ReservaForm(data = form_data)
         self.assertFalse(form.is_valid())
 
 ###############################################################################
