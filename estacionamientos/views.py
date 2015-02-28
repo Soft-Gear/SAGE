@@ -2,7 +2,10 @@
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
+from django.utils import dateparse
+import re
 
+import urllib
 import datetime
 from decimal import Decimal
 from estacionamientos.controller import HorarioEstacionamiento, validarHorarioReserva, marzullo
@@ -24,6 +27,8 @@ from estacionamientos.models import (
     TarifaFinDeSemana,
     TarifaHoraPico
 )
+from django.http.response import HttpResponseRedirect, HttpResponse
+from django.utils.dateparse import parse_datetime
 
 
 # Usamos esta vista para procesar todos los estacionamientos
@@ -296,3 +301,32 @@ def estacionamiento_consulta_reserva(request):
                           )
 
     return render(request, 'estacionamientoConsultarReservas.html', {"form" : form })
+
+def receive_sms(request):
+    # Procesamiento del mensaje
+    '''sms = 'nombre        in 2015-02-15    07:00   out   2015-02-20 10:00    '
+    sms = re.split('in', sms)
+    sms = re.split('out', sms)
+    sms[0] = sms[0].strip()
+    sms[0] = re.sub('\s{2,}', ' ', sms[0])
+    sms[0] = re.sub('(\s)*in(\s)*', '', sms[0])
+    sms[1] = sms[1].strip()
+    sms[1] = re.sub('\s{2,}', ' ', sms[1])
+    horario_in = parse_datetime(sms[0])
+    horario_out = parse_datetime(sms[1])
+    print(horario_in)
+    print(horario_out)'''
+    
+    
+    phone = request.GET.get('phone', False)
+    text = request.GET.get('text', False)
+    # print(phone)
+    # print(text)
+    phone = urllib.parse.quote(str(phone))
+    text = urllib.parse.quote(str(text))
+    print('http://192.168.0.135:8000/sendsms?phone={0}&text={1}&password='.format(phone,text))
+    f = urllib.request.urlopen('http://192.168.0.135:8000/sendsms?phone={0}&text={1}&password='.format(phone,text))
+    print(f.read(100).decode('utf-8'))
+    return HttpResponse('')
+    #urllib.request.urlopen('http://192.168.0.135:8000/sendsms?phone={0}&text={1}&password='.format(phone,text))
+    #return render(request, 'sms.html', {'text':text})

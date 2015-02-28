@@ -8,5 +8,5 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', RedirectView.as_view(url='estacionamientos/', permanent=True)),
     url(r'^estacionamientos/', include('estacionamientos.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls))
 )
