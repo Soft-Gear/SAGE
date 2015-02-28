@@ -372,20 +372,39 @@ class PagoForm(forms.Form):
                 )
 
 class RifForm(forms.Form):
-        rif = forms.CharField(
-                        required = True,
-                        label = "RIF",
-                        validators = [
-                            RegexValidator(
-                                regex = '^[JVD]-?\d{8}-?\d$',
-                                message = 'Introduzca un RIF con un formato válido.'
-                            )
-                        ],
-                        widget = forms.TextInput(attrs = {
-                            'class':'form-control',
-                            'placeholder':'RIF: J-xxxxxxxxx',
-                            'pattern':'^[JVD]-\d{8}-?\d$',
-                            'message':'La entrada debe ser un RIF válido'
-                        }
-                    )
+    rif = forms.CharField(
+                    required = True,
+                    label = "RIF",
+                    validators = [
+                        RegexValidator(
+                            regex = '^[JVD]-?\d{8}-?\d$',
+                            message = 'Introduzca un RIF con un formato válido.'
+                        )
+                    ],
+                    widget = forms.TextInput(attrs = {
+                        'class':'form-control',
+                        'placeholder':'RIF: J-xxxxxxxxx',
+                        'pattern':'^[JVD]-\d{8}-?\d$',
+                        'message':'La entrada debe ser un RIF válido'
+                    }
                 )
+            )
+
+class CedulaForm(forms.Form):
+    cedula = forms.CharField(
+                    required = True,
+                    label = "Cédula",
+                    validators = [
+                        RegexValidator(
+                            regex = '^[0-9]+$',
+                            message = 'La cédula solo puede contener caracteres numéricos')
+                        ],
+                    widget = forms.TextInput(attrs = {
+                        'class':'form-control',
+                        'placeholder':'Cédula',
+                        'pattern':'^[0-9]+$',
+                        'message':'La entrada debe ser un número de cédula válido.',
+                        'maxlength':'9'
+                    }
+                )
+            )

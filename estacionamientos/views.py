@@ -12,6 +12,7 @@ from estacionamientos.forms import (
     ReservaForm,
     PagoForm,
     RifForm,
+    CedulaForm,
 )
 from estacionamientos.models import (
     Estacionamiento,
@@ -251,7 +252,6 @@ def estacionamiento_ingreso(request):
     form = RifForm()
     if request.method == 'POST':
         form = RifForm(request.POST)
-        print ("hola")
         if form.is_valid():
             rif = form.cleaned_data['rif']
             listaEstacionamientos = Estacionamiento.objects.filter(rif = rif) 
@@ -264,7 +264,6 @@ def estacionamiento_ingreso(request):
                     ingreso[1] += factura.monto
                 listaIngresos += [ingreso]
                 ingresoTotal  += ingreso[1]
-                print (listaIngresos)
             return render(request,'estacionamientoIngreso.html',{ "ingresoTotal"  : ingresoTotal,
                                                                   "listaIngresos" : listaIngresos,
                                                                   "form"          : form,
@@ -272,3 +271,22 @@ def estacionamiento_ingreso(request):
                           )
 
     return render(request, 'estacionamientoIngreso.html', {"form" : form })
+
+def estacionamiento_consulta_reserva(request):
+    form = CedulaForm()
+    if request.method == 'POST':
+        form = CedulaForm(request.POST)
+        if form.is_valid():
+            cedula = form.cleaned_data['cedula']
+            facturas = Pago.objects.filter(cedula = cedula) 
+            listaFacturas = []
+            for factura in facturas:
+                listaFacturas += [factura]
+            listaFacturas.sort(key=lambda r: r.reserva.inicioReserva)
+            return render(request,'estacionamientoConsultarReservas.html',
+                                    { "listaFacturas" : listaFacturas,
+                                      "form"          : form,
+                                    }
+                          )
+
+    return render(request, 'estacionamientoConsultarReservas.html', {"form" : form })
