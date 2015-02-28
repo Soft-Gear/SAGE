@@ -25,8 +25,6 @@ class Estacionamiento(models.Model):
 	tarifa         = models.DecimalField(decimal_places = 2, max_digits = 256, blank = True, null = True)
 	apertura       = models.TimeField(blank = True, null = True)
 	cierre         = models.TimeField(blank = True, null = True)
-	reservasInicio = models.TimeField(blank = True, null = True)
-	reservasCierre = models.TimeField(blank = True, null = True)
 	nroPuesto      = models.IntegerField(blank = True, null = True)
 
 	def __str__(self):

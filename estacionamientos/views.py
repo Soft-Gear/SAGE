@@ -44,7 +44,7 @@ def estacionamientos_all(request):
         # estacionamientos a 5
         if len(estacionamientos) >= 5:
             return render(request, 'templateMensaje.html',
-                                  {'color'   : 'red', 
+                                  {'color'   : 'red',
                                    'mensaje' : 'No se pueden agregar más estacionamientos'
                                   }
                         )
@@ -88,32 +88,35 @@ def estacionamiento_detail(request, _id):
         if form.is_valid():
             horaIn        = form.cleaned_data['horarioin']
             horaOut       = form.cleaned_data['horarioout']
-            reservaIn     = form.cleaned_data['horario_reserin']
-            reservaOut    = form.cleaned_data['horario_reserout']
             tarifa        = form.cleaned_data['tarifa']
             tipo          = form.cleaned_data['esquema']
             inicioTarifa2 = form.cleaned_data['inicioTarifa2']
             finTarifa2    = form.cleaned_data['finTarifa2']
             tarifa2       = form.cleaned_data['tarifa2']
 
-            esquemaTarifa = eval(tipo)(tarifa         = tarifa,
-                                       tarifa2        = tarifa2, 
-                                       inicioEspecial = inicioTarifa2, 
-                                       finEspecial    = finTarifa2)
+            esquemaTarifa = eval(tipo)(
+                tarifa         = tarifa,
+                tarifa2        = tarifa2,
+                inicioEspecial = inicioTarifa2,
+                finEspecial    = finTarifa2
+            )
 
             esquemaTarifa.save()
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
-            m_validado = HorarioEstacionamiento(horaIn, horaOut, reservaIn, reservaOut)
-            if not m_validado[0]:
-                return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
+            if not HorarioEstacionamiento(horaIn, horaOut):
+                return render(
+                    request,
+                    'templateMensaje.html',
+                    {
+                        'color':'red',
+                        'mensaje': 'El horario de apertura debe ser menor al horario de cierre'
+                    }
+                )
             # debería funcionar con excepciones
-
             estacionamiento.tarifa         = tarifa
             estacionamiento.apertura       = horaIn
             estacionamiento.cierre         = horaOut
-            estacionamiento.reservasInicio = reservaIn
-            estacionamiento.reservasCierre = reservaOut
             estacionamiento.esquemaTarifa  = esquemaTarifa
             estacionamiento.nroPuesto      = form.cleaned_data['puestos']
 
@@ -141,18 +144,19 @@ def estacionamiento_reserva(request, _id):
         print(request.POST)
         # Verificamos si es valido con los validadores del formulario
         if form.is_valid():
-            
+
             inicioReserva = form.cleaned_data['inicio']
             print(form.cleaned_data)
             finalReserva = form.cleaned_data['final']
 
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
-            m_validado = validarHorarioReserva(inicioReserva, 
-                                               finalReserva, 
-                                               estacionamiento.reservasInicio, 
-                                               estacionamiento.reservasCierre
-                                            )
+            m_validado = validarHorarioReserva(
+                inicioReserva,
+                finalReserva,
+                estacionamiento.apertura,
+                estacionamiento.cierre,
+            )
 
             # Si no es valido devolvemos el request
             if not m_validado[0]:
@@ -177,18 +181,18 @@ def estacionamiento_reserva(request, _id):
                 request.session['aniofinal']           = finalReserva.year
                 request.session['mesfinal']            = finalReserva.month
                 request.session['diafinal']            = finalReserva.day
-                return render(request, 'estacionamientoPagarReserva.html', 
+                return render(request, 'estacionamientoPagarReserva.html',
                                        {'id'      : _id,
                                         'monto'   : monto,
                                         'reserva' : reservaFinal,
-                                        'color'   : 'green', 
+                                        'color'   : 'green',
                                         'mensaje' : 'Existe un puesto disponible'
                                        }
                             )
             else:
                 # Cambiar mensaje
-                return render(request, 'templateMensaje.html', 
-                                        {'color'   : 'red', 
+                return render(request, 'templateMensaje.html',
+                                        {'color'   : 'red',
                                          'mensaje' : 'No hay un puesto disponible para ese horario'
                                         }
                             )
@@ -204,16 +208,16 @@ def estacionamiento_pago(request,_id):
                 estacionamiento = Estacionamiento.objects.get(id = _id)
             except ObjectDoesNotExist:
                 return render(request, '404.html')
-            inicioReserva = datetime.datetime(year   = request.session['anioinicial'], 
-                                              month  = request.session['mesinicial'], 
-                                              day    = request.session['diainicial'], 
+            inicioReserva = datetime.datetime(year   = request.session['anioinicial'],
+                                              month  = request.session['mesinicial'],
+                                              day    = request.session['diainicial'],
                                               hour   = request.session['inicioReservaHora'],
                                               minute = request.session['inicioReservaMinuto']
                                             )
 
-            finalReserva  = datetime.datetime(year   = request.session['aniofinal'], 
+            finalReserva  = datetime.datetime(year   = request.session['aniofinal'],
                                               month  = request.session['mesfinal'],
-                                              day    = request.session['diafinal'], 
+                                              day    = request.session['diafinal'],
                                               hour   = request.session['finalReservaHora'],
                                               minute = request.session['finalReservaMinuto']
                                              )
@@ -255,7 +259,7 @@ def estacionamiento_ingreso(request):
         if form.is_valid():
 
             rif                   = form.cleaned_data['rif']
-            listaEstacionamientos = Estacionamiento.objects.filter(rif = rif) 
+            listaEstacionamientos = Estacionamiento.objects.filter(rif = rif)
             ingresoTotal          = 0
             listaIngresos         = []
 
@@ -282,7 +286,7 @@ def estacionamiento_consulta_reserva(request):
         if form.is_valid():
 
             cedula        = form.cleaned_data['cedula']
-            facturas      = Pago.objects.filter(cedula = cedula) 
+            facturas      = Pago.objects.filter(cedula = cedula)
             listaFacturas = []
 
             for factura in facturas:

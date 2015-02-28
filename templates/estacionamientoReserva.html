@@ -36,35 +36,29 @@
 
   <!-- upper section -->
   <div class="row">
-  <div class="col-sm-2">
-      <!-- left -->
-                <h3>
-            <i class="glyphicon glyphicon-briefcase">
-            </i>
-            Menú
-          </h3>
+    <div class="col-sm-2">
+      <h3>
+        <i class="glyphicon glyphicon-briefcase"></i>
+        Menú
+      </h3>
       <hr>
-
-         <ul class="nav nav-stacked">
-            <li>
-              <a href="..">
-                <i class="fa fa-bus"></i>
-                Estacionamientos
-              </a>
-            </li>
-          </ul>
-          <br>
-          <ul class="nav nav-stacked">
-            <li>
-              <a href="./reserva">
-                <i class="fa fa-pencil-square-o"></i>
-                Reservar
-              </a>
-            </li>
-          </ul>
+        <ul class="nav nav-stacked">
+          <li><a href="..">
+            <i class="fa fa-bus"></i>
+            Estacionamientos
+          </a></li>
+          <li><a href="./">
+            <i class="fa fa-wrench"></i>
+            Parametrizar
+          </a></li>
+          <li><a href="./reserva">
+            <i class="fa fa-pencil-square-o"></i>
+            Reservar
+          </a></li>
+        </ul>
       <hr>
+    </div>
 
-    </div><!-- /span-3 -->
     <div class="col-sm-9">
 
       <!-- column 2 -->
@@ -135,10 +129,6 @@
       {% if estacionamiento.nroPuesto %}
         <tr><td><b><i class="fa fa-car"></i> Puestos:</b></td></tr>
         <tr><td>{{estacionamiento.nroPuesto}}</td></tr>
-        <tr><td><b><i class="fa fa-clock-o"></i> Horario inicio de reserva:</b></td></tr>
-        <tr><td>{{estacionamiento.reservasInicio}}</td></tr>
-        <tr><td><b><i class="fa fa-clock-o"></i> Horario fin de reserva:</b></td></tr>
-        <tr><td>{{estacionamiento.reservasCierre}}</td></tr>
         <tr><td><b><i class="fa fa-clock-o"></i> Horario apertura:</b></td></tr>
         <tr><td>{{estacionamiento.apertura}}</td></tr>
         <tr><td><b><i class="fa fa-clock-o"></i> Horario cierre:</b></td></tr>
@@ -179,7 +169,7 @@
                 <i class="glyphicon glyphicon-wrench pull-right">
                 </i>
                 <h4>
-                  Reserva
+                  Reservar
                 </h4>
               </div>
             </div>

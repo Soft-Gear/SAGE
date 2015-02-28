@@ -363,109 +363,38 @@ class ExtendedFormTestCase(TestCase):
 
 ######################################################################
 # ESTACIONAMIENTO_EXTENDED pruebas controlador
-###################################################################
+######################################################################
 
 class ExtendedFormControllerTestCase(TestCase):
     # normal
     def test_HorariosValidos(self):
         HoraInicio = time(hour = 12, minute = 0, second = 0)
         HoraFin = time(hour = 18, minute = 0, second = 0)
-        ReservaInicio = time(hour = 12, minute = 0, second = 0)
-        ReservaFin = time(hour = 18, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (True, ''))
+        self.assertTrue(HorarioEstacionamiento(HoraInicio, HoraFin))
 
     # malicia
     def test_HorariosInvalido_HoraCierre_Menor_HoraApertura(self):
         HoraInicio = time(hour = 12, minute = 0, second = 0)
         HoraFin = time(hour = 11, minute = 0, second = 0)
-        ReservaInicio = time(hour = 12, minute = 0, second = 0)
-        ReservaFin = time(hour = 18, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (False, 'El horario de apertura debe ser menor al horario de cierre'))
+        self.assertFalse(HorarioEstacionamiento(HoraInicio, HoraFin))
 
     # caso borde
     def test_HorariosInvalido_HoraCierre_Igual_HoraApertura(self):
         HoraInicio = time(hour = 12, minute = 0, second = 0)
         HoraFin = time(hour = 12, minute = 0, second = 0)
-        ReservaInicio = time(hour = 12, minute = 0, second = 0)
-        ReservaFin = time(hour = 18, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (False, 'El horario de apertura debe ser menor al horario de cierre'))
-
-    # caso borde
-    def test_HorariosInvalido_HoraCierreReserva_Menor_HoraAperturaReserva(self):
-        HoraInicio = time(hour = 12, minute = 0, second = 0)
-        HoraFin = time(hour = 18, minute = 0, second = 0)
-        ReservaInicio = time(hour = 12, minute = 0, second = 0)
-        ReservaFin = time(hour = 11, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe ser menor al horario de cierre'))
-
-    # caso borde
-    def test_HorariosInvalido_HoraCierreReserva_Igual_HoraAperturaReserva(self):
-        HoraInicio = time(hour = 12, minute = 0, second = 0)
-        HoraFin = time(hour = 18, minute = 0, second = 0)
-        ReservaInicio = time(hour = 12, minute = 0, second = 0)
-        ReservaFin = time(hour = 12, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe ser menor al horario de cierre'))
+        self.assertFalse(HorarioEstacionamiento(HoraInicio, HoraFin))
 
     # caso borde
     def test_Limite_HorarioValido_Apertura_Cierre(self):
         HoraInicio = time(hour = 12, minute = 0, second = 0)
         HoraFin = time(hour = 12, minute = 0, second = 1)
-        ReservaInicio = time(hour = 12, minute = 0, second = 0)
-        ReservaFin = time(hour = 12, minute = 0, second = 1)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (True, ''))
+        self.assertTrue(HorarioEstacionamiento(HoraInicio, HoraFin))
 
     # caso borde
     def test_Limite_Superior_HorarioValido_Apertura_Cierre(self):
         HoraInicio = time(hour = 0, minute = 0, second = 0)
         HoraFin = time(hour = 23, minute = 59, second = 59)
-        ReservaInicio = time(hour = 12, minute = 0, second = 0)
-        ReservaFin = time(hour = 23, minute = 59, second = 59)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (True, ''))
-
-    # caso borde
-    def test_InicioReserva_Mayor_HoraCierreEstacionamiento(self):
-        HoraInicio = time(hour = 12, minute = 0, second = 0)
-        HoraFin = time(hour = 18, minute = 0, second = 0)
-        ReservaInicio = time(hour = 19, minute = 0, second = 0)
-        ReservaFin = time(hour = 20, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (False, 'El horario de comienzo de reserva debe ser menor al horario de cierre del estacionamiento'))
-
-    # caso borde
-    def test_InicioReserva_Mayor_HoraCierreEstacionamiento2(self):
-        HoraInicio = time(hour = 12, minute = 0, second = 0)
-        HoraFin = time(hour = 18, minute = 0, second = 0)
-        ReservaInicio = time(hour = 19, minute = 0, second = 0)
-        ReservaFin = time(hour = 20, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (False, 'El horario de comienzo de reserva debe ser menor al horario de cierre del estacionamiento'))
-
-    # malicia
-    def test_CierreReserva_Mayor_HoraCierreEstacionamiento(self):
-        HoraInicio = time(hour = 12, minute = 0, second = 0)
-        HoraFin = time(hour = 18, minute = 0, second = 0)
-        ReservaInicio = time(hour = 17, minute = 0, second = 0)
-        ReservaFin = time(hour = 20, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (False, 'El horario de cierre de estacionamiento debe ser mayor o igual al horario de finalización de reservas'))
-
-    # malicia
-    def test_CierreReserva_Menos_HoraInicioEstacionamiento(self):
-        HoraInicio = time(hour = 12, minute = 0, second = 0)
-        HoraFin = time(hour = 18, minute = 0, second = 0)
-        ReservaInicio = time(hour = 10, minute = 0, second = 0)
-        ReservaFin = time(hour = 11, minute = 0, second = 0)
-        x = HorarioEstacionamiento(HoraInicio, HoraFin, ReservaInicio, ReservaFin)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe mayor o igual al horario de apertura del estacionamiento'))
-
-
+        self.assertTrue(HorarioEstacionamiento(HoraInicio, HoraFin))
 
 ###################################################################
 # ESTACIONAMIENTO_RESERVA_FORM
@@ -764,8 +693,8 @@ class ReservaFormControllerTestCase(TestCase):
     # normal
     def test_HorarioReservaValido(self):
         hoy=datetime.now()
-        ReservaInicio = datetime(hoy.year,hoy.month,hoy.day+1,15)
-        ReservaFin = datetime(hoy.year,hoy.month,hoy.day+1,17)
+        ReservaInicio = datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=1)
+        ReservaFin = datetime(hoy.year,hoy.month,hoy.day,17) + timedelta(days=1)
         HoraApertura = time(hour = 12, minute = 0, second = 0)
         HoraCierre = time(hour = 18, minute = 0, second = 0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
@@ -776,8 +705,8 @@ class ReservaFormControllerTestCase(TestCase):
         hoy=datetime.now()
         HoraApertura=time(6,0)
         HoraCierre=time(18,0)
-        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day+1,15)
-        ReservaFin=datetime(hoy.year,hoy.month,hoy.day+2,15)
+        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=1)
+        ReservaFin=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
     #Borde
@@ -785,8 +714,8 @@ class ReservaFormControllerTestCase(TestCase):
         hoy=datetime.now()
         HoraApertura=time(6,0)
         HoraCierre=time(18,0)
-        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day+1,6)
-        ReservaFin=datetime(hoy.year,hoy.month,hoy.day+2,18)
+        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,6) + timedelta(days=1)
+        ReservaFin=datetime(hoy.year,hoy.month,hoy.day,18) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
 
@@ -794,8 +723,8 @@ class ReservaFormControllerTestCase(TestCase):
         hoy=datetime.now()
         HoraApertura=time(6,0)
         HoraCierre=time(18,0)
-        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day+1,6)
-        ReservaFin=datetime(hoy.year,hoy.month,hoy.day+2,18,1)
+        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,6) + timedelta(days=1)
+        ReservaFin=datetime(hoy.year,hoy.month,hoy.day,18,1) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
 
@@ -805,8 +734,8 @@ class ReservaFormControllerTestCase(TestCase):
         hoy=datetime.now()
         HoraApertura=time(0,0)
         HoraCierre=time(23,59)
-        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day+1,15)
-        ReservaFin=datetime(hoy.year,hoy.month,hoy.day+2,15)
+        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=1)
+        ReservaFin=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (True, ''))
 
@@ -852,16 +781,16 @@ class ReservaFormControllerTestCase(TestCase):
         HoraApertura = time(hour = 10, minute = 0, second = 0)
         HoraCierre = time(hour = 22, minute = 0, second = 0)
         hoy=datetime.today()
-        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day+1,17)
-        ReservaFin=datetime(hoy.year,hoy.month,hoy.day+1,23)
+        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,17) + timedelta(days=1)
+        ReservaFin=datetime(hoy.year,hoy.month,hoy.day,23) + timedelta(days=1)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
         self.assertEqual(x, (False, 'El horario de fin de la reserva debe estar en un horario válido'))
 
     # Caso borde
     def test_HorarioReservaInvalido_ReservaInicial_Menor_HorarioApertura(self):
         hoy=datetime.now()
-        ReservaInicio = datetime(hoy.year,hoy.month,hoy.day+1,7)
-        ReservaFin = datetime(hoy.year,hoy.month,hoy.day+1,15)
+        ReservaInicio = datetime(hoy.year,hoy.month,hoy.day,7) + timedelta(days=1)
+        ReservaFin = datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=1)
         HoraApertura=time(8,0)
         HoraCierre=time(18,0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
@@ -935,9 +864,7 @@ class TestMarzullo(unittest.TestCase):
             rif = "rif",
             nroPuesto = puestos,
             apertura       = "06:00",
-            reservasInicio = "06:00",
             cierre         = "18:00",
-            reservasCierre = "18:00"
         )
         e.save()
         return e
