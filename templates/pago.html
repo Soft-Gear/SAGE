@@ -1,3 +1,5 @@
+
+{% load humanize %}
 <html lang="es"><head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
@@ -241,7 +243,7 @@
               <tr><td>{{pago.tarjetaTipo}} </td></tr>
 
               <tr><td><b><i class="fa fa-money"></i> Monto:</b></td></tr>
-              <tr><td>{{pago.monto}} Bs.</td></tr>
+              <tr><td>{{pago.monto|floatformat:2|intcomma }} Bs.</td></tr>
              
             </tbody>
           </table>
