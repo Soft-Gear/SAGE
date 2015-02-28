@@ -124,8 +124,8 @@ class EstacionamientoForm(forms.Form):
                         ],
                         widget = forms.TextInput(attrs = {
                             'class':'form-control',
-                            'placeholder':'RIF',
-                            'pattern':'^[JVD]-?\d{8}-?\d$',
+                            'placeholder':'RIF: J-xxxxxxxxx',
+                            'pattern':'^[JVD]-\d{8}-?\d$',
                             'message':'La entrada debe ser un RIF válido'
                         }
                     )
@@ -256,7 +256,7 @@ class EstacionamientoExtendedForm(forms.Form):
                     )
                 )
 
-class EstacionamientoReserva(forms.Form):
+class ReservaForm(forms.Form):
     inicio = forms.SplitDateTimeField(
                         required = True,
                         label = 'Horario Inicio Reserva',
@@ -279,7 +279,7 @@ class EstacionamientoReserva(forms.Form):
                     )
                 )
 
-class PagoTarjetaDeCredito(forms.Form):
+class PagoForm(forms.Form):
 
     nombre = forms.CharField(
                         required = True,
@@ -346,7 +346,7 @@ class PagoTarjetaDeCredito(forms.Form):
                         required = True,
                         label = 'tarjetaTipo',
                         choices = (
-                            ('Vista', ' VISTA '),
+                            ('Vista',  ' VISTA '),
                             ('Mister', ' MISTER '),
                             ('Xpress', ' XPRESS ')
                         ),
@@ -370,3 +370,41 @@ class PagoTarjetaDeCredito(forms.Form):
                         }
                     )
                 )
+
+class RifForm(forms.Form):
+    rif = forms.CharField(
+                    required = True,
+                    label = "RIF",
+                    validators = [
+                        RegexValidator(
+                            regex = '^[JVD]-?\d{8}-?\d$',
+                            message = 'Introduzca un RIF con un formato válido.'
+                        )
+                    ],
+                    widget = forms.TextInput(attrs = {
+                        'class':'form-control',
+                        'placeholder':'RIF: J-xxxxxxxxx',
+                        'pattern':'^[JVD]-\d{8}-?\d$',
+                        'message':'La entrada debe ser un RIF válido'
+                    }
+                )
+            )
+
+class CedulaForm(forms.Form):
+    cedula = forms.CharField(
+                    required = True,
+                    label = "Cédula",
+                    validators = [
+                        RegexValidator(
+                            regex = '^[0-9]+$',
+                            message = 'La cédula solo puede contener caracteres numéricos')
+                        ],
+                    widget = forms.TextInput(attrs = {
+                        'class':'form-control',
+                        'placeholder':'Cédula',
+                        'pattern':'^[0-9]+$',
+                        'message':'La entrada debe ser un número de cédula válido.',
+                        'maxlength':'9'
+                    }
+                )
+            )

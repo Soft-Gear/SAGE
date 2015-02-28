@@ -1,5 +1,6 @@
 {% load staticfiles %}
 <!DOCTYPE html>
+{% load humanize %}
 <html lang="es"><head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
@@ -167,7 +168,7 @@
         <tr><td>{{estacionamiento.esquemaTarifa.finEspecial}}</td></tr>
       {% elif estacionamiento.nroPuesto %}
         <tr><td><b><i class="fa fa-money"></i></i> Tarifa:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa}}</td></tr>
+        <tr><td>BsF. {{estacionamiento.tarifa|floatformat:2|intcomma }}</td></tr>
       {% endif %}
 
 

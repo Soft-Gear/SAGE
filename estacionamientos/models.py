@@ -8,59 +8,56 @@ from datetime import timedelta
 
 class Estacionamiento(models.Model):
 	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
-	nombre = models.CharField(max_length = 50)
-	direccion = models.TextField(max_length = 120)
-
-	telefono1 = models.CharField(blank = True, null = True, max_length = 30)
-	telefono2 = models.CharField(blank = True, null = True, max_length = 30)
-	telefono3 = models.CharField(blank = True, null = True, max_length = 30)
-
-	email1 = models.EmailField(blank = True, null = True)
-	email2 = models.EmailField(blank = True, null = True)
-
-	rif = models.CharField(max_length = 12)
+	nombre      = models.CharField(max_length = 50)
+	direccion   = models.TextField(max_length = 120)
+	telefono1   = models.CharField(blank = True, null = True, max_length = 30)
+	telefono2   = models.CharField(blank = True, null = True, max_length = 30)
+	telefono3   = models.CharField(blank = True, null = True, max_length = 30)
+	email1      = models.EmailField(blank = True, null = True)
+	email2      = models.EmailField(blank = True, null = True)
+	rif         = models.CharField(max_length = 12)
 
 	# Campos para referenciar al esquema de tarifa
 
-	content_type = models.ForeignKey(ContentType, null = True)
-	object_id = models.PositiveIntegerField(null = True)
-	esquemaTarifa = GenericForeignKey()
-	tarifa = models.DecimalField(decimal_places = 2, max_digits = 256, blank = True, null = True)
-	apertura = models.TimeField(blank = True, null = True)
-	cierre = models.TimeField(blank = True, null = True)
+	content_type   = models.ForeignKey(ContentType, null = True)
+	object_id      = models.PositiveIntegerField(null = True)
+	esquemaTarifa  = GenericForeignKey()
+	tarifa         = models.DecimalField(decimal_places = 2, max_digits = 256, blank = True, null = True)
+	apertura       = models.TimeField(blank = True, null = True)
+	cierre         = models.TimeField(blank = True, null = True)
 	reservasInicio = models.TimeField(blank = True, null = True)
 	reservasCierre = models.TimeField(blank = True, null = True)
-	nroPuesto = models.IntegerField(blank = True, null = True)
+	nroPuesto      = models.IntegerField(blank = True, null = True)
 
 	def __str__(self):
 		return self.nombre+' '+str(self.id)
 
 class Reserva(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
-	inicioReserva = models.DateTimeField()
-	finalReserva = models.DateTimeField()
+	inicioReserva   = models.DateTimeField()
+	finalReserva    = models.DateTimeField()
 
 	def __str__(self):
 		return self.estacionamiento.nombre+' ('+str(self.inicioReserva)+','+str(self.finalReserva)+')'
 
 class Pago(models.Model):
 	fechaTransaccion = models.DateTimeField()
-	cedulaTipo = models.CharField(max_length = 1)
-	cedula = models.CharField(max_length = 10)
-	tarjetaTipo = models.CharField(max_length = 6)
-	reserva = models.ForeignKey(Reserva)
-	monto   = models.DecimalField(decimal_places = 2, max_digits = 256)
+	cedulaTipo       = models.CharField(max_length = 1)
+	cedula           = models.CharField(max_length = 10)
+	tarjetaTipo      = models.CharField(max_length = 6)
+	reserva          = models.ForeignKey(Reserva)
+	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
 
 	def __str__(self):
-		return str(self.id)
+		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
 
 class EsquemaTarifario(models.Model):
 
 	# No se cuantos digitos deberiamos poner
-	tarifa = models.DecimalField(max_digits=10, decimal_places=2)
-	tarifa2 = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
+	tarifa         = models.DecimalField(max_digits=10, decimal_places=2)
+	tarifa2        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
 	inicioEspecial = models.TimeField(blank = True, null = True)
-	finEspecial = models.TimeField(blank = True, null = True)
+	finEspecial    = models.TimeField(blank = True, null = True)
 
 	class Meta:
 		abstract = True

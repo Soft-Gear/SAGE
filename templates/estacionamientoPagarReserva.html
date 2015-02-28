@@ -1,3 +1,5 @@
+
+{% load humanize %}
 <html lang="es"><head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
@@ -128,7 +130,7 @@
             <tr><td>{{reserva.finalReserva}}</td></tr>
 
             <tr><td><b><i class="fa fa-money"></i> Monto:</b></td></tr>
-            <tr><td>{{monto}} Bs.</td></tr>
+            <tr><td>{{monto|floatformat:2|intcomma }} Bs.</td></tr>
               
             <tr><td>           
             <A HREF="pago" onClick="return popup(this, 'Pago de Reserva')">

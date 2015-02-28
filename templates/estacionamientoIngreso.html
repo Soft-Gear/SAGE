@@ -1,5 +1,6 @@
 {% load staticfiles %}
 <!DOCTYPE html>
+{% load humanize %}
 <html lang="es"><head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     
@@ -70,16 +71,6 @@
             </li>
           </ul>
 
- <!--           <ul class="nav nav-stacked">
-            <li>
-              <a href="./hola">
-                <i class="fa fa-bus"></i>
-                blabla
-              </a>
-            </li>
-          </ul> -->
-
-
           
           <hr>
           
@@ -101,19 +92,27 @@
      
        <div class="col-md-8"> 
       <table class="table table-striped">
-      {% if estacionamientos %}
-
-        <thead>
-          <tr><th></th><th>Dueño</th><th>Nombre</th><th>RIF</th></tr>
-        </thead>
-        <tbody>
-        {% for obj in estacionamientos %}
-          <tr><td>{{forloop.counter}}</td><td>{{obj.propietario}}</td><td>{{obj.nombre}}</td><td>{{obj.rif}}</td><td><a href="./{{obj.id}}"><i class="fa fa-search"></i></a> </td></tr> 
-        {% endfor %}
-        </tbody>
+        {% if listaIngresos  %}
+            <thead>
+              <tr><th></th><th>Nombre</th><th>Monto</th></tr>
+            </thead>
+            <tbody>
+            {% for ingreso in listaIngresos%}
+              <tr>
+                <td></td>
+                <td>{{ingreso.0}}</td>
+                <td>{{ingreso.1|floatformat:2|intcomma}}</td>
+              </tr> 
+            {% endfor %}
+              <tr>
+                <td></td>
+                <td>Ingreso total</td>
+                <td>{{ingresoTotal|floatformat:2|intcomma}}</td>
+              </tr> 
+            </tbody>
         {% else %}
-       <h3>No hay estacionamientos</h3>
-      {% endif %}
+            <h3>Introduzca su RIF</h3>
+        {% endif %}
       </table>
       <hr>              
     </div><div class="col-md-4">
@@ -125,7 +124,7 @@
                 <i class="glyphicon glyphicon-wrench pull-right">
                 </i>
                 <h4>
-                  Crear estacionamiento
+                  Consultar Ingresos
                 </h4>
               </div>
             </div>
@@ -133,7 +132,7 @@
 
       
               
-              <form action="." method="post" class="form form-vertical">
+              <form action="/estacionamientos/ingreso" method="post" class="form form-vertical">
               {% csrf_token %}
               {% for field in form %}
                 <div class="control-group">
@@ -145,69 +144,16 @@
                     {% else %}
                       {{ field }}
                     {% endif %}
+                    {{ field.errors }}
                   </div>
                 </div> 
               {% endfor %}
-              
-            <script>
-			
-			   	var inputs = document.getElementsByTagName("input");
-			    var inputs_len = inputs.length;
-			    var addDirtyClass = function(evt) {
-				  evt.srcElement.classList.toggle("dirty", true);
-			    };
-			    for (var i = 0; i < inputs_len; i++) {
-			      var input = inputs[i];
-			      input.addEventListener("focus", addDirtyClass);
-			      input.addEventListener("invalid", addDirtyClass);
-			      input.addEventListener("valid", addDirtyClass);
-			    }
-			
-				function verifyPattern(input, error, error_message) {
-					if (input.validity.valid) {
-						error.innerHTML = ""; // Reset the content of the message
-						error.className = "error"; // Reset the visual state of the message
-					}
-					else {
-						if (input.validity.rangeUnderflow) {
-							error.innerHTML = "El minimo valor de este campo debe ser " + input.getAttribute('min');
-						}
-						else if (input.validity.rangeOverflow) {
-							error.innerHTML = "El maximo valor de este campo debe ser " + input.getAttribute('min');
-						}
-						else if (input.validity.tooLong) {
-							error.innerHTML = "Este campo debe tener un maximo de " + input.getAttribute('maxlength') + "caracteres";
-						}
-						else {
-							error.innerHTML = error_message;
-						}
-						error.className = "error active";
-					}
-				};
-			
-			
-				{% for field in form %}
-					var error_{{ field.name }} = document.getElementById('{{ field.name }}_error')
-					var {{ field.name }} = document.getElementById('id_{{ field.name }}');
-					{{ field.name }}.addEventListener('blur', function (event) {
-						verifyPattern({{ field.name }}, error_{{ field.name }}, {{ field.name }}.getAttribute('message'));
-					}, false);
-					
-					{{ field.name }}.addEventListener('focus', function (event) {
-						error_{{ field.name}}.innerHTML = ""; // Reset the content of the message
-						error_{{ field.name}}.className = "error"; // Reset the visual state of the message
-					}, false);
-					
-				{% endfor %}
-			
-			</script>
-                
                 <div class="control-group">
                   <label>
                   </label>
                   <div class="controls">
                     <button type="submit" class="btn btn-primary">
-                      Crear estacionamiento
+                      Continuar
                     </button>
                   </div>
                 </div>
