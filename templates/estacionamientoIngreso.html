@@ -59,8 +59,8 @@
             </li>
             <li>
               <a href="/estacionamientos/ingreso">
-                <i class="fa fa-bus"></i>
-                Consultar Ingresos
+                <i class="fa fa-money"></i>
+                Consultar Ingreso
               </a>
             </li>
           </ul>
@@ -86,27 +86,27 @@
      
        <div class="col-md-8"> 
       <table class="table table-striped">
-      {% if listaIngresos  %}
-
-
-          <table class="table table-striped">
+        {% if listaIngresos  %}
+            <thead>
+              <tr><th></th><th>Nombre</th><th>Monto</th></tr>
+            </thead>
             <tbody>
-
             {% for ingreso in listaIngresos%}
-              <tr><td><b><i class="fa fa-money"></i> Ingreso de {{ ingreso.0 }}:</b></td></tr>
-              <tr><td>{{ ingreso.1 |floatformat:2|intcomma }}</td></tr>
+              <tr>
+                <td></td>
+                <td>{{ingreso.0}}</td>
+                <td>{{ingreso.1|floatformat:2|intcomma}}</td>
+              </tr> 
             {% endfor %}
-              
-              <tr><td><b><i class="fa fa-money"></i> Monto total de ingresos:</b></td></tr>
-              <tr><td>{{ingresoTotal|floatformat:2|intcomma }}</td></tr>
-
-             
+              <tr>
+                <td></td>
+                <td>Ingreso total</td>
+                <td>{{ingresoTotal|floatformat:2|intcomma}}</td>
+              </tr> 
             </tbody>
-          </table>
-
         {% else %}
-       <h3>Introduzca su RIF</h3>
-      {% endif %}
+            <h3>Introduzca su RIF</h3>
+        {% endif %}
       </table>
       <hr>              
     </div><div class="col-md-4">

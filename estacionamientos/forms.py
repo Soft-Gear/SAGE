@@ -124,8 +124,8 @@ class EstacionamientoForm(forms.Form):
                         ],
                         widget = forms.TextInput(attrs = {
                             'class':'form-control',
-                            'placeholder':'RIF',
-                            'pattern':'^[JVD]-?\d{8}-?\d$',
+                            'placeholder':'RIF: J-xxxxxxxxx',
+                            'pattern':'^[JVD]-\d{8}-?\d$',
                             'message':'La entrada debe ser un RIF válido'
                         }
                     )
@@ -383,8 +383,8 @@ class RifForm(forms.Form):
                         ],
                         widget = forms.TextInput(attrs = {
                             'class':'form-control',
-                            'placeholder':'RIF',
-                            'pattern':'^[JVD]-?\d{8}-?\d$',
+                            'placeholder':'RIF: J-xxxxxxxxx',
+                            'pattern':'^[JVD]-\d{8}-?\d$',
                             'message':'La entrada debe ser un RIF válido'
                         }
                     )
