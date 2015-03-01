@@ -21,8 +21,7 @@ class Estacionamiento(models.Model):
 
 	content_type   = models.ForeignKey(ContentType, null = True)
 	object_id      = models.PositiveIntegerField(null = True)
-	esquemaTarifa  = GenericForeignKey()
-	tarifa         = models.DecimalField(decimal_places = 2, max_digits = 256, blank = True, null = True)
+	tarifa         = GenericForeignKey()
 	apertura       = models.TimeField(blank = True, null = True)
 	cierre         = models.TimeField(blank = True, null = True)
 	nroPuesto      = models.IntegerField(blank = True, null = True)
@@ -52,7 +51,7 @@ class Pago(models.Model):
 class EsquemaTarifario(models.Model):
 
 	# No se cuantos digitos deberiamos poner
-	tarifa         = models.DecimalField(max_digits=10, decimal_places=2)
+	tarifa         = models.DecimalField(max_digits=20, decimal_places=2)
 	tarifa2        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
 	inicioEspecial = models.TimeField(blank = True, null = True)
 	finEspecial    = models.TimeField(blank = True, null = True)

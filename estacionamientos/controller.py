@@ -8,9 +8,9 @@ def HorarioEstacionamiento(HoraInicio, HoraFin):
 
 def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
 	if inicioReserva >= finReserva:
-		return (False, 'El horario de inicio de reservacion debe ser menor al horario de fin de la reserva')
+		return (False, 'El horario de inicio de reservacion debe ser menor al horario de fin de la reserva.')
 	if finReserva - inicioReserva < timedelta(hours=1):
-		return (False, 'El tiempo de reserva debe ser al menos de 1 hora')
+		return (False, 'El tiempo de reserva debe ser al menos de 1 hora.')
 	if inicioReserva.replace(second=0, microsecond=0) < datetime.now().replace(second=0, microsecond=0):
 		return (False, 'La reserva no puede tener lugar en el pasado.')
 	if finReserva > datetime.now()+timedelta(days=7):
@@ -21,20 +21,20 @@ def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
 		if finReserva-inicioReserva<=seven_days :
 			return (True,'')
 		else:
-			return(False,'Se puede reservar un puesto por un maximo de 7 dias')
+			return(False,'Se puede reservar un puesto por un maximo de 7 dias.')
 	else:
 		delta =       timedelta(hours=cierre.hour,  minutes=cierre.minute)
 		delta = delta-timedelta(hours=apertura.hour,minutes=apertura.minute)
 
 		if finReserva-inicioReserva>delta:
-			return (False, 'El horario de inicio de reserva debe estar en un horario válido')
+			return (False, 'El horario de inicio de reserva debe estar en un horario válido.')
 		else:
 			hora_inicio = time(hour = inicioReserva.hour, minute = inicioReserva.minute)
 			hora_final  = time(hour = finReserva.hour   , minute = finReserva.minute)
 			if hora_inicio<apertura:
-				return (False, 'El horario de inicio de reserva debe estar en un horario válido')
+				return (False, 'El horario de inicio de reserva debe estar en un horario válido.')
 			if hora_final > cierre:
-				return (False, 'El horario de fin de la reserva debe estar en un horario válido')
+				return (False, 'El horario de fin de la reserva debe estar en un horario válido.')
 		return (True,'')
 
 def marzullo(idEstacionamiento, hIn, hOut):

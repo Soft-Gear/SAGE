@@ -1,15 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, time, timedelta, date
 from django.test import Client
 from django.test import TestCase
-import unittest
-from estacionamientos.controller import HorarioEstacionamiento, validarHorarioReserva, marzullo
+
+from decimal import Decimal
+from datetime import (
+    datetime,
+    time,
+    timedelta,
+    date,
+)
+
+from estacionamientos.controller import (
+    HorarioEstacionamiento,
+    validarHorarioReserva,
+    marzullo,
+)
 from estacionamientos.forms import (
     EstacionamientoForm,
     EstacionamientoExtendedForm,
     ReservaForm,
-    PagoForm
+    PagoForm,
 )
 from estacionamientos.models import (
     Estacionamiento,
@@ -18,16 +29,13 @@ from estacionamientos.models import (
     TarifaHora,
     TarifaHorayFraccion,
     TarifaFinDeSemana,
-    TarifaHoraPico
+    TarifaHoraPico,
 )
-from decimal import Decimal
-from _datetime import timedelta
-
 
 ###################################################################
 #                    ESTACIONAMIENTO VISTA DISPONIBLE
 ###################################################################
-class SimpleTest(unittest.TestCase):
+class SimpleTest(TestCase):
     # normal
     def setUp(self):
         self.client = Client()
@@ -36,8 +44,6 @@ class SimpleTest(unittest.TestCase):
     def test_primera(self):
         response = self.client.get('/estacionamientos/')
         self.assertEqual(response.status_code, 200)
-
-
 
 ###################################################################
 #                    ESTACIONAMIENTO_ALL FORM
@@ -261,8 +267,8 @@ class ExtendedFormTestCase(TestCase):
         self.assertEqual(form.is_valid(), True)
 
     # caso borde
-    def test_EstacionamientoExtendedForm_Puestos0(self):
-        form_data = { 'puestos': 0,
+    def test_EstacionamientoExtendedForm_Puestos1(self):
+        form_data = { 'puestos': 1,
                       'horarioin': time(hour = 6,  minute = 0),
                       'horarioout': time(hour = 19,  minute = 0),
                       'horario_reserin': time(hour = 7,  minute = 0),
@@ -270,7 +276,7 @@ class ExtendedFormTestCase(TestCase):
                       'tarifa': '12',
                       'esquema':'TarifaHora'}
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), True)
+        self.assertTrue(form.is_valid())
 
     # caso borde
     def test_EstacionamientoExtendedForm_HoraInicioIgualHoraCierre(self):
@@ -708,7 +714,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=1)
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
+        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
     #Borde
     def test_reservaHorarioCompleto(self):
         hoy=datetime.now()
@@ -717,7 +723,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,6) + timedelta(days=1)
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day,18) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
+        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
 
     def test_reservaHorarioCompletoYUnMinuto(self):
         hoy=datetime.now()
@@ -726,7 +732,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,6) + timedelta(days=1)
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day,18,1) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
+        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
 
 
     #Normal
@@ -756,7 +762,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaInicio=hoy
         ReservaFin=hoy + timedelta(days=7,minutes=1)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'La reserva no puede ser por mas de 7 dias'))
+        self.assertEqual(x, (False, 'La reserva debe estar dentro de los próximos 7 días.'))
 
     # caso borde
     def test_HorarioReservaInvalido_InicioReservacion_Mayor_FinalReservacion(self):
@@ -765,7 +771,7 @@ class ReservaFormControllerTestCase(TestCase):
         HoraApertura = time(hour = 0, minute = 0, second = 0)
         HoraCierre = time(hour = 23, minute = 59, second = 59)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reservacion debe ser menor al horario de fin de la reserva'))
+        self.assertEqual(x, (False, 'El horario de inicio de reservacion debe ser menor al horario de fin de la reserva.'))
 
     # caso borde
     def test_HorarioReservaInvalido_TiempoTotalMenor1h(self):
@@ -774,7 +780,7 @@ class ReservaFormControllerTestCase(TestCase):
         HoraApertura = time(hour = 12, minute = 0, second = 0)
         HoraCierre = time(hour = 18, minute = 0, second = 0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El tiempo de reserva debe ser al menos de 1 hora'))
+        self.assertEqual(x, (False, 'El tiempo de reserva debe ser al menos de 1 hora.'))
 
     # caso borde.
     def test_HorarioReservaInvalido_ReservaFinal_Mayor_HorarioCierre(self):
@@ -784,7 +790,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,17) + timedelta(days=1)
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day,23) + timedelta(days=1)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de fin de la reserva debe estar en un horario válido'))
+        self.assertEqual(x, (False, 'El horario de fin de la reserva debe estar en un horario válido.'))
 
     # Caso borde
     def test_HorarioReservaInvalido_ReservaInicial_Menor_HorarioApertura(self):
@@ -794,7 +800,7 @@ class ReservaFormControllerTestCase(TestCase):
         HoraApertura=time(8,0)
         HoraCierre=time(18,0)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido'))
+        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
 
     # malicia
     def test_Reservacion_CamposVacios(self):
@@ -806,7 +812,7 @@ class ReservaFormControllerTestCase(TestCase):
 # Marzullo
 ###############################################################################
 
-class TestMarzullo(unittest.TestCase):
+class TestMarzullo(TestCase):
     '''
         Bordes:   7
         Esquinas: 6

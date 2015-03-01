@@ -3,9 +3,16 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 
-import datetime
 from decimal import Decimal
-from estacionamientos.controller import HorarioEstacionamiento, validarHorarioReserva, marzullo
+from datetime import (
+    datetime,
+)
+
+from estacionamientos.controller import (
+    HorarioEstacionamiento,
+    validarHorarioReserva,
+    marzullo
+)
 from estacionamientos.forms import (
     EstacionamientoExtendedForm,
     EstacionamientoForm,
@@ -25,14 +32,12 @@ from estacionamientos.models import (
     TarifaHoraPico
 )
 
-
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
     estacionamientos = Estacionamiento.objects.all()
 
     # Si es un GET, mandamos un formulario vacio
     if request.method == 'GET':
-
         form = EstacionamientoForm()
 
     # Si es POST, se verifica la información recibida
@@ -43,11 +48,12 @@ def estacionamientos_all(request):
         # Parte de la entrega era limitar la cantidad maxima de
         # estacionamientos a 5
         if len(estacionamientos) >= 5:
-            return render(request, 'templateMensaje.html',
-                                  {'color'   : 'red',
-                                   'mensaje' : 'No se pueden agregar más estacionamientos'
-                                  }
-                        )
+            return render(
+                request, 'templateMensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'No se pueden agregar más estacionamientos'
+                }
+            )
 
         # Si el formulario es valido, entonces creamos un objeto con
         # el constructor del modelo
@@ -68,7 +74,13 @@ def estacionamientos_all(request):
             estacionamientos = Estacionamiento.objects.all()
             form = EstacionamientoForm()
 
-    return render(request, 'base.html', {'form': form, 'estacionamientos': estacionamientos})
+    return render(
+        request,
+        'catalogoEst.html',
+        { 'form': form
+        , 'estacionamientos': estacionamientos
+        }
+    )
 
 def estacionamiento_detail(request, _id):
     _id = int(_id)
@@ -76,7 +88,10 @@ def estacionamiento_detail(request, _id):
     try:
         estacionamiento = Estacionamiento.objects.get(id = _id)
     except ObjectDoesNotExist:
-        return render(request, '404.html')
+        return render(
+            request,
+            '404.html'
+        )
 
     if request.method == 'GET':
         form = EstacionamientoExtendedForm()
@@ -108,22 +123,26 @@ def estacionamiento_detail(request, _id):
                 return render(
                     request,
                     'templateMensaje.html',
-                    {
-                        'color':'red',
-                        'mensaje': 'El horario de apertura debe ser menor al horario de cierre'
+                    { 'color':'red'
+                    , 'mensaje': 'El horario de apertura debe ser menor al horario de cierre'
                     }
                 )
             # debería funcionar con excepciones
-            estacionamiento.tarifa         = tarifa
-            estacionamiento.apertura       = horaIn
-            estacionamiento.cierre         = horaOut
-            estacionamiento.esquemaTarifa  = esquemaTarifa
-            estacionamiento.nroPuesto      = form.cleaned_data['puestos']
+            estacionamiento.tarifa    = esquemaTarifa
+            estacionamiento.apertura  = horaIn
+            estacionamiento.cierre    = horaOut
+            estacionamiento.nroPuesto = form.cleaned_data['puestos']
 
             estacionamiento.save()
             form = EstacionamientoExtendedForm()
 
-    return render(request, 'estacionamiento.html', {'form': form, 'estacionamiento': estacionamiento})
+    return render(
+        request,
+        'detalleEst.html',
+        { 'form': form
+        , 'estacionamiento': estacionamiento
+        }
+    )
 
 
 def estacionamiento_reserva(request, _id):
@@ -132,7 +151,10 @@ def estacionamiento_reserva(request, _id):
     try:
         estacionamiento = Estacionamiento.objects.get(id = _id)
     except ObjectDoesNotExist:
-        return render(request, '404.html')
+        return render(
+            request,
+            '404.html'
+        )
 
     # Si se hace un GET renderizamos los estacionamientos con su formulario
     if request.method == 'GET':
@@ -160,17 +182,33 @@ def estacionamiento_reserva(request, _id):
 
             # Si no es valido devolvemos el request
             if not m_validado[0]:
-                return render(request, 'templateMensaje.html', {'color':'red', 'mensaje': m_validado[1]})
+                return render(
+                    request,
+                    'templateMensaje.html',
+                    { 'color'  :'red'
+                    , 'mensaje': m_validado[1]
+                    }
+                )
 
             if marzullo(_id, inicioReserva, finalReserva):
-                reservaFinal = Reserva( estacionamiento=estacionamiento,
-                                        inicioReserva=inicioReserva,
-                                        finalReserva=finalReserva,
-                                    )
+                reservaFinal = Reserva(
+                    estacionamiento = estacionamiento,
+                    inicioReserva   = inicioReserva,
+                    finalReserva    = finalReserva,
+                )
 
-                monto = Decimal(estacionamiento.esquemaTarifa.calcularPrecio(inicioReserva,finalReserva))
+                monto = Decimal(
+                    estacionamiento.tarifa.calcularPrecio(
+                        inicioReserva,finalReserva
+                    )
+                )
 
-                request.session['monto'] = float(estacionamiento.esquemaTarifa.calcularPrecio(inicioReserva,finalReserva))
+                request.session['monto'] = float(
+                    estacionamiento.tarifa.calcularPrecio(
+                        inicioReserva,
+                        finalReserva
+                    )
+                )
                 request.session['finalReservaHora']    = finalReserva.hour
                 request.session['finalReservaMinuto']  = finalReserva.minute
                 request.session['inicioReservaHora']   = inicioReserva.hour
@@ -181,23 +219,33 @@ def estacionamiento_reserva(request, _id):
                 request.session['aniofinal']           = finalReserva.year
                 request.session['mesfinal']            = finalReserva.month
                 request.session['diafinal']            = finalReserva.day
-                return render(request, 'estacionamientoPagarReserva.html',
-                                       {'id'      : _id,
-                                        'monto'   : monto,
-                                        'reserva' : reservaFinal,
-                                        'color'   : 'green',
-                                        'mensaje' : 'Existe un puesto disponible'
-                                       }
-                            )
+                return render(
+                    request,
+                    'confirmar.html',
+                    { 'id'      : _id
+                    , 'monto'   : monto
+                    , 'reserva' : reservaFinal
+                    , 'color'   : 'green'
+                    , 'mensaje' : 'Existe un puesto disponible'
+                    }
+                )
             else:
                 # Cambiar mensaje
-                return render(request, 'templateMensaje.html',
-                                        {'color'   : 'red',
-                                         'mensaje' : 'No hay un puesto disponible para ese horario'
-                                        }
-                            )
+                return render(
+                    request,
+                    'templateMensaje.html',
+                    {'color'   : 'red'
+                    , 'mensaje' : 'No hay un puesto disponible para ese horario'
+                    }
+                )
 
-    return render(request, 'estacionamientoReserva.html', {'form': form, 'estacionamiento': estacionamiento})
+    return render(
+        request,
+        'reservar.html',
+        { 'form': form
+        , 'estacionamiento': estacionamiento
+        }
+    )
 
 def estacionamiento_pago(request,_id):
     form = PagoForm()
@@ -207,50 +255,63 @@ def estacionamiento_pago(request,_id):
             try:
                 estacionamiento = Estacionamiento.objects.get(id = _id)
             except ObjectDoesNotExist:
-                return render(request, '404.html')
-            inicioReserva = datetime.datetime(year   = request.session['anioinicial'],
-                                              month  = request.session['mesinicial'],
-                                              day    = request.session['diainicial'],
-                                              hour   = request.session['inicioReservaHora'],
-                                              minute = request.session['inicioReservaMinuto']
-                                            )
+                return render(
+                    request,
+                    '404.html'
+                )
+            inicioReserva = datetime(
+                year   = request.session['anioinicial'],
+                month  = request.session['mesinicial'],
+                day    = request.session['diainicial'],
+                hour   = request.session['inicioReservaHora'],
+                minute = request.session['inicioReservaMinuto']
+            )
 
-            finalReserva  = datetime.datetime(year   = request.session['aniofinal'],
-                                              month  = request.session['mesfinal'],
-                                              day    = request.session['diafinal'],
-                                              hour   = request.session['finalReservaHora'],
-                                              minute = request.session['finalReservaMinuto']
-                                             )
+            finalReserva  = datetime(
+                year   = request.session['aniofinal'],
+                month  = request.session['mesfinal'],
+                day    = request.session['diafinal'],
+                hour   = request.session['finalReservaHora'],
+                minute = request.session['finalReservaMinuto']
+            )
 
-            reservaFinal = Reserva( estacionamiento = estacionamiento,
-                                    inicioReserva   = inicioReserva,
-                                    finalReserva    = finalReserva,
-                                )
+            reservaFinal = Reserva(
+                estacionamiento = estacionamiento,
+                inicioReserva   = inicioReserva,
+                finalReserva    = finalReserva,
+            )
 
             # Se guarda la reserva en la base de datos
             reservaFinal.save()
 
             monto = Decimal(request.session['monto']).quantize(Decimal('1.00'))
-            pago = Pago(fechaTransaccion = datetime.datetime.now(),
-                        cedula           = form.cleaned_data['cedula'],
-                        cedulaTipo       = form.cleaned_data['cedulaTipo'],
-                        monto            = monto,
-                        tarjetaTipo      = form.cleaned_data['tarjetaTipo'],
-                        reserva          = reservaFinal,
-                        )
+            pago = Pago(
+                fechaTransaccion = datetime.now(),
+                cedula           = form.cleaned_data['cedula'],
+                cedulaTipo       = form.cleaned_data['cedulaTipo'],
+                monto            = monto,
+                tarjetaTipo      = form.cleaned_data['tarjetaTipo'],
+                reserva          = reservaFinal,
+            )
 
             # Se guarda el recibo de pago en la base de datos
             pago.save()
 
-            return render(request,'pago.html',{"id"      : _id,
-                                               "pago"    : pago,
-                                               "color"   : "green",
-                                               'mensaje' : "Se realizo el pago de reserva satisfactoriamente."
-                                              }
-                        )
+            return render(
+                request,
+                'pago.html',
+                { "id"      : _id
+                , "pago"    : pago
+                , "color"   : "green"
+                , 'mensaje' : "Se realizo el pago de reserva satisfactoriamente."
+                }
+            )
 
-    return render(request, 'pago.html', {'form':form})
-
+    return render(
+        request,
+        'pago.html',
+        { 'form' : form }
+    )
 
 def estacionamiento_ingreso(request):
     form = RifForm()
@@ -264,20 +325,29 @@ def estacionamiento_ingreso(request):
             listaIngresos         = []
 
             for estacionamiento in listaEstacionamientos:
-                listaFacturas = Pago.objects.filter(reserva__estacionamiento__nombre = estacionamiento.nombre)
+                listaFacturas = models.Pago.objects.filter(
+                    reserva__estacionamiento__nombre = estacionamiento.nombre
+                )
                 ingreso       = [estacionamiento.nombre, 0]
                 for factura in listaFacturas:
                     ingreso[1] += factura.monto
                 listaIngresos += [ingreso]
                 ingresoTotal  += ingreso[1]
 
-            return render(request,'estacionamientoIngreso.html',{ "ingresoTotal"  : ingresoTotal,
-                                                                  "listaIngresos" : listaIngresos,
-                                                                  "form"          : form,
-                                                                }
-                          )
+            return render(
+                request,
+                'consultarIngreso.html',
+                { "ingresoTotal"  : ingresoTotal
+                , "listaIngresos" : listaIngresos
+                , "form"          : form
+                }
+            )
 
-    return render(request, 'estacionamientoIngreso.html', {"form" : form })
+    return render(
+        request,
+        'consultarIngreso.html',
+        { "form" : form }
+    )
 
 def estacionamiento_consulta_reserva(request):
     form = CedulaForm()
@@ -289,14 +359,20 @@ def estacionamiento_consulta_reserva(request):
             facturas      = Pago.objects.filter(cedula = cedula)
             listaFacturas = []
 
-            for factura in facturas:
-                listaFacturas += [factura]
-            listaFacturas.sort(key=lambda r: r.reserva.inicioReserva)
+            listaFacturas = sorted(
+                list(facturas),
+                key = lambda r: r.reserva.inicioReserva
+            )
 
-            return render(request,'estacionamientoConsultarReservas.html',
-                                    { "listaFacturas" : listaFacturas,
-                                      "form"          : form,
-                                    }
-                          )
-
-    return render(request, 'estacionamientoConsultarReservas.html', {"form" : form })
+            return render(
+                request,
+                'consultarReservas.html',
+                { "listaFacturas" : listaFacturas
+                , "form"          : form
+                }
+            )
+    return render(
+        request,
+        'consultarReservas.html',
+        { "form" : form }
+    )
