@@ -19,12 +19,12 @@ class Estacionamiento(models.Model):
 
 	# Campos para referenciar al esquema de tarifa
 
-	content_type   = models.ForeignKey(ContentType, null = True)
-	object_id      = models.PositiveIntegerField(null = True)
-	tarifa         = GenericForeignKey()
-	apertura       = models.TimeField(blank = True, null = True)
-	cierre         = models.TimeField(blank = True, null = True)
-	nroPuesto      = models.IntegerField(blank = True, null = True)
+	content_type = models.ForeignKey(ContentType, null = True)
+	object_id    = models.PositiveIntegerField(null = True)
+	tarifa       = GenericForeignKey()
+	apertura     = models.TimeField(blank = True, null = True)
+	cierre       = models.TimeField(blank = True, null = True)
+	nroPuesto    = models.IntegerField(blank = True, null = True)
 
 	def __str__(self):
 		return self.nombre+' '+str(self.id)
@@ -64,9 +64,9 @@ class EsquemaTarifario(models.Model):
 
 class TarifaHora(EsquemaTarifario):
 	def calcularPrecio(self,horaInicio,horaFinal):
-		a=horaFinal-horaInicio
-		a=a.days*24+a.seconds/3600
-		a=ceil(a) #  De las horas se calcula el techo de ellas
+		a = horaFinal-horaInicio
+		a = a.days*24+a.seconds/3600
+		a = ceil(a) #  De las horas se calcula el techo de ellas
 		return(Decimal(self.tarifa*a).quantize(Decimal('1.00')))
 	def tipo(self):
 		return("Por Hora")
@@ -100,10 +100,10 @@ class TarifaHorayFraccion(EsquemaTarifario):
 
 class TarifaFinDeSemana(EsquemaTarifario):
 	def calcularPrecio(self,inicio,final):
-		minutosNormales = 0
+		minutosNormales    = 0
 		minutosFinDeSemana = 0
-		tiempoActual = inicio
-		minuto = timedelta(minutes=1)
+		tiempoActual       = inicio
+		minuto             = timedelta(minutes=1)
 		while tiempoActual < final:
 			# weekday() devuelve un numero del 0 al 6 tal que
 			# 0 = Lunes
@@ -126,10 +126,10 @@ class TarifaFinDeSemana(EsquemaTarifario):
 
 class TarifaHoraPico(EsquemaTarifario):
 	def calcularPrecio(self,reservaInicio,reservaFinal):
-		minutosPico = 0
+		minutosPico  = 0
 		minutosValle = 0
 		tiempoActual = reservaInicio
-		minuto = timedelta(minutes=1)
+		minuto       = timedelta(minutes=1)
 		while tiempoActual < reservaFinal:
 			horaActual = tiempoActual.time()
 			if horaActual >= self.inicioEspecial and horaActual < self.finEspecial:

@@ -294,6 +294,7 @@ def estacionamiento_pago(request,_id):
                 reserva          = reservaFinal,
             )
 
+
             # Se guarda el recibo de pago en la base de datos
             pago.save()
 
