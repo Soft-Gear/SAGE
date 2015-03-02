@@ -52,3 +52,26 @@ def marzullo(idEstacionamiento, hIn, hOut):
 		if count > capacidad:
 			return False
 	return True
+
+def tasa_reservaciones(id_estacionamiento):
+	e = Estacionamiento.objects.get(id = id_estacionamiento)
+	ahora = datetime.today().replace(second=0,microsecond=0)
+	reservas_filtradas = e.reserva_set.filter(finalReserva__gt=ahora)
+	lista_fechas=[(ahora+timedelta(i)).date for i in range(8)]
+	lista_valores=[0 for i in range(8)]
+	ocupacion_por_dia = dict(zip(lista_fechas,lista_valores))
+	UN_DIA = timedelta(days = 1)
+	for reserva in reservas_filtradas:
+		# Caso del inicio de la reserva
+		if (reserva.inicioReserva < ahora):
+			reserva_inicio = ahora
+		else:
+			reserva_inicio = reserva.inicioReserva
+		reserva_final = reserva.finalReserva
+		while (reserva_inicio.date < reserva_final.date):
+			longitud_reserva = (reserva_inicio+UN_DIA).replace(hour=ahora.hour,minute=ahora.minute)-reserva_inicio
+			ocupacion_por_dia[reserva_inicio.date] += longitud_reserva.minutes
+			reserva_inicio = (reserva_inicio+UN_DIA).replace(hour=ahora.hour,minute=ahora.minute)
+		longitud_reserva = reserva_final - reserva_inicio
+		ocupacion_por_dia[reserva_inicio.date] += longitud_reserva.minutes
+	return ocupacion_por_dia

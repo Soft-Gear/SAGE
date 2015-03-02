@@ -326,7 +326,7 @@ def estacionamiento_ingreso(request):
             listaIngresos         = []
 
             for estacionamiento in listaEstacionamientos:
-                listaFacturas = models.Pago.objects.filter(
+                listaFacturas = Pago.objects.filter(
                     reserva__estacionamiento__nombre = estacionamiento.nombre
                 )
                 ingreso       = [estacionamiento.nombre, 0]
