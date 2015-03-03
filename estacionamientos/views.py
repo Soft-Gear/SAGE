@@ -94,7 +94,21 @@ def estacionamiento_detail(request, _id):
         )
 
     if request.method == 'GET':
-        form = EstacionamientoExtendedForm()
+        if estacionamiento.tarifa:
+            
+            form_data = {
+                'horarioin' : estacionamiento.apertura,
+                'horarioout' : estacionamiento.cierre,
+                'tarifa' : estacionamiento.tarifa.tarifa,
+                'tarifa2' : estacionamiento.tarifa.tarifa2,
+                'inicioTarifa2' : estacionamiento.tarifa.inicioEspecial,
+                'finTarifa2' : estacionamiento.tarifa.finEspecial,
+                'puestos' : estacionamiento.nroPuesto,
+                'esquema' : estacionamiento.tarifa.__class__.__name__
+            }
+            form = EstacionamientoExtendedForm(data = form_data)
+        else:
+            form = EstacionamientoExtendedForm()
 
     elif request.method == 'POST':
         # Leemos el formulario
@@ -326,7 +340,7 @@ def estacionamiento_ingreso(request):
             listaIngresos         = []
 
             for estacionamiento in listaEstacionamientos:
-                listaFacturas = models.Pago.objects.filter(
+                listaFacturas = Pago.objects.filter(
                     reserva__estacionamiento__nombre = estacionamiento.nombre
                 )
                 ingreso       = [estacionamiento.nombre, 0]
