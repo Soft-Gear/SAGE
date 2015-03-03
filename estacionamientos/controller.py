@@ -1,6 +1,7 @@
 # Archivo con funciones de control para SAGE
 from estacionamientos.models import Estacionamiento
 from datetime import datetime, timedelta, time
+from django.db.models.lookups import Minute
 
 # chequeo de horarios de extended
 def HorarioEstacionamiento(HoraInicio, HoraFin):
@@ -61,6 +62,7 @@ def tasa_reservaciones(id_estacionamiento):
 	lista_valores=[0 for i in range(8)]
 	ocupacion_por_dia = dict(zip(lista_fechas,lista_valores))
 	UN_DIA = timedelta(days = 1)
+	
 	for reserva in reservas_filtradas:
 		# Caso del inicio de la reserva
 		if (reserva.inicioReserva < ahora):
@@ -68,10 +70,12 @@ def tasa_reservaciones(id_estacionamiento):
 		else:
 			reserva_inicio = reserva.inicioReserva
 		reserva_final = reserva.finalReserva
-		while (reserva_inicio.date() < reserva_final.date()):
-			longitud_reserva = (reserva_inicio+UN_DIA).replace(hour=ahora.hour,minute=ahora.minute)-reserva_inicio
+		duracion=reserva_final-reserva_inicio
+		while (reserva_inicio.date() < reserva_final.date() and duracion>UN_DIA): 
+			longitud_reserva = (reserva_inicio+UN_DIA).replace(hour=ahora.hour,minute=ahora.minute,second=0)-reserva_inicio
 			ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60+longitud_reserva.days*24*60
-			reserva_inicio = (reserva_inicio+UN_DIA).replace(hour=ahora.hour,minute=ahora.minute)
+			reserva_inicio = (reserva_inicio+UN_DIA).replace(hour=ahora.hour,minute=ahora.minute,second=0)
 		longitud_reserva = reserva_final - reserva_inicio
 		ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60 + longitud_reserva.days*24*60
+		
 	return ocupacion_por_dia
