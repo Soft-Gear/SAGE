@@ -56,7 +56,7 @@ def marzullo(idEstacionamiento, hIn, hOut):
 
 def tasa_reservaciones(id_estacionamiento):
 	e = Estacionamiento.objects.get(id = id_estacionamiento)
-	ahora = datetime.today().replace(second=0,microsecond=0)
+	ahora = datetime.today().replace(hour=0,minute=0,second=0,microsecond=0)
 	reservas_filtradas = e.reserva_set.filter(finalReserva__gt=ahora)
 	lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
 	lista_valores=[0 for i in range(8)]
@@ -70,12 +70,14 @@ def tasa_reservaciones(id_estacionamiento):
 		else:
 			reserva_inicio = reserva.inicioReserva
 		reserva_final = reserva.finalReserva
-		duracion=reserva_final-reserva_inicio
-		while (reserva_inicio.date() < reserva_final.date() and duracion>UN_DIA): 
-			longitud_reserva = (reserva_inicio+UN_DIA).replace(hour=ahora.hour,minute=ahora.minute,second=0)-reserva_inicio
+		final_aux=ahora
+		while (reserva_final.date()>reserva_inicio.date()): 
+			final_aux+=UN_DIA
+			longitud_reserva = final_aux-reserva_inicio
 			ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60+longitud_reserva.days*24*60
-			reserva_inicio = (reserva_inicio+UN_DIA).replace(hour=ahora.hour,minute=ahora.minute,second=0)
+			reserva_inicio = final_aux
+		
 		longitud_reserva = reserva_final - reserva_inicio
 		ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60 + longitud_reserva.days*24*60
-		
+	
 	return ocupacion_por_dia
