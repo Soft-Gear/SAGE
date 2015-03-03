@@ -15,7 +15,7 @@ from estacionamientos.controller import (
     HorarioEstacionamiento,
     validarHorarioReserva,
     marzullo,
-)
+     tasa_reservaciones)
 from estacionamientos.forms import (
     EstacionamientoForm,
     EstacionamientoExtendedForm,
@@ -998,6 +998,96 @@ class TestMarzullo(TestCase):
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 6), finalReserva=datetime(2015, 1, 20, 10)).save()
         Reserva(estacionamiento = e, inicioReserva=datetime(2015, 1, 20, 6), finalReserva=datetime(2015, 1, 20, 10)).save()
         self.assertFalse(marzullo(e.id, datetime(2015,1,20,9), datetime(2015,1,20,10)))
+        
+###################################################################
+# Casos de prueba de la tasa de resevación
+###################################################################
+
+class TestTasaEstacionamiento(TestCase):
+    
+    def crearEstacionamiento(self, puestos):
+        e = Estacionamiento(
+            propietario = "prop",
+            nombre = "nom",
+            direccion = "dir",
+            rif = "rif",
+            nroPuesto = puestos,
+            apertura       = "0:00",
+            cierre         = "23:59",
+        )
+        e.save()
+        return e
+    
+    # Esquina 
+    def test_estacionamiento_sin_reservas(self):
+        e=self.crearEstacionamiento(1)
+        ahora=datetime.now()
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[0 for i in range(8)]
+        salida=dict(zip(lista_fechas,lista_valores))
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+    
+    def test_estacionamiento_reserva_una_hora_primer_dia(self):
+        e=self.crearEstacionamiento(1)
+        ahora=datetime.now().replace(second=0,microsecond=0)
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[0 for i in range(8)]
+        lista_valores[0]=60
+        salida=dict(zip(lista_fechas,lista_valores))
+        fecha_inicio=ahora
+        fecha_fin=ahora+timedelta(seconds=3600)
+        Reserva(estacionamiento= e,inicioReserva=fecha_inicio,finalReserva=fecha_fin).save()
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+        
+    def test_reserva_inicio_antes_de_ahora_fin_despues_ahora(self):
+        e=self.crearEstacionamiento(1)
+        ahora=datetime.now().replace(second=0,microsecond=0)
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[0 for i in range(8)]
+        lista_valores[0]=60
+        salida=dict(zip(lista_fechas,lista_valores))
+        fecha_inicio=ahora-timedelta(minutes=1)
+        fecha_fin=ahora+timedelta(seconds=3600)
+        Reserva(estacionamiento= e,inicioReserva=fecha_inicio,finalReserva=fecha_fin).save()
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+        
+    def test_estacionamiento_reserva_un_dia(self):
+        e=self.crearEstacionamiento(1)
+        ahora=datetime.now().replace(second=0,microsecond=0)
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[0 for i in range(8)]
+        lista_valores[1]=60*24
+        salida=dict(zip(lista_fechas,lista_valores))
+        fecha_inicio=ahora+timedelta(1)
+        fecha_fin=ahora+timedelta(days=2)
+        Reserva(estacionamiento= e,inicioReserva=fecha_inicio,finalReserva=fecha_fin).save()
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+        
+    def test_estacionamiento_reserva_un_dia_mas_un_minuto(self):
+        e=self.crearEstacionamiento(1)
+        ahora=datetime.now().replace(second=0,microsecond=0)
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[0 for i in range(8)]
+        lista_valores[1]=60*24
+        lista_valores[2]=1
+        salida=dict(zip(lista_fechas,lista_valores))
+        fecha_inicio=ahora+timedelta(1)
+        fecha_fin=ahora+timedelta(days=2,seconds=60)
+        Reserva(estacionamiento= e,inicioReserva=fecha_inicio,finalReserva=fecha_fin).save()
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+        
+    def test_estacionamiento_reserva_siete_dias(self):
+        e=self.crearEstacionamiento(1)
+        ahora=datetime.now().replace(second=0,microsecond=0)
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[60*24 for i in range(8)]
+        lista_valores[7]=0
+        salida=dict(zip(lista_fechas,lista_valores))
+        fecha_inicio=ahora
+        fecha_fin=ahora+timedelta(days=7)
+        Reserva(estacionamiento= e,inicioReserva=fecha_inicio,finalReserva=fecha_fin).save()
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+        
 
 ###################################################################
 # Casos de prueba de tipos de tarifa
