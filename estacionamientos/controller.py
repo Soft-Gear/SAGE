@@ -2,6 +2,7 @@
 from estacionamientos.models import Estacionamiento
 from datetime import datetime, timedelta, time
 from django.db.models.lookups import Minute
+from decimal import Decimal
 
 # chequeo de horarios de extended
 def HorarioEstacionamiento(HoraInicio, HoraFin):
@@ -76,8 +77,15 @@ def tasa_reservaciones(id_estacionamiento):
 			longitud_reserva = final_aux-reserva_inicio
 			ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60+longitud_reserva.days*24*60
 			reserva_inicio = final_aux
-		
 		longitud_reserva = reserva_final - reserva_inicio
 		ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60 + longitud_reserva.days*24*60
-	
 	return ocupacion_por_dia
+
+def calcular_porcentaje_de_tasa(hora_apertura,hora_cierre, capacidad, ocupacion):
+	factor_divisor=timedelta(hours=hora_cierre.hour,minutes=hora_cierre.minute)
+	factor_divisor-=timedelta(hours=hora_apertura.hour,minutes=hora_apertura.minute)
+	factor_divisor=Decimal(factor_divisor.seconds)/Decimal(60)
+	if (hora_apertura==time(0,0) and hora_cierre==time(23,59)):
+		factor_divisor+=1 # Se le suma un minuto
+	for i in ocupacion.keys():
+		ocupacion[i]=Decimal(ocupacion[i])*100/(factor_divisor*capacidad)
