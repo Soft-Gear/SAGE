@@ -1165,6 +1165,45 @@ class TestTasaEstacionamiento(TestCase):
         Reserva(estacionamiento= e,inicioReserva=ahora,finalReserva=ahora+timedelta(1)).save()
         self.assertEqual(tasa_reservaciones(e.id),salida)
         
+    def test_estres_reservaciones_24_horas(self):
+        CAPACIDAD = 10
+        HORAS_SEMANA = 168
+        UNA_HORA = timedelta(hours=1)
+        ahora = datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+        e = self.crearEstacionamiento(CAPACIDAD)
+        numero_puesto=e.nroPuesto
+        for i in range(CAPACIDAD):
+            hora_reserva = ahora
+            for j in range(HORAS_SEMANA):
+                Reserva(estacionamiento=e,inicioReserva=hora_reserva,finalReserva=hora_reserva+UNA_HORA).save()
+                hora_reserva += UNA_HORA
+                
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[60*CAPACIDAD*24 for i in range(8)]
+        lista_valores[7]=0
+        salida=dict(zip(lista_fechas,lista_valores))
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+        
+    def test_estres_reservaciones_6_a_18_horas(self):
+        CAPACIDAD = 1000
+        HORAS_DIA = 12
+        UNA_HORA = timedelta(hours=1)
+        ahora = datetime.now().replace(hour=6,minute=0,second=0,microsecond=0)
+        e = self.crearEstacionamiento(CAPACIDAD,time(6,0),time(18,0))
+        for i in range(CAPACIDAD):
+            hora_reserva = ahora
+            for j in range(7):
+                for k in range(HORAS_DIA):
+                    Reserva(estacionamiento=e,inicioReserva=hora_reserva,finalReserva=hora_reserva+UNA_HORA).save()
+                    hora_reserva += UNA_HORA
+                hora_reserva=ahora+timedelta(j+1)
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[60*CAPACIDAD*HORAS_DIA for i in range(8)]
+        lista_valores[7]=0
+        salida=dict(zip(lista_fechas,lista_valores))
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+                
+        
 ###################################################################
     # Casos de prueba para calcular tarifas        
 ##################################################################
@@ -1201,6 +1240,47 @@ class TestTasaEstacionamiento(TestCase):
         lista_valores2=[Decimal(0) for i in range(8)]
         lista_valores2[0]=Decimal(50)
         self.assertEqual(dict(zip(lista_fechas,lista_valores2)),ocupacion1)
+        
+    def test_estacionamiento_horario_restringido_toda_capacidad_primer_dia(self):
+        e=self.crearEstacionamiento(2,time(6,0),time(18,45))
+        ahora=datetime.now()
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[0 for i in range(8)]
+        lista_valores[0]=765*2
+        ocupacion1=dict(zip(lista_fechas,lista_valores))
+        calcular_porcentaje_de_tasa(hora_apertura=e.apertura,hora_cierre=e.cierre,capacidad=2, ocupacion=ocupacion1)
+        lista_valores2=[Decimal(0) for i in range(8)]
+        lista_valores2[0]=Decimal(50)*2
+        self.assertEqual(dict(zip(lista_fechas,lista_valores2)),ocupacion1)
+    
+    def test_horario_restringido_toda_capacidad_primer_diay_un_minuto(self):
+        e=self.crearEstacionamiento(2,time(6,0),time(18,45))
+        ahora=datetime.now()
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[0 for i in range(8)]
+        lista_valores[0]=765*2
+        lista_valores[1]=1
+        ocupacion1=dict(zip(lista_fechas,lista_valores))
+        calcular_porcentaje_de_tasa(hora_apertura=e.apertura,hora_cierre=e.cierre,capacidad=2, ocupacion=ocupacion1)
+        lista_valores2=[Decimal(0) for i in range(8)]
+        lista_valores2[0]=Decimal(50)*2
+        lista_valores2[1]=Decimal(100)/Decimal(765*2)
+        lista_valores2[1] = lista_valores2[1].quantize(Decimal('1.0'))
+        self.assertEqual(dict(zip(lista_fechas,lista_valores2)),ocupacion1)
+    
+    def test_horario_restringido_toda_capacidad_primer_dia_ecceso_1minuto(self):
+        e=self.crearEstacionamiento(2,time(6,0),time(18,45))
+        ahora=datetime.now()
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[0 for i in range(8)]
+        lista_valores[0]=765*2+1
+        ocupacion1=dict(zip(lista_fechas,lista_valores))
+        calcular_porcentaje_de_tasa(hora_apertura=e.apertura,hora_cierre=e.cierre,capacidad=2, ocupacion=ocupacion1)
+        lista_valores2=[Decimal(0) for i in range(8)]
+        lista_valores2[0]=Decimal(765*2+1)*100/Decimal(765*2)
+        lista_valores2[0] = lista_valores2[0].quantize(Decimal('1.0'))
+        self.assertEqual(dict(zip(lista_fechas,lista_valores2)),ocupacion1)
+        
 
 ###################################################################
 # Casos de prueba de tipos de tarifa

@@ -3,6 +3,7 @@ from estacionamientos.models import Estacionamiento
 from datetime import datetime, timedelta, time
 from django.db.models.lookups import Minute
 from decimal import Decimal
+from collections import OrderedDict
 
 # chequeo de horarios de extended
 def HorarioEstacionamiento(HoraInicio, HoraFin):
@@ -61,7 +62,7 @@ def tasa_reservaciones(id_estacionamiento):
 	reservas_filtradas = e.reserva_set.filter(finalReserva__gt=ahora)
 	lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
 	lista_valores=[0 for i in range(8)]
-	ocupacion_por_dia = dict(zip(lista_fechas,lista_valores))
+	ocupacion_por_dia = OrderedDict(zip(lista_fechas,lista_valores))
 	UN_DIA = timedelta(days = 1)
 	
 	for reserva in reservas_filtradas:
@@ -72,12 +73,17 @@ def tasa_reservaciones(id_estacionamiento):
 			reserva_inicio = reserva.inicioReserva
 		reserva_final = reserva.finalReserva
 		final_aux=ahora
-		while (reserva_final.date()>reserva_inicio.date()): 
+		while (reserva_final-reserva_inicio>UN_DIA): 
 			final_aux+=UN_DIA
 			longitud_reserva = final_aux-reserva_inicio
 			ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60+longitud_reserva.days*24*60
 			reserva_inicio = final_aux
-		longitud_reserva = reserva_final - reserva_inicio
+		if reserva_final.date()>reserva_inicio.date():
+			longitud_reserva = reserva_final.replace(hour=0,minute=0,second=0,microsecond=0) - reserva_inicio
+			ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60 + longitud_reserva.days*24*60
+			reserva_inicio+=UN_DIA
+			reserva_inicio=reserva_inicio.replace(hour=0,minute=0,second=0,microsecond=0)
+		longitud_reserva=reserva_final-reserva_inicio
 		ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60 + longitud_reserva.days*24*60
 	return ocupacion_por_dia
 
@@ -88,4 +94,4 @@ def calcular_porcentaje_de_tasa(hora_apertura,hora_cierre, capacidad, ocupacion)
 	if (hora_apertura==time(0,0) and hora_cierre==time(23,59)):
 		factor_divisor+=1 # Se le suma un minuto
 	for i in ocupacion.keys():
-		ocupacion[i]=Decimal(ocupacion[i])*100/(factor_divisor*capacidad)
+		ocupacion[i]=(Decimal(ocupacion[i])*100/(factor_divisor*capacidad)).quantize(Decimal('1.0'))
