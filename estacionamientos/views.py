@@ -11,7 +11,9 @@ from datetime import (
 from estacionamientos.controller import (
     HorarioEstacionamiento,
     validarHorarioReserva,
-    marzullo
+    marzullo,
+    tasa_reservaciones,
+    calcular_porcentaje_de_tasa
 )
 from estacionamientos.forms import (
     EstacionamientoExtendedForm,
@@ -377,3 +379,24 @@ def estacionamiento_consulta_reserva(request):
         'consultarReservas.html',
         { "form" : form }
     )
+    
+def tasa_de_reservacion(request, _id):
+    _id = int(_id)
+    # Verificamos que el objeto exista antes de continuar
+    try:
+        estacionamiento = Estacionamiento.objects.get(id = _id)
+    except ObjectDoesNotExist:
+        return render(
+            request,
+            '404.html'
+        )
+    ocupacion = tasa_reservaciones(_id)
+    print(estacionamiento.apertura)
+    calcular_porcentaje_de_tasa(estacionamiento.apertura, estacionamiento.cierre, estacionamiento.nroPuesto, ocupacion)
+    grafico = None
+    return render(
+        request,
+        'tasaReservacion.html',
+        { "ocupacion" : ocupacion , "grafico": grafico}
+    )
+    
