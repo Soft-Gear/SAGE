@@ -72,7 +72,7 @@ def tasa_reservaciones(id_estacionamiento):
 		else:
 			reserva_inicio = reserva.inicioReserva
 		reserva_final = reserva.finalReserva
-		final_aux=ahora
+		final_aux=reserva_inicio.replace(hour=0,minute=0,second=0,microsecond=0)
 		while (reserva_final-reserva_inicio>UN_DIA): 
 			final_aux+=UN_DIA
 			longitud_reserva = final_aux-reserva_inicio
