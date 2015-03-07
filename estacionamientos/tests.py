@@ -11,6 +11,8 @@ from datetime import (
     date,
 )
 
+from collections import OrderedDict
+
 from estacionamientos.controller import (
     HorarioEstacionamiento,
     validarHorarioReserva,
@@ -1165,13 +1167,27 @@ class TestTasaEstacionamiento(TestCase):
         Reserva(estacionamiento= e,inicioReserva=ahora,finalReserva=ahora+timedelta(1)).save()
         self.assertEqual(tasa_reservaciones(e.id),salida)
         
+    def test_reserva_6_dias_misma_hora(self):
+        e=self.crearEstacionamiento(2)
+        ahora=datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+        lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
+        lista_valores=[1440 for i in range(8)]
+        lista_valores[0]=0
+        lista_valores[1]=0
+        lista_valores[2]=18*60
+        lista_valores[7]=6*60
+        salida=dict(zip(lista_fechas,lista_valores))
+        Reserva(estacionamiento= e,inicioReserva=ahora.replace(hour=6)+timedelta(2),finalReserva=ahora.replace(hour=6)+timedelta(7)).save()
+        x=tasa_reservaciones(e.id)
+        print(x)
+        self.assertEqual(tasa_reservaciones(e.id),salida)
+        
     def test_estres_reservaciones_24_horas(self):
         CAPACIDAD = 10
         HORAS_SEMANA = 168
         UNA_HORA = timedelta(hours=1)
         ahora = datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
         e = self.crearEstacionamiento(CAPACIDAD)
-        numero_puesto=e.nroPuesto
         for i in range(CAPACIDAD):
             hora_reserva = ahora
             for j in range(HORAS_SEMANA):
