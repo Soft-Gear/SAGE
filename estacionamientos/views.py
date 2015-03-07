@@ -2,7 +2,9 @@
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
-
+from django.http import HttpResponse
+from urllib.parse import urlencode
+from matplotlib import pyplot
 from decimal import Decimal
 from datetime import (
     datetime,
@@ -33,6 +35,9 @@ from estacionamientos.models import (
     TarifaFinDeSemana,
     TarifaHoraPico
 )
+from collections import OrderedDict
+from numpy.core.multiarray import arange
+
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
@@ -391,12 +396,28 @@ def tasa_de_reservacion(request, _id):
             '404.html'
         )
     ocupacion = tasa_reservaciones(_id)
-    print(estacionamiento.apertura)
     calcular_porcentaje_de_tasa(estacionamiento.apertura, estacionamiento.cierre, estacionamiento.nroPuesto, ocupacion)
-    grafico = None
+    datos_ocupacion = urlencode(ocupacion)
     return render(
         request,
         'tasaReservacion.html',
-        { "ocupacion" : ocupacion , "grafico": grafico}
+        { "ocupacion" : ocupacion, "datos_ocupacion": datos_ocupacion}
     )
+
+def grafica_tasa_de_reservacion(request):
+    datos_ocupacion = request.GET.dict()
+    datos_ocupacion = OrderedDict(sorted((k, float(v)) for k, v in datos_ocupacion.items()))     
+    response = HttpResponse(content_type='image/png')
+    
+    # Configuracion y creacion del grafico de barras con la biblioteca pyplot
+    pyplot.switch_backend('Agg') # Para que no use Tk y aparezcan problemas con hilos
+    pyplot.bar(range(len(datos_ocupacion)), datos_ocupacion.values(), hold = False, color = '0.50')
+    pyplot.ylim([0,100])
+    pyplot.title('Distribucion de los porcentajes por grano')
+    pyplot.xticks(range(len(datos_ocupacion)), list(datos_ocupacion.keys()), rotation=20)
+    pyplot.ylabel('Porcentaje (%)')
+    pyplot.savefig(response, format='png') # Guarda la imagen creada en el HttpResponse creado
+    pyplot.close()
+    
+    return response
     

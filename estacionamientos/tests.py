@@ -1185,7 +1185,7 @@ class TestTasaEstacionamiento(TestCase):
         self.assertEqual(tasa_reservaciones(e.id),salida)
         
     def test_estres_reservaciones_6_a_18_horas(self):
-        CAPACIDAD = 1000
+        CAPACIDAD = 10
         HORAS_DIA = 12
         UNA_HORA = timedelta(hours=1)
         ahora = datetime.now().replace(hour=6,minute=0,second=0,microsecond=0)
@@ -1202,6 +1202,7 @@ class TestTasaEstacionamiento(TestCase):
         lista_valores[7]=0
         salida=dict(zip(lista_fechas,lista_valores))
         self.assertEqual(tasa_reservaciones(e.id),salida)
+        
                 
         
 ###################################################################
