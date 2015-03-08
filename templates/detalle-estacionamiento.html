@@ -6,14 +6,17 @@
 {% block innerContents%}
   <div class="col-sm-10">
     <h3><i class="fa fa-bus"></i>
-      Tasa de Reservacion del Estacionamiento {{estacionamiento.nombre}}
+      Estacionamiento {{estacionamiento.nombre}}
     </h3>
     <hr>
-    <div class="col-md-6">
-      {% include "tablaTasas.html" %}
+    <div class="col-md-4">
+      {% include "datos.html" %}
     </div>
-    <div class="col-md-6">
-		<img class="img-responsive" src="/estacionamientos/grafica/?{{ datos_ocupacion}}">
+    <div class="col-md-4">
+      {% include "parametros.html" %}
+    </div>
+    <div class="col-md-4">
+      {% include "parametrizar-form.html" %}
     </div>
   </div>
 {% endblock %}

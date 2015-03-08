@@ -59,7 +59,7 @@ def estacionamientos_all(request):
         # estacionamientos a 5
         if len(estacionamientos) >= 5:
             return render(
-                request, 'templateMensaje.html',
+                request, 'template-mensaje.html',
                 { 'color'   : 'red'
                 , 'mensaje' : 'No se pueden agregar más estacionamientos'
                 }
@@ -86,7 +86,7 @@ def estacionamientos_all(request):
 
     return render(
         request,
-        'catalogoEst.html',
+        'catalogo-estacionamientos.html',
         { 'form': form
         , 'estacionamientos': estacionamientos
         }
@@ -146,7 +146,7 @@ def estacionamiento_detail(request, _id):
             if not HorarioEstacionamiento(horaIn, horaOut):
                 return render(
                     request,
-                    'templateMensaje.html',
+                    'template-mensaje.html',
                     { 'color':'red'
                     , 'mensaje': 'El horario de apertura debe ser menor al horario de cierre'
                     }
@@ -162,7 +162,7 @@ def estacionamiento_detail(request, _id):
 
     return render(
         request,
-        'detalleEst.html',
+        'detalle-estacionamiento.html',
         { 'form': form
         , 'estacionamiento': estacionamiento
         }
@@ -265,7 +265,7 @@ def estacionamiento_reserva(request, _id):
 
     return render(
         request,
-        'reservar.html',
+        'reserva.html',
         { 'form': form
         , 'estacionamiento': estacionamiento
         }
@@ -361,7 +361,7 @@ def estacionamiento_ingreso(request):
 
             return render(
                 request,
-                'consultarIngreso.html',
+                'consultar-ingreso.html',
                 { "ingresoTotal"  : ingresoTotal
                 , "listaIngresos" : listaIngresos
                 , "form"          : form
@@ -370,7 +370,7 @@ def estacionamiento_ingreso(request):
 
     return render(
         request,
-        'consultarIngreso.html',
+        'consultar-ingreso.html',
         { "form" : form }
     )
 
@@ -390,14 +390,14 @@ def estacionamiento_consulta_reserva(request):
             )
             return render(
                 request,
-                'consultarReservas.html',
+                'consultar-reservas.html',
                 { "listaFacturas" : listaFacturas
                 , "form"          : form
                 }
             )
     return render(
         request,
-        'consultarReservas.html',
+        'consultar-reservas.html',
         { "form" : form }
     )
 
@@ -439,7 +439,7 @@ def receive_sms(request):
             finalReserva    = final_reserva,
         )
         reserva_sms.save()
-        text = 'Se realizo la reserva satisfactoriamente.'
+        text = 'Se realizó la reserva satisfactoriamente.'
         text = urllib.parse.quote(str(text))
         urllib.request.urlopen('http://{0}:{1}/sendsms?phone={2}&text={3}&password='.format(ip, port, phone, text))
     else:
@@ -465,7 +465,7 @@ def tasa_de_reservacion(request, _id):
     datos_ocupacion = urlencode(ocupacion) # Se convierten los datos del diccionario en el formato key1=value1&key2=value2&...
     return render(
         request,
-        'tasaReservacion.html',
+        'tasa-reservacion.html',
         { "ocupacion" : ocupacion
         , "datos_ocupacion": datos_ocupacion
         }
@@ -482,7 +482,7 @@ def grafica_tasa_de_reservacion(request):
     pyplot.switch_backend('Agg') # Para que no use Tk y aparezcan problemas con hilos
     pyplot.bar(range(len(datos_ocupacion)), datos_ocupacion.values(), hold = False, color = '0.50')
     pyplot.ylim([0,100])
-    pyplot.title('Distribucion de los porcentajes por fecha')
+    pyplot.title('Distribución de los porcentajes por fecha')
     pyplot.xticks(range(len(datos_ocupacion)), list(datos_ocupacion.keys()), rotation=20)
     pyplot.ylabel('Porcentaje (%)')
     pyplot.grid(True, 'major', 'both')
