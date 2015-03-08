@@ -12,36 +12,42 @@ class EstacionamientoForm(forms.Form):
 
     phone_validator = RegexValidator(
         regex   = '^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}',
-        message = 'Debe introducir un formato válido.'
+        message = 'Debe introducir un formato válido de teléfono.'
+    )
+    
+    name_validator = RegexValidator(
+        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ ]+$',
+        message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
+    )
+    
+    rif_validator = RegexValidator(
+        regex   = '^[JVD]-?\d{8}-?\d$',
+        message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'
     )
 
     # Nombre del dueno del estacionamiento (no se permiten digitos)
     propietario = forms.CharField(
         required   = True,
         label      = "Propietario",
-        validators = [
-             RegexValidator(
-                regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ ]+$',
-                message = 'Sólo debe contener letras.'
-            )
-        ],
+        validators = [name_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Propietario'
-            , 'pattern'     : '^[0-9a-zA-ZáéíóúüñÑÁÉÍÓÚÜ ]+$'
-            , 'message'     : 'La entrada debe ser un nombre en español sin símbolos especiales.'
+            , 'pattern'     : name_validator.regex
+            , 'message'     : name_validator.message
             }
         )
     )
 
     nombre = forms.CharField(
         required = True,
-        label    = "Nombre",
+        label    = "Nombre del Estacionamiento",
+        validators = [name_validator],
         widget   = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Nombre'
-            , 'pattern'     : '^[0-9a-zA-ZáéíóúüñÑÁÉÍÓÚÜ\. ]+$'
-            , 'message'     : 'La entrada debe ser un nombre en español sin símbolos especiales.'
+            , 'placeholder' : 'Nombre del Estacionamiento'
+            , 'pattern'     : name_validator.regex
+            , 'message'     : name_validator.message
             }
         )
     )
@@ -51,7 +57,7 @@ class EstacionamientoForm(forms.Form):
         label    = "Direccion",
         widget   = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Direccion'
+            , 'placeholder' : 'Dirección'
             , 'message'     : 'La entrada no puede quedar vacía.'
             }
         )
@@ -62,9 +68,9 @@ class EstacionamientoForm(forms.Form):
         validators = [phone_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Telefono 2'
-            , 'pattern'     : '^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}'
-            , 'message'     : 'La entrada debe ser un teléfono válido.'
+            , 'placeholder' : 'Teléfono 1'
+            , 'pattern'     : phone_validator.regex
+            , 'message'     : phone_validator.message
             }
         )
     )
@@ -74,9 +80,9 @@ class EstacionamientoForm(forms.Form):
         validators = [phone_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Telefono 2'
-            , 'pattern'     : '^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}'
-            , 'message'     : 'La entrada debe ser un teléfono válido.'
+            , 'placeholder' : 'Teléfono 2'
+            , 'pattern'     : phone_validator.regex
+            , 'message'     : phone_validator.message
             }
         )
     )
@@ -86,9 +92,9 @@ class EstacionamientoForm(forms.Form):
         validators = [phone_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Telefono 3'
-            , 'pattern'     : '^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}'
-            , 'message'     : 'La entrada debe ser un teléfono válido.'
+            , 'placeholder' : 'Teléfono 3'
+            , 'pattern'     : phone_validator.regex
+            , 'message'     : phone_validator.message
             }
         )
     )
@@ -116,22 +122,23 @@ class EstacionamientoForm(forms.Form):
     rif = forms.CharField(
         required   = True,
         label      = "RIF",
-        validators = [
-            RegexValidator(
-                regex   = '^[JVD]-?\d{8}-?\d$',
-                message = 'Introduzca un RIF con un formato válido.'
-            )
-        ],
+        validators = [rif_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'RIF: J-xxxxxxxxx'
-            , 'pattern'     : '^[JVD]-\d{8}-?\d$'
-            , 'message'     : 'La entrada debe ser un RIF válido'
+            , 'placeholder' : 'RIF: X-xxxxxxxxx'
+            , 'pattern'     : rif_validator.regex
+            , 'message'     : rif_validator.message
             }
         )
     )
 
 class EstacionamientoExtendedForm(forms.Form):
+    
+    tarifa_validator = RegexValidator(
+        regex   = '^([0-9]+(\.[0-9]+)?)$',
+        message = 'Sólo debe contener dígitos.'
+    )
+    
     puestos = forms.IntegerField(
         required  = True,
         min_value = 1,
@@ -144,11 +151,6 @@ class EstacionamientoExtendedForm(forms.Form):
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
             }
         )
-    )
-
-    tarifa_validator = RegexValidator(
-        regex   = '^([0-9]+(\.[0-9]+)?)$',
-        message = 'Sólo debe contener dígitos.'
     )
 
     horarioin = forms.TimeField(
@@ -240,6 +242,7 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
 class ReservaForm(forms.Form):
+    
     inicio = forms.SplitDateTimeField(
         required = True,
         label = 'Horario Inicio Reserva',
@@ -263,37 +266,49 @@ class ReservaForm(forms.Form):
     )
 
 class PagoForm(forms.Form):
+    
+    card_name_validator = RegexValidator(
+        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+        message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
+    )
+    
+    card_surname_validator = RegexValidator(
+        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+        message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
+    )
+    
+    id_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'La cédula solo puede contener caracteres numéricos.'
+    )
+    
+    card_validator = RegexValidator(
+        regex   = '^[0-9]{16}$',
+        message = 'Introduzca un número de tarjeta válido de 16 dígitos.'
+    )
+    
     nombre = forms.CharField(
         required   = True,
-        label      = "Nombre",
-        validators = [
-            RegexValidator(
-                regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
-                message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
-            )
-        ],
+        label      = "Nombre del Tarjetahabiente",
+        validators = [card_name_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Nombre'
-            , 'pattern'     : '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$'
-            , 'message'     : 'El nombre no puede contener números o empezar con espacios en blanco.'
+            , 'placeholder' : 'Nombre del Tarjetahabiente'
+            , 'pattern'     : card_name_validator.regex
+            , 'message'     : card_name_validator.message
             }
         )
     )
 
     apellido = forms.CharField(
         required   = True,
-        label      = "Apellido",
-        validators = [
-            RegexValidator(
-                regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
-                message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos')
-        ],
+        label      = "Apellido del Tarjetahabiente",
+        validators = [card_surname_validator],
         widget = forms.TextInput(attrs =
             { 'class'      : 'form-control'
-            , 'placeholder' : 'Apellido'
-            , 'pattern'     : '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$'
-            , 'message'     : 'El apellido no puede contener números o empezar con espacios en blanco.'
+            , 'placeholder' : 'Apellido del Tarjetahabiente'
+            , 'pattern'     : card_surname_validator.regex
+            , 'message'     : card_surname_validator.message
             }
         )
     )
@@ -313,17 +328,12 @@ class PagoForm(forms.Form):
     cedula = forms.CharField(
         required   = True,
         label      = "Cédula",
-        validators = [
-            RegexValidator(
-                regex   = '^[0-9]+$',
-                message = 'La cédula solo puede contener caracteres numéricos')
-            ],
+        validators = [id_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
-            , 'pattern'     : '^[0-9]+$'
-            , 'message'     : 'La entrada debe ser un número de cédula válido.'
-            # , 'maxlength'   : '9'
+            , 'pattern'     : id_validator.regex
+            , 'message'     : id_validator.message
             }
         )
     )
@@ -342,55 +352,52 @@ class PagoForm(forms.Form):
     tarjeta = forms.CharField(
         required   = True,
         label      = "Tarjeta de Credito",
-        validators = [
-            RegexValidator(
-                regex   = '^[0-9]{16}$',
-                message = 'Introduzca un número de tarjeta válido.'
-            )
-        ],
+        validators = [card_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Tarjeta de Credito'
-            , 'pattern'     : '^[0-9]{16}$'
-            , 'message'     : 'La entrada debe ser un número de tarjeta válido.'
+            , 'pattern'     : card_validator.regex
+            , 'message'     : card_validator.message
             }
         )
     )
 
 class RifForm(forms.Form):
+    
+    rif_validator = RegexValidator(
+        regex   = '^[JVD]-?\d{8}-?\d$',
+        message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'                              
+    )
+    
     rif = forms.CharField(
         required   = True,
         label      = "RIF",
-        validators = [
-            RegexValidator(
-                regex   = '^[JVD]-?\d{8}-?\d$',
-                message = 'Introduzca un RIF con un formato válido.'
-            )
-        ],
+        validators = [rif_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'RIF: J-xxxxxxxxx'
-            , 'pattern'     : '^[JVD]-\d{8}-?\d$'
-            , 'message'     : 'La entrada debe ser un RIF válido'
+            , 'placeholder' : 'RIF: X-xxxxxxxxx'
+            , 'pattern'     : rif_validator.regex
+            , 'message'     : rif_validator.message
             }
         )
     )
 
 class CedulaForm(forms.Form):
+    
+    id_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'La cédula solo puede contener caracteres numéricos.'
+    )
+    
     cedula = forms.CharField(
         required   = True,
         label      = "Cédula",
-        validators = [
-            RegexValidator(
-                regex   = '^[0-9]+$',
-                message = 'La cédula solo puede contener caracteres numéricos')
-            ],
+        validators = [id_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
-            , 'pattern'     : '^[0-9]+$'
-            , 'message'     : 'La entrada debe ser un número de cédula válido.'
-            , 'maxlength'   : '9'
+            , 'pattern'     : id_validator.regex
+            , 'message'     : id_validator.message
             }
         )
     )
