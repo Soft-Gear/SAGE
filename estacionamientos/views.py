@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from urllib.parse import urlencode
 from matplotlib import pyplot
 from decimal import Decimal
+from collections import OrderedDict
+
 from datetime import (
     datetime,
 )
@@ -35,8 +37,6 @@ from estacionamientos.models import (
     TarifaFinDeSemana,
     TarifaHoraPico
 )
-from collections import OrderedDict
-from numpy.core.multiarray import arange
 
 
 # Usamos esta vista para procesar todos los estacionamientos
@@ -397,14 +397,18 @@ def tasa_de_reservacion(request, _id):
         )
     ocupacion = tasa_reservaciones(_id)
     calcular_porcentaje_de_tasa(estacionamiento.apertura, estacionamiento.cierre, estacionamiento.nroPuesto, ocupacion)
-    datos_ocupacion = urlencode(ocupacion)
+    datos_ocupacion = urlencode(ocupacion) # Se convierten los datos del diccionario en el formato key1=value1&key2=value2&...
     return render(
         request,
         'tasaReservacion.html',
-        { "ocupacion" : ocupacion, "datos_ocupacion": datos_ocupacion}
+        { "ocupacion" : ocupacion
+        , "datos_ocupacion": datos_ocupacion
+        }
     )
 
 def grafica_tasa_de_reservacion(request):
+    
+    # Recuperacion del diccionario para crear el grafico
     datos_ocupacion = request.GET.dict()
     datos_ocupacion = OrderedDict(sorted((k, float(v)) for k, v in datos_ocupacion.items()))     
     response = HttpResponse(content_type='image/png')
@@ -413,9 +417,10 @@ def grafica_tasa_de_reservacion(request):
     pyplot.switch_backend('Agg') # Para que no use Tk y aparezcan problemas con hilos
     pyplot.bar(range(len(datos_ocupacion)), datos_ocupacion.values(), hold = False, color = '0.50')
     pyplot.ylim([0,100])
-    pyplot.title('Distribucion de los porcentajes por grano')
+    pyplot.title('Distribucion de los porcentajes por fecha')
     pyplot.xticks(range(len(datos_ocupacion)), list(datos_ocupacion.keys()), rotation=20)
     pyplot.ylabel('Porcentaje (%)')
+    pyplot.grid(True, 'major', 'both')
     pyplot.savefig(response, format='png') # Guarda la imagen creada en el HttpResponse creado
     pyplot.close()
     
