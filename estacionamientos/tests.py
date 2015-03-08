@@ -33,20 +33,134 @@ from estacionamientos.models import (
     TarifaHorayFraccion,
     TarifaFinDeSemana,
     TarifaHoraPico,
-)
+    EsquemaTarifario)
 
 ###################################################################
 #                    ESTACIONAMIENTO VISTA DISPONIBLE
 ###################################################################
-class SimpleTest(TestCase):
-    # normal
+class IntegrationTest(TestCase):
+    
+    # TDD
     def setUp(self):
         self.client = Client()
+        
+    def crearEstacionamiento(self, puestos,hora_apertura=time(0,0),hora_cierre=time(23,59)):
+        e = Estacionamiento(
+            propietario = "prop",
+            nombre = "nom",
+            direccion = "dir",
+            rif = "rif",
+            #nroPuesto = puestos,
+            #apertura       = hora_apertura,
+            #cierre         = hora_cierre,
+        )
+        e.save()
+        return e
 
-    # normal
-    def test_primera(self):
+    # TDD
+    def test_primera_vista_disponible(self):
         response = self.client.get('/estacionamientos/')
         self.assertEqual(response.status_code, 200)
+    
+    # malicia 
+    def test_llamada_a_la_raiz_lleva_a_estacionamientos(self):
+        response = self.client.get('', follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+    # integracion TDD
+    def test_llamada_a_los_detalles_de_un_estacionamiento(self):
+        self.crearEstacionamiento(1)
+        response = self.client.get('/estacionamientos/1/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'detalle-estacionamiento.html')
+    
+    # integracion malicia
+    def test_llamada_a_los_detalles_sin_estacionamiento_creado(self):
+        response = self.client.get('/estacionamientos/1/')
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, '404.html')
+    
+    # integracion TDD
+    def test_llamada_a_reserva(self):
+        e = Estacionamiento(
+            propietario = "prop",
+            nombre = "nom",
+            direccion = "dir",
+            rif = "rif",
+            nroPuesto = 20,
+            apertura = time(0,0),
+            cierre = time(23,59),
+        )
+        e.save()
+        response = self.client.get('/estacionamientos/1/reserva')
+        self.assertEqual(response.status_code, 200)
+        
+    # integracion malicia 
+    def test_llamada_a_reserva_sin_estacionamiento_creado(self):
+        response = self.client.get('/estacionamientos/1/reserva')
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, '404.html')
+        
+    # integracion malicia
+    def test_llamada_a_tasa_sin_parametros_especificados_aun(self):
+        self.crearEstacionamiento(1)
+        response = self.client.get('/estacionamientos/1/tasa')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'template-mensaje.html')
+        
+    # integracion esquina
+    def test_llamada_a_la_generacion_de_grafica_empty_request(self):
+        self.crearEstacionamiento(1)
+        response = self.client.get('/estacionamientos/grafica/')
+        self.assertEqual(response.status_code, 400)
+        
+    # integracion TDD
+    def test_llamada_a_la_generacion_de_grafica_normal_request(self):
+        self.crearEstacionamiento(1)
+        response = self.client.get('/estacionamientos/grafica/?2015-03-10=10.5')
+        self.assertEqual(response.status_code, 200)
+    
+    # integracion malicia
+    def test_llamada_a_la_generacion_de_grafica_bad_request(self):
+        self.crearEstacionamiento(1)
+        response = self.client.get('/estacionamientos/grafica/?hola=chao')
+        self.assertEqual(response.status_code, 400)
+    
+    # integracion malicia
+    def test_llamada_a_la_reserva_por_sms_bad_request(self):
+        self.crearEstacionamiento(1)
+        response = self.client.get('/estacionamientos/sms?phone=04242221111&text=hola')
+        self.assertEqual(response.status_code, 400)
+       
+    # integracion esquina
+    def test_llamada_a_la_reserva_por_sms_empty_request(self):
+        self.crearEstacionamiento(1)
+        response = self.client.get('/estacionamientos/sms')
+        self.assertEqual(response.status_code, 400)
+        
+    # integracion esquina
+    def test_llamada_a_reserva_sin_parametros_especificados_aun(self):
+        self.crearEstacionamiento(1)
+        response = self.client.get('/estacionamientos/1/reserva')
+        self.assertEqual(response.status_code, 403)
+    
+    # integracion TDD
+    def test_llamada_a_consultar_reserva(self):
+        response = self.client.get('/estacionamientos/consulta_reserva')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'consultar-reservas.html')
+    
+    # integracion TDD 
+    def test_llamada_a_consultar_ingreso(self):
+        response = self.client.get('/estacionamientos/ingreso')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'consultar-ingreso.html')
+    
+    # integracion malicia  
+    def test_llamada_a_url_inexistente(self):
+        response = self.client.get('/este/url/no/existe')
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, '404.html')
 
 ###################################################################
 #                    ESTACIONAMIENTO_ALL FORM
@@ -55,84 +169,84 @@ class SimpleTest(TestCase):
 class SimpleFormTestCase(TestCase):
 
     # malicia
-    def test_CamposVacios(self):
+    def test_campos_vacios(self):
         form_data = {}
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_SoloUnCampoNecesario(self):
+    def test_solo_un_campo_necesario(self):
         form_data = {
             'propietario': 'Pedro'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_DosCamposNecesarios(self):
+    def test_dos_campos_necesarios(self):
         form_data = {
             'propietario': 'Pedro',
             'nombre': 'Orinoco'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_TresCamposNecesarios(self):
+    def test_tres_campos_necesarios(self):
         form_data = {
             'propietario': 'Pedro',
             'nombre': 'Orinoco',
             'direccion': 'Caracas'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_TodosLosCamposNecesarios(self):
+    def test_todos_los_campos_necesarios(self):
         form_data = {
             'propietario': 'Pedro',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V123456789'
+            'rif': 'V-123456789'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), True)
+        self.assertTrue(form.is_valid())
 
     # malicia
-    def test_PropietarioInvalidoDigitos(self):
+    def test_propietario_invalido_digitos_en_campo(self):
         form_data = {
             'propietario': 'Pedro132',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V123456789'
+            'rif': 'V-123456789'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # malicia
-    def test_PropietarioInvalidoSimbolos(self):
+    def test_propietario_invalido_simbolos_especiales(self):
         form_data = {
             'propietario': 'Pedro!',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V123456789'
+            'rif': 'V-123456789'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_RIFtamanoinvalido(self):
+    def test_RIF_tamano_invalido(self):
         form_data = {
             'propietario': 'Pedro132',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V1234567'
+            'rif': 'V-1234567'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # malicia
-    def test_RIFformatoinvalido(self):
+    def test_RIF_formato_invalido(self):
         form_data = {
             'propietario': 'Pedro132',
             'nombre': 'Orinoco',
@@ -140,53 +254,53 @@ class SimpleFormTestCase(TestCase):
             'rif': 'Kaa123456789'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # malicia
-    def test_AgregarTLFs(self):
+    def test_agregar_telefonos(self):
         form_data = {
             'propietario': 'Pedro',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V123456789',
+            'rif': 'V-123456789',
             'telefono_1': '02129322878',
             'telefono_2': '04149322878',
             'telefono_3': '04129322878'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), True)
+        self.assertTrue(form.is_valid())
 
     # malicia
-    def test_FormatoInvalidoTLF(self):
+    def test_formato_invalido_telefono(self):
         form_data = {
             'propietario': 'Pedro',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V123456789',
-            'telefono_1': '02119322878'
+            'rif': 'V-123456789',
+            'telefono_1': '02193228782'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_TamanoInvalidoTLF(self):
+    def test_tamano_invalido_telefono(self):
         form_data = {
             'propietario': 'Pedro',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V123456789',
-            'telefono_1': '0219322878'
+            'rif': 'V-123456789',
+            'telefono_1': '0212322878'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # malicia
-    def test_AgregarCorreos(self):
+    def test_agregar_correos_electronicos(self):
         form_data = {
             'propietario': 'Pedro',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V123456789',
+            'rif': 'V-123456789',
             'telefono_1': '02129322878',
             'telefono_2': '04149322878',
             'telefono_3': '04129322878',
@@ -194,22 +308,22 @@ class SimpleFormTestCase(TestCase):
             'email_2': 'usua_rio@users.com'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), True)
+        self.assertTrue(form.is_valid())
 
     # malicia
-    def test_CorreoInvalido(self):
+    def test_correo_electronico_invalido(self):
         form_data = {
             'propietario': 'Pedro',
             'nombre': 'Orinoco',
             'direccion': 'Caracas',
-            'rif': 'V123456789',
+            'rif': 'V-123456789',
             'telefono_1': '02129322878',
             'telefono_2': '04149322878',
             'telefono_3': '04129322878',
             'email_1': 'adminsitrador@a@dmin.com'
         }
         form = EstacionamientoForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
 ###################################################################
 # ESTACIONAMIENTO_EXTENDED_FORM
@@ -218,158 +332,111 @@ class SimpleFormTestCase(TestCase):
 class ExtendedFormTestCase(TestCase):
 
     # malicia
-    def test_EstacionamientoExtendedForm_UnCampo(self):
+    def test_estacionamiento_extended_form_un_campo(self):
         form_data = { 'puestos': 2}
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # malicia
-    def test_EstacionamientoExtendedForm_DosCampos(self):
+    def test_estacionamiento_extended_form_dos_campos(self):
         form_data = { 'puestos': 2,
                       'horarioin': time(hour = 6,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # malicia
-    def test_EstacionamientoExtendedForm_TresCampos(self):
+    def test_estacionamiento_extended_form_tres_campos(self):
         form_data = { 'puestos': 2,
                       'horarioin': time( hour = 6,  minute = 0),
                       'horarioout': time(hour = 19,  minute = 0)}
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
-
-    # malicia
-    def test_EstacionamientoExtendedForm_CuatroCampos(self):
+        self.assertFalse(form.is_valid())
+        
+    # caso borde
+    def test_estacionamiento_extended_form_cuatro_bien(self):
         form_data = { 'puestos': 2,
                       'horarioin': time(hour = 6,  minute = 0),
                       'horarioout': time(hour = 19,  minute = 0),
-                      'horario_reserin': time(hour = 7,  minute = 0)}
+                      'tarifa': '12'
+                    }
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_EstacionamientoExtendedForm_CincoCampos(self):
+    def test_estacionamiento_extended_form_todos_campos_bien(self):
         form_data = { 'puestos': 2,
                       'horarioin': time(hour = 6,  minute = 0),
                       'horarioout': time(hour = 19,  minute = 0),
-                      'horario_reserin': time(hour = 7,  minute = 0),
-                      'horario_reserout': time( hour = 14,  minute = 0)}
-        form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
-
-    # caso borde
-    def test_EstacionamientoExtendedForm_TodosCamposBien(self):
-        form_data = { 'puestos': 2,
-                      'horarioin': time(hour = 6,  minute = 0),
-                      'horarioout': time(hour = 19,  minute = 0),
-                      'horario_reserin': time(hour = 7,  minute = 0),
-                      'horario_reserout': time(hour = 14,  minute = 0),
                       'tarifa': '12',
-                      'esquema':'TarifaMinuto'}
+                      'esquema':'TarifaMinuto'
+                    }
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), True)
-
+        self.assertTrue(form.is_valid())
+        
     # caso borde
-    def test_EstacionamientoExtendedForm_Puestos1(self):
+    def test_estacionamiento_extended_form_puestos_1(self):
         form_data = { 'puestos': 1,
                       'horarioin': time(hour = 6,  minute = 0),
                       'horarioout': time(hour = 19,  minute = 0),
-                      'horario_reserin': time(hour = 7,  minute = 0),
-                      'horario_reserout': time(hour = 14,  minute = 0),
                       'tarifa': '12',
                       'esquema':'TarifaHora'}
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertTrue(form.is_valid())
 
     # caso borde
-    def test_EstacionamientoExtendedForm_HoraInicioIgualHoraCierre(self):
-        form_data = { 'puestos': 2,
+    def test_estacionamiento_extended_form_puestos_0(self):
+        form_data = { 'puestos': 0,
                       'horarioin': time(hour = 6,  minute = 0),
-                      'horarioout': time(hour = 6,  minute = 0),
-                      'horario_reserin': time(hour = 7,  minute = 0),
-                      'horario_reserout': time(hour = 14,  minute = 0),
+                      'horarioout': time(hour = 19,  minute = 0),
                       'tarifa': '12',
                       'esquema':'TarifaHora'}
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), True)
+        self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_EstacionamientoExtendedForm_HoraIniReserIgualHoraFinReser(self):
+    def test_estacionamiento_extended_form_hora_inicio_igual_hora_cierre(self):
         form_data = { 'puestos': 2,
                       'horarioin': time(hour = 6,  minute = 0),
-                      'horarioout': time(hour = 19,  minute = 0),
-                      'horario_reserin': time( hour = 7,  minute = 0),
-                      'horario_reserout': time( hour = 7,  minute = 0),
+                      'horarioout': time(hour = 6,  minute = 0),
                       'tarifa': '12',
-                      'esquema':'TarifaMinuto'}
+                      'esquema':'TarifaHora'
+                    }
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), True)
+        self.assertTrue(form.is_valid())
 
     # malicia
-    def test_EstacionamientoExtendedForm_StringEnPuesto(self):
+    def test_estacionamiento_extended_form_string_en_campo_puesto(self):
         form_data = { 'puestos': 'hola',
-                                'horarioin': time(hour = 6,  minute = 0),
-                                'horarioout': time(hour = 19,  minute = 0),
-                                'horario_reserin': time( hour = 7,  minute = 0),
-                                'horario_reserout': time( hour = 14,  minute = 0),
-                                'tarifa': '12'}
+                      'horarioin': time(hour = 6,  minute = 0),
+                      'horarioout': time(hour = 19,  minute = 0),
+                      'tarifa': '12',
+                      'esquema':'TarifaHora'
+                    }
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # malicia
-    def test_EstacionamientoExtendedForm_StringHoraInicio(self):
+    def test_estacionamiento_extended_form_string_hora_inicio(self):
         form_data = { 'puestos': 2,
-                                'horarioin': 'holaa',
-                                'horarioout': time(hour = 19,  minute = 0),
-                                'horario_reserin': time(hour = 7,  minute = 0),
-                                'horario_reserout': time( hour = 14,  minute = 0),
-                                'tarifa': '12'}
+                      'horarioin': 'holaa',
+                      'horarioout': time(hour = 19,  minute = 0),
+                      'tarifa': '12',
+                      'esquema':'TarifaHora'
+                    }
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
-
-    # malicia
-    def test_EstacionamientoExtendedForm_NumeroNegativoHoraInicio(self):
-        form_data = { 'puestos': 2,
-                                'horarioout': time(hour = 19,  minute = 0),
-                                'horario_reserin': time( hour = 7,  minute = 0),
-                                'horario_reserout': time(hour = 14,  minute = 0),
-                                'tarifa': '12'}
-        form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertFalse(form.is_valid())
 
     # malicia
     def test_EstacionamientoExtendedForm_NoneEntarifa(self):
         form_data = { 'puestos': 2,
-                                'horarioin': time( hour = 6,  minute = 0),
-                                'horarioout': time(hour = 19,  minute = 0),
-                                'horario_reserin': time(hour = 7,  minute = 0),
-                                'horario_reserout': time( hour = 14,  minute = 0),
-                                'tarifa': None}
+                      'horarioin': time( hour = 6,  minute = 0),
+                      'horarioout': time(hour = 19,  minute = 0),
+                      'tarifa': None,
+                      'esquema':'TarifaHora'
+                    }
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
-
-    # malicia
-    def test_EstacionamientoExtendedForm_NoneEnHorarioReserva(self):
-        form_data = { 'puestos': 2,
-                                'horarioin': 'holaa',
-                                'horarioout': time(hour = 19,  minute = 0),
-                                'horario_reserin': None,
-                                'horario_reserout': time( hour = 14,  minute = 0),
-                                'tarifa': '12'}
-        form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
-
-    # malicia
-    def test_EstacionamientoExtendedForm_listaEnHoraReserva(self):
-        form_data = { 'puestos': 2,
-                                'horarioin': time( hour = 6,  minute = 0),
-                                'horarioout': time(hour = 19,  minute = 0),
-                                'horario_reserin': time(hour = 7,  minute = 0),
-                                'horario_reserout': [time( hour = 14,  minute = 0)],
-                                'tarifa': 12}
-        form = EstacionamientoExtendedForm(data = form_data)
-        self.assertEqual(form.is_valid(), False)
-
+        self.assertFalse(form.is_valid())
+        
 ######################################################################
 # ESTACIONAMIENTO_EXTENDED pruebas controlador
 ######################################################################

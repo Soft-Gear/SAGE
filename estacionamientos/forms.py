@@ -16,7 +16,7 @@ class EstacionamientoForm(forms.Form):
     )
     
     name_validator = RegexValidator(
-        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ ]+$',
+        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚ ]+$',
         message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
     )
     
@@ -33,7 +33,7 @@ class EstacionamientoForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Propietario'
-            , 'pattern'     : name_validator.regex
+            , 'pattern'     : name_validator.regex.pattern
             , 'message'     : name_validator.message
             }
         )
@@ -46,7 +46,7 @@ class EstacionamientoForm(forms.Form):
         widget   = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre del Estacionamiento'
-            , 'pattern'     : name_validator.regex
+            , 'pattern'     : name_validator.regex.pattern
             , 'message'     : name_validator.message
             }
         )
@@ -69,7 +69,7 @@ class EstacionamientoForm(forms.Form):
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Teléfono 1'
-            , 'pattern'     : phone_validator.regex
+            , 'pattern'     : phone_validator.regex.pattern
             , 'message'     : phone_validator.message
             }
         )
@@ -81,7 +81,7 @@ class EstacionamientoForm(forms.Form):
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Teléfono 2'
-            , 'pattern'     : phone_validator.regex
+            , 'pattern'     : phone_validator.regex.pattern
             , 'message'     : phone_validator.message
             }
         )
@@ -93,7 +93,7 @@ class EstacionamientoForm(forms.Form):
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Teléfono 3'
-            , 'pattern'     : phone_validator.regex
+            , 'pattern'     : phone_validator.regex.pattern
             , 'message'     : phone_validator.message
             }
         )
@@ -126,7 +126,7 @@ class EstacionamientoForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'RIF: X-xxxxxxxxx'
-            , 'pattern'     : rif_validator.regex
+            , 'pattern'     : rif_validator.regex.pattern
             , 'message'     : rif_validator.message
             }
         )
@@ -294,7 +294,7 @@ class PagoForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre del Tarjetahabiente'
-            , 'pattern'     : card_name_validator.regex
+            , 'pattern'     : card_name_validator.regex.pattern
             , 'message'     : card_name_validator.message
             }
         )
@@ -307,7 +307,7 @@ class PagoForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'      : 'form-control'
             , 'placeholder' : 'Apellido del Tarjetahabiente'
-            , 'pattern'     : card_surname_validator.regex
+            , 'pattern'     : card_surname_validator.regex.pattern
             , 'message'     : card_surname_validator.message
             }
         )
@@ -332,7 +332,7 @@ class PagoForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
-            , 'pattern'     : id_validator.regex
+            , 'pattern'     : id_validator.regex.pattern
             , 'message'     : id_validator.message
             }
         )
@@ -356,7 +356,7 @@ class PagoForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Tarjeta de Credito'
-            , 'pattern'     : card_validator.regex
+            , 'pattern'     : card_validator.regex.pattern
             , 'message'     : card_validator.message
             }
         )
@@ -376,7 +376,7 @@ class RifForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'RIF: X-xxxxxxxxx'
-            , 'pattern'     : rif_validator.regex
+            , 'pattern'     : rif_validator.regex.pattern
             , 'message'     : rif_validator.message
             }
         )
@@ -396,7 +396,7 @@ class CedulaForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
-            , 'pattern'     : id_validator.regex
+            , 'pattern'     : id_validator.regex.pattern
             , 'message'     : id_validator.message
             }
         )

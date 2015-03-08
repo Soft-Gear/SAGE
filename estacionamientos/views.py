@@ -3,7 +3,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 import urllib
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils.dateparse import parse_datetime
 from urllib.parse import urlencode
 from matplotlib import pyplot
@@ -98,10 +98,7 @@ def estacionamiento_detail(request, _id):
     try:
         estacionamiento = Estacionamiento.objects.get(id = _id)
     except ObjectDoesNotExist:
-        return render(
-            request,
-            '404.html'
-        )
+        raise Http404
 
     if request.method == 'GET':
         if estacionamiento.tarifa:
@@ -175,10 +172,11 @@ def estacionamiento_reserva(request, _id):
     try:
         estacionamiento = Estacionamiento.objects.get(id = _id)
     except ObjectDoesNotExist:
-        return render(
-            request,
-            '404.html'
-        )
+        raise Http404
+
+    # Verificamos que el estacionamiento este parametrizado
+    if (estacionamiento.apertura is None):
+        return HttpResponse(status = 403) # Esta prohibido entrar aun
 
     # Si se hace un GET renderizamos los estacionamientos con su formulario
     if request.method == 'GET':
@@ -208,7 +206,7 @@ def estacionamiento_reserva(request, _id):
             if not m_validado[0]:
                 return render(
                     request,
-                    'templateMensaje.html',
+                    'template-mensaje.html',
                     { 'color'  :'red'
                     , 'mensaje': m_validado[1]
                     }
@@ -279,10 +277,8 @@ def estacionamiento_pago(request,_id):
             try:
                 estacionamiento = Estacionamiento.objects.get(id = _id)
             except ObjectDoesNotExist:
-                return render(
-                    request,
-                    '404.html'
-                )
+                raise Http404
+            
             inicioReserva = datetime(
                 year   = request.session['anioinicial'],
                 month  = request.session['mesinicial'],
@@ -406,15 +402,21 @@ def receive_sms(request):
     port = '8000' # Puerto del telefono donde esta montado el SMS Gateway
     phone = request.GET.get('phone', False)
     sms = request.GET.get('text', False)
+    if (not sms or not phone):
+        return HttpResponse(status=400) # Bad request
+    
     phone = urllib.parse.quote(str(phone)) # Codificacion porcentaje del numero de telefono recibido
     
     # Tratamiento del texto recibido
-    sms = sms.split(' ')
-    id_sms = int(sms[0])
-    inicio_reserva = sms[1] + ' ' + sms[2]
-    final_reserva = sms[3] + ' ' + sms[4]
-    inicio_reserva = parse_datetime(inicio_reserva)
-    final_reserva = parse_datetime(final_reserva)
+    try:
+        sms = sms.split(' ')
+        id_sms = int(sms[0])
+        inicio_reserva = sms[1] + ' ' + sms[2]
+        final_reserva = sms[3] + ' ' + sms[4]
+        inicio_reserva = parse_datetime(inicio_reserva)
+        final_reserva = parse_datetime(final_reserva)
+    except:
+        return HttpResponse(status=400) # Bad request
     
     # Validacion del id de estacionamiento recibido por SMS
     try:
@@ -456,9 +458,13 @@ def tasa_de_reservacion(request, _id):
     try:
         estacionamiento = Estacionamiento.objects.get(id = _id)
     except ObjectDoesNotExist:
+        raise Http404
+    if (estacionamiento.apertura is None):
         return render(
-            request,
-            '404.html'
+            request, 'template-mensaje.html',
+            { 'color'   : 'red'
+            , 'mensaje' : 'Se debe parametrizar el estacionamiento primero.'
+            }
         )
     ocupacion = tasa_reservaciones(_id)
     calcular_porcentaje_de_tasa(estacionamiento.apertura, estacionamiento.cierre, estacionamiento.nroPuesto, ocupacion)
@@ -474,9 +480,16 @@ def tasa_de_reservacion(request, _id):
 def grafica_tasa_de_reservacion(request):
     
     # Recuperacion del diccionario para crear el grafico
-    datos_ocupacion = request.GET.dict()
-    datos_ocupacion = OrderedDict(sorted((k, float(v)) for k, v in datos_ocupacion.items()))     
-    response = HttpResponse(content_type='image/png')
+    try:
+        datos_ocupacion = request.GET.dict()
+        datos_ocupacion = OrderedDict(sorted((k, float(v)) for k, v in datos_ocupacion.items()))     
+        response = HttpResponse(content_type='image/png')
+    except:
+        return HttpResponse(status=400) # Bad request
+    
+    # Si el request no viene con algun diccionario
+    if (not datos_ocupacion):
+        return HttpResponse(status=400) # Bad request
     
     # Configuracion y creacion del grafico de barras con la biblioteca pyplot
     pyplot.switch_backend('Agg') # Para que no use Tk y aparezcan problemas con hilos
