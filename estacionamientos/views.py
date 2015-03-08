@@ -271,13 +271,18 @@ def estacionamiento_reserva(request, _id):
 
 def estacionamiento_pago(request,_id):
     form = PagoForm()
+    
+    try:
+        estacionamiento = Estacionamiento.objects.get(id = _id)
+    except ObjectDoesNotExist:
+        raise Http404
+    
+    if (estacionamiento.apertura is None):
+        return HttpResponse(status = 403) # No esta permitido acceder a esta vista aun
+    
     if request.method == 'POST':
         form = PagoForm(request.POST)
         if form.is_valid():
-            try:
-                estacionamiento = Estacionamiento.objects.get(id = _id)
-            except ObjectDoesNotExist:
-                raise Http404
             
             inicioReserva = datetime(
                 year   = request.session['anioinicial'],

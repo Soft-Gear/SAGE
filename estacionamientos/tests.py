@@ -32,8 +32,8 @@ from estacionamientos.models import (
     TarifaHora,
     TarifaHorayFraccion,
     TarifaFinDeSemana,
-    TarifaHoraPico,
-    EsquemaTarifario)
+    TarifaHoraPico
+)
 
 ###################################################################
 #                    ESTACIONAMIENTO VISTA DISPONIBLE
@@ -159,6 +159,50 @@ class IntegrationTest(TestCase):
     # integracion malicia  
     def test_llamada_a_url_inexistente(self):
         response = self.client.get('/este/url/no/existe')
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, '404.html')
+    
+    # integracion TDD
+    def test_llamada_a_pago_get(self):
+        e = Estacionamiento(
+            propietario = "prop",
+            nombre = "nom",
+            direccion = "dir",
+            rif = "rif",
+            nroPuesto = 20,
+            apertura = time(0,0),
+            cierre = time(23,59),
+        )
+        e.save()
+        response = self.client.get('/estacionamientos/1/pago')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'pago.html')
+    
+    # integracion TDD  
+    def test_llamada_a_pago_post(self):
+        e = Estacionamiento(
+            propietario = "prop",
+            nombre = "nom",
+            direccion = "dir",
+            rif = "rif",
+            nroPuesto = 20,
+            apertura = time(0,0),
+            cierre = time(23,59),
+        )
+        e.save()
+        response = self.client.post('/estacionamientos/1/pago')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'pago.html')
+    
+    # integracion malicia
+    def test_llamada_a_pago_sin_parametros_especificados_aun(self):
+        self.crear_estacionamiento(1)
+        response = self.client.get('/estacionamientos/1/reserva')
+        self.assertEqual(response.status_code, 403)
+    
+    # integracion malicia
+    def test_llamada_a_pago_sin_estacionamiento_creado(self):
+        response = self.client.get('/estacionamientos/1/pago')
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, '404.html')
 
@@ -611,7 +655,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
             'nombre': 'Pedro',
             'apellido': 'Perez',
             'cedulaTipo': 'V',
-            'cedula': '24277076',
+            'cedula': '24277100',
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234567890123456',
         }
@@ -1910,5 +1954,3 @@ class FinDeSemanaTestCase(TestCase):
             finReserva = inicioReserva + timedelta(hours=10) # diez horas más tarde
             valor = tarifa.calcularPrecio(inicioReserva,finReserva)
             self.assertEqual(valor, 2*(9.75-n) + 5*(n+.25))
-            
-    
