@@ -397,30 +397,30 @@ def estacionamiento_consulta_reserva(request):
     )
 
 def receive_sms(request):
-    ip = get_client_ip(request)
-    print(ip)
-    port = '8000'
+    ip = get_client_ip(request) # Busca el IP del telefono donde esta montado el SMS Gateway
+    port = '8000' # Puerto del telefono donde esta montado el SMS Gateway
     phone = request.GET.get('phone', False)
     sms = request.GET.get('text', False)
-    phone = urllib.parse.quote(str(phone))
-    #text = urllib.parse.quote(str(text))
-    # Procesamiento del mensaje
-    #sms = '1 2015-03-10 7:00 2015-03-12 10:00'
+    phone = urllib.parse.quote(str(phone)) # Codificacion porcentaje del numero de telefono recibido
+    
+    # Tratamiento del texto recibido
     sms = sms.split(' ')
     id_sms = int(sms[0])
     inicio_reserva = sms[1] + ' ' + sms[2]
     final_reserva = sms[3] + ' ' + sms[4]
     inicio_reserva = parse_datetime(inicio_reserva)
     final_reserva = parse_datetime(final_reserva)
+    
+    # Validacion del id de estacionamiento recibido por SMS
     try:
         estacionamiento = Estacionamiento.objects.get(id = id_sms)
     except ObjectDoesNotExist:
         text = 'No existe el estacionamiento ' + str(id_sms) + '.'
         text = urllib.parse.quote(str(text))
-        #print('http://{0}:{1}/sendsms?phone={0}&text={1}&password='.format(ip, port, phone, text))
         urllib.request.urlopen('http://{0}:{1}/sendsms?phone={2}&text={3}&password='.format(ip, port, phone, text))
-        #print(f.read(100).decode('utf-8'))
-        return HttpResponse('No existe')
+        return HttpResponse('No existe el estacionamiento ' + str(id_sms) + '.')
+    
+    # Validacion de las dos fechas recibidas por SMS
     m_validado = validarHorarioReserva(
         inicio_reserva,
         final_reserva,
@@ -433,24 +433,14 @@ def receive_sms(request):
             inicioReserva   = inicio_reserva,
             finalReserva    = final_reserva,
         )
-        print('Se realizo la reserva satisfactoriamente.')
         reserva_sms.save()
         text = 'Se realizo la reserva satisfactoriamente.'
         text = urllib.parse.quote(str(text))
-        #print('http://{0}:{1}/sendsms?phone={0}&text={1}&password='.format(ip, port, phone, text))
         urllib.request.urlopen('http://{0}:{1}/sendsms?phone={2}&text={3}&password='.format(ip, port, phone, text))
-        #print(f.read(100).decode('utf-8'))
     else:
-        print('ERROR')
         text = m_validado[1]
         text = urllib.parse.quote(str(text))
-        #print('http://{0}:{1}/sendsms?phone={0}&text={1}&password='.format(ip, port, phone, text))
         urllib.request.urlopen('http://{0}:{1}/sendsms?phone={2}&text={3}&password='.format(ip, port, phone, text))
-        #print(f.read(100).decode('utf-8'))
         return HttpResponse(m_validado[1])
-    #print('http://{0}:{1}/sendsms?phone={0}&text={1}&password='.format(ip, port, phone, sms))
-    #f = urllib.request.urlopen('http://{0}:{1}/sendsms?phone={2}&text={3}&password='.format(ip, port, phone, sms))
-    #print(f.read(100).decode('utf-8'))
+    
     return HttpResponse('')
-    #urllib.request.urlopen('http://192.168.0.135:8000/sendsms?phone={0}&text={1}&password='.format(phone,text))
-    #return render(request, 'sms.html', {'text':text})
