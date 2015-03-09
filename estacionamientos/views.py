@@ -255,7 +255,7 @@ def estacionamiento_reserva(request, _id):
                 # Cambiar mensaje
                 return render(
                     request,
-                    'templateMensaje.html',
+                    'template-mensaje.html',
                     {'color'   : 'red'
                     , 'mensaje' : 'No hay un puesto disponible para ese horario'
                     }
