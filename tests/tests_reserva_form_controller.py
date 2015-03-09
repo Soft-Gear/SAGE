@@ -78,7 +78,7 @@ class ReservaFormControllerTestCase(TestCase):
         self.assertEqual(x, (True, ''))
 
     def test_SieteDiasDeReservaYUnMinuto(self):
-        hoy=datetime.now()
+        hoy=datetime.now().replace(hour = 0, minute = 0)
         HoraApertura=time(0,0)
         HoraCierre=time(23,59)
         ReservaInicio=hoy

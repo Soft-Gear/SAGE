@@ -197,7 +197,6 @@ class TestTasaEstacionamiento(TestCase):
         salida=dict(zip(lista_fechas,lista_valores))
         Reserva(estacionamiento= e,inicioReserva=ahora.replace(hour=6)+timedelta(2),finalReserva=ahora.replace(hour=6)+timedelta(7)).save()
         x=tasa_reservaciones(e.id)
-        print(x)
         self.assertEqual(tasa_reservaciones(e.id),salida)
         
     def test_reservaciones_de_una_hora_24_horas(self): # Esquina

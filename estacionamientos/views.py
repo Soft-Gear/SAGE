@@ -185,12 +185,10 @@ def estacionamiento_reserva(request, _id):
     # Si es un POST estan mandando un request
     elif request.method == 'POST':
         form = ReservaForm(request.POST)
-        print(request.POST)
         # Verificamos si es valido con los validadores del formulario
         if form.is_valid():
 
             inicioReserva = form.cleaned_data['inicio']
-            print(form.cleaned_data)
             finalReserva = form.cleaned_data['final']
 
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
