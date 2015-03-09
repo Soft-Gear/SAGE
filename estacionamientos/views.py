@@ -438,12 +438,12 @@ def receive_sms(request):
         estacionamiento.cierre,
     )
     if m_validado[0]:
-        reserva_sms = Reserva(
+        '''reserva_sms = Reserva(
             estacionamiento = estacionamiento,
             inicioReserva   = inicio_reserva,
             finalReserva    = final_reserva,
         )
-        reserva_sms.save()
+        reserva_sms.save()'''
         text = 'Se realizó la reserva satisfactoriamente.'
         text = urllib.parse.quote(str(text))
         urllib.request.urlopen('http://{0}:{1}/sendsms?phone={2}&text={3}&password='.format(ip, port, phone, text))

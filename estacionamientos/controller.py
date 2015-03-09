@@ -25,18 +25,14 @@ def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
 		else:
 			return(False,'Se puede reservar un puesto por un maximo de 7 dias.')
 	else:
-		delta =       timedelta(hours=cierre.hour,  minutes=cierre.minute)
-		delta = delta-timedelta(hours=apertura.hour,minutes=apertura.minute)
-
-		if finReserva-inicioReserva>delta:
+		hora_inicio = time(hour = inicioReserva.hour, minute = inicioReserva.minute)
+		hora_final  = time(hour = finReserva.hour   , minute = finReserva.minute)
+		if hora_inicio<apertura:
 			return (False, 'El horario de inicio de reserva debe estar en un horario válido.')
-		else:
-			hora_inicio = time(hour = inicioReserva.hour, minute = inicioReserva.minute)
-			hora_final  = time(hour = finReserva.hour   , minute = finReserva.minute)
-			if hora_inicio<apertura:
-				return (False, 'El horario de inicio de reserva debe estar en un horario válido.')
-			if hora_final > cierre:
-				return (False, 'El horario de fin de la reserva debe estar en un horario válido.')
+		if hora_final > cierre:
+			return (False, 'El horario de fin de la reserva debe estar en un horario válido.')
+		if inicioReserva.date()!=finReserva.date():
+			return (False, 'No puede haber reservas entre dos dias distintos')
 		return (True,'')
 
 def marzullo(idEstacionamiento, hIn, hOut):
