@@ -19,20 +19,25 @@ class Estacionamiento(models.Model):
 
 	# Campos para referenciar al esquema de tarifa
 
-	content_type   = models.ForeignKey(ContentType, null = True)
-	object_id      = models.PositiveIntegerField(null = True)
-	esquemaTarifa  = GenericForeignKey()
-	tarifa         = models.DecimalField(decimal_places = 2, max_digits = 256, blank = True, null = True)
-	apertura       = models.TimeField(blank = True, null = True)
-	cierre         = models.TimeField(blank = True, null = True)
-	reservasInicio = models.TimeField(blank = True, null = True)
-	reservasCierre = models.TimeField(blank = True, null = True)
-	nroPuesto      = models.IntegerField(blank = True, null = True)
+	content_type = models.ForeignKey(ContentType, null = True)
+	object_id    = models.PositiveIntegerField(null = True)
+	tarifa       = GenericForeignKey()
+	apertura     = models.TimeField(blank = True, null = True)
+	cierre       = models.TimeField(blank = True, null = True)
+	capacidad    = models.IntegerField(blank = True, null = True)
 
 	def __str__(self):
 		return self.nombre+' '+str(self.id)
 
 class Reserva(models.Model):
+	estacionamiento = models.ForeignKey(Estacionamiento)
+	inicioReserva   = models.DateTimeField()
+	finalReserva    = models.DateTimeField()
+
+	def __str__(self):
+		return self.estacionamiento.nombre+' ('+str(self.inicioReserva)+','+str(self.finalReserva)+')'
+	
+class ConfiguracionSMS(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
 	inicioReserva   = models.DateTimeField()
 	finalReserva    = models.DateTimeField()
@@ -54,7 +59,7 @@ class Pago(models.Model):
 class EsquemaTarifario(models.Model):
 
 	# No se cuantos digitos deberiamos poner
-	tarifa         = models.DecimalField(max_digits=10, decimal_places=2)
+	tarifa         = models.DecimalField(max_digits=20, decimal_places=2)
 	tarifa2        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
 	inicioEspecial = models.TimeField(blank = True, null = True)
 	finEspecial    = models.TimeField(blank = True, null = True)
@@ -67,9 +72,9 @@ class EsquemaTarifario(models.Model):
 
 class TarifaHora(EsquemaTarifario):
 	def calcularPrecio(self,horaInicio,horaFinal):
-		a=horaFinal-horaInicio
-		a=a.days*24+a.seconds/3600
-		a=ceil(a) #  De las horas se calcula el techo de ellas
+		a = horaFinal-horaInicio
+		a = a.days*24+a.seconds/3600
+		a = ceil(a) #  De las horas se calcula el techo de ellas
 		return(Decimal(self.tarifa*a).quantize(Decimal('1.00')))
 	def tipo(self):
 		return("Por Hora")
@@ -103,10 +108,10 @@ class TarifaHorayFraccion(EsquemaTarifario):
 
 class TarifaFinDeSemana(EsquemaTarifario):
 	def calcularPrecio(self,inicio,final):
-		minutosNormales = 0
+		minutosNormales    = 0
 		minutosFinDeSemana = 0
-		tiempoActual = inicio
-		minuto = timedelta(minutes=1)
+		tiempoActual       = inicio
+		minuto             = timedelta(minutes=1)
 		while tiempoActual < final:
 			# weekday() devuelve un numero del 0 al 6 tal que
 			# 0 = Lunes
@@ -129,10 +134,10 @@ class TarifaFinDeSemana(EsquemaTarifario):
 
 class TarifaHoraPico(EsquemaTarifario):
 	def calcularPrecio(self,reservaInicio,reservaFinal):
-		minutosPico = 0
+		minutosPico  = 0
 		minutosValle = 0
 		tiempoActual = reservaInicio
-		minuto = timedelta(minutes=1)
+		minuto       = timedelta(minutes=1)
 		while tiempoActual < reservaFinal:
 			horaActual = tiempoActual.time()
 			if horaActual >= self.inicioEspecial and horaActual < self.finEspecial:
