@@ -20,7 +20,8 @@ from estacionamientos.controller import (
     marzullo,
     get_client_ip,
     tasa_reservaciones,
-    calcular_porcentaje_de_tasa
+    calcular_porcentaje_de_tasa,
+    consultar_ingresos,
 )
 
 from estacionamientos.forms import (
@@ -343,20 +344,8 @@ def estacionamiento_ingreso(request):
         form = RifForm(request.POST)
         if form.is_valid():
 
-            rif                   = form.cleaned_data['rif']
-            listaEstacionamientos = Estacionamiento.objects.filter(rif = rif)
-            ingresoTotal          = 0
-            listaIngresos         = []
-
-            for estacionamiento in listaEstacionamientos:
-                listaFacturas = Pago.objects.filter(
-                    reserva__estacionamiento__nombre = estacionamiento.nombre
-                )
-                ingreso       = [estacionamiento.nombre, 0]
-                for factura in listaFacturas:
-                    ingreso[1] += factura.monto
-                listaIngresos += [ingreso]
-                ingresoTotal  += ingreso[1]
+            rif = form.cleaned_data['rif']
+            listaIngresos, ingresoTotal = consultar_ingresos(rif)
 
             return render(
                 request,
