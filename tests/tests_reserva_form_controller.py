@@ -10,7 +10,6 @@ from datetime import (
 
 from estacionamientos.controller import validarHorarioReserva
 
-from estacionamientos.forms import ReservaForm
 
 ##############################################################
 # Estacionamiento Reserva Controlador
@@ -36,16 +35,16 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=1)
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
+        self.assertEqual(x, (False, 'No puede haber reservas entre dos dias distintos'))
     #Borde
     def test_reservaHorarioCompleto(self):
         hoy=datetime.now()
         HoraApertura=time(6,0)
         HoraCierre=time(18,0)
         ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,6) + timedelta(days=1)
-        ReservaFin=datetime(hoy.year,hoy.month,hoy.day,18) + timedelta(days=2)
+        ReservaFin=datetime(hoy.year,hoy.month,hoy.day,18) + timedelta(days=1)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
+        self.assertEqual(x, (True,''))
 
     def test_reservaHorarioCompletoYUnMinuto(self):
         hoy=datetime.now()
@@ -54,7 +53,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,6) + timedelta(days=1)
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day,18,1) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
+        self.assertEqual(x, (False, 'El horario de fin de la reserva debe estar en un horario válido.'))
 
 
     #Normal
@@ -125,7 +124,3 @@ class ReservaFormControllerTestCase(TestCase):
         self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
 
     # malicia
-    def test_Reservacion_CamposVacios(self):
-        form_data = {}
-        form = ReservaForm(data = form_data)
-        self.assertFalse(form.is_valid())
