@@ -59,12 +59,12 @@ def get_client_ip(request):
 		ip = request.META.get('REMOTE_ADDR')
 	return ip
 
-def tasa_reservaciones(id_estacionamiento):
+def tasa_reservaciones(id_estacionamiento,prt=False):
 	e = Estacionamiento.objects.get(id = id_estacionamiento)
 	ahora = datetime.today().replace(hour=0,minute=0,second=0,microsecond=0)
 	reservas_filtradas = e.reserva_set.filter(finalReserva__gt=ahora)
-	lista_fechas=[(ahora+timedelta(i)).date() for i in range(8)]
-	lista_valores=[0 for i in range(8)]
+	lista_fechas=[(ahora+timedelta(i)).date() for i in range(7)]
+	lista_valores=[0 for i in range(7)]
 	ocupacion_por_dia = OrderedDict(zip(lista_fechas,lista_valores))
 	UN_DIA = timedelta(days = 1)
 	
@@ -76,18 +76,14 @@ def tasa_reservaciones(id_estacionamiento):
 			reserva_inicio = reserva.inicioReserva
 		reserva_final = reserva.finalReserva
 		final_aux=reserva_inicio.replace(hour=0,minute=0,second=0,microsecond=0)
-		while (reserva_final-reserva_inicio>UN_DIA): 
+		while (reserva_final.date()>reserva_inicio.date()): 
 			final_aux+=UN_DIA
 			longitud_reserva = final_aux-reserva_inicio
 			ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60+longitud_reserva.days*24*60
 			reserva_inicio = final_aux
-		if reserva_final.date()>reserva_inicio.date():
-			longitud_reserva = reserva_final.replace(hour=0,minute=0,second=0,microsecond=0) - reserva_inicio
-			ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60 + longitud_reserva.days*24*60
-			reserva_inicio+=UN_DIA
-			reserva_inicio=reserva_inicio.replace(hour=0,minute=0,second=0,microsecond=0)
 		longitud_reserva=reserva_final-reserva_inicio
 		ocupacion_por_dia[reserva_inicio.date()] += longitud_reserva.seconds/60 + longitud_reserva.days*24*60
+			
 	return ocupacion_por_dia
 
 def calcular_porcentaje_de_tasa(hora_apertura,hora_cierre, capacidad, ocupacion):

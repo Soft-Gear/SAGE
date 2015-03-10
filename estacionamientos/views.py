@@ -496,7 +496,7 @@ def grafica_tasa_de_reservacion(request):
     
     # Configuracion y creacion del grafico de barras con la biblioteca pyplot
     pyplot.switch_backend('Agg') # Para que no use Tk y aparezcan problemas con hilos
-    pyplot.bar(range(len(datos_ocupacion)), datos_ocupacion.values(), hold = False, color = '0.50')
+    pyplot.bar(range(len(datos_ocupacion)), datos_ocupacion.values(), hold = False, color = '#6495ed')
     pyplot.ylim([0,100])
     pyplot.title('Distribución de los porcentajes por fecha')
     pyplot.xticks(range(len(datos_ocupacion)), list(datos_ocupacion.keys()), rotation=20)
