@@ -21,7 +21,7 @@ class EstacionamientoForm(forms.Form):
     )
     
     rif_validator = RegexValidator(
-        regex   = '^[JVD]-?\d{8}-?\d$',
+        regex   = '^[JVD]-\d{8}-?\d$',
         message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'
     )
 
@@ -365,7 +365,7 @@ class PagoForm(forms.Form):
 class RifForm(forms.Form):
     
     rif_validator = RegexValidator(
-        regex   = '^[JVD]-?\d{8}-?\d$',
+        regex   = '^[JVD]-\d{8}-?\d$',
         message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'                              
     )
     
