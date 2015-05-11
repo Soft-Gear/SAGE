@@ -345,7 +345,7 @@ class PagoForm(forms.Form):
             ('Vista',  ' VISTA '),
             ('Mister', ' MISTER '),
             ('Xpress', ' XPRESS '),
-            ('Billetera', 'BILLETERA ELECTRONICA')
+            ('Billetera Electronica', 'BILLETERA ELECTRONICA')
         ),
         widget   = forms.RadioSelect()
     )
