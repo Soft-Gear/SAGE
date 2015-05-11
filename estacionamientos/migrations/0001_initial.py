@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
                 ('fechaTransaccion', models.DateTimeField()),
                 ('cedulaTipo', models.CharField(max_length=1)),
                 ('cedula', models.CharField(max_length=10)),
-                ('tarjetaTipo', models.CharField(max_length=6)),
+                ('tarjetaTipo', models.CharField(max_length=30)),
                 ('monto', models.DecimalField(max_digits=256, decimal_places=2)),
             ],
             options={
