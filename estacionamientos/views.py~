@@ -98,7 +98,7 @@ def estacionamientos_all(request):
             )
             obj2.save()
             propietarios = Propietario.objects.all()
-            form2 = PropietarioForm()            
+            form2 = EstacionamientoForm()            
 
     return render(
         request,

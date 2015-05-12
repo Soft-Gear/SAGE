@@ -149,7 +149,7 @@ class PropietarioForm(forms.Form):
         message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
     )
     
-    nombreProp = forms.CharField(
+    nombre = forms.CharField(
         required   = True,
         label      = "Nombre",
         validators = [name_validator],
