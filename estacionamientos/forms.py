@@ -8,6 +8,61 @@ class CustomSplitDateTimeWidget(SplitDateTimeWidget):
     def format_output(self, rendered_widgets):
         return '<p></p>'.join(rendered_widgets)
 
+class PropietarioForm(forms.Form):
+    
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-\d{8}$',
+        message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
+    )
+    
+    phone_validator = RegexValidator(
+        regex   = '^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}',
+        message = 'Debe introducir un formato válido de teléfono.'
+    )
+    
+    name_validator = RegexValidator(
+        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚ ]+$',
+        message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
+    )
+    
+    nombreProp = forms.CharField(
+        required   = True,
+        label      = "Nombre",
+        validators = [name_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Nombre'
+            , 'pattern'     : name_validator.regex.pattern
+            , 'message'     : name_validator.message
+            }
+        )
+    )
+    
+    telefono = forms.CharField(
+        required   = False,
+        validators = [phone_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Teléfono'
+            , 'pattern'     : phone_validator.regex.pattern
+            , 'message'     : phone_validator.message
+            }
+        )
+    )
+    
+    ci = forms.CharField(
+        required   = True,
+        label      = "Cédula",
+        validators = [ci_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'C/E: X-xxxxxxxxx'
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
+            }
+        )
+    )
+
 class EstacionamientoForm(forms.Form):
 
     phone_validator = RegexValidator(
@@ -128,61 +183,6 @@ class EstacionamientoForm(forms.Form):
             , 'placeholder' : 'RIF: X-xxxxxxxxx'
             , 'pattern'     : rif_validator.regex.pattern
             , 'message'     : rif_validator.message
-            }
-        )
-    )
-    
-class PropietarioForm(forms.Form):
-    
-    ci_validator = RegexValidator(
-        regex   = '^[VE]-\d{8}-?\d$',
-        message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'
-    )
-    
-    phone_validator = RegexValidator(
-        regex   = '^((0212)|(0412)|(0416)|(0414)|(0424)|(0426))-?\d{7}',
-        message = 'Debe introducir un formato válido de teléfono.'
-    )
-    
-    name_validator = RegexValidator(
-        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚ ]+$',
-        message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
-    )
-    
-    nombreProp = forms.CharField(
-        required   = True,
-        label      = "Nombre",
-        validators = [name_validator],
-        widget = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Nombre'
-            , 'pattern'     : name_validator.regex.pattern
-            , 'message'     : name_validator.message
-            }
-        )
-    )
-    
-    telefono = forms.CharField(
-        required   = False,
-        validators = [phone_validator],
-        widget     = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Teléfono'
-            , 'pattern'     : phone_validator.regex.pattern
-            , 'message'     : phone_validator.message
-            }
-        )
-    )
-    
-    ci = forms.CharField(
-        required   = True,
-        label      = "Cédula",
-        validators = [ci_validator],
-        widget = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'C/E: X-xxxxxxxxx'
-            , 'pattern'     : ci_validator.regex.pattern
-            , 'message'     : ci_validator.message
             }
         )
     )
