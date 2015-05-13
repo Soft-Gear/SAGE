@@ -265,6 +265,80 @@ class ReservaForm(forms.Form):
             }
         )
     )
+    
+class BilleteraElectronicaForm(forms.Form):
+    
+    idB_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un numero de id valido'
+    )
+    
+    pin_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un numero de PIN valido'
+    )
+    
+    name_billetera_validator = RegexValidator(
+        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚ ]+$',
+        message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
+    )
+    
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-\d{8}-?\d$',
+        message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'
+    )
+    
+    idBilletera = forms.CharField(
+        required = True,
+        label    = "ID Billetera",
+        validators = [idB_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : idB_validator.regex.pattern
+            , 'message'     : idB_validator.message
+            }
+        )                         
+    )
+    
+    PIN = forms.CharField(
+        required = True,
+        label    = "PIN",
+        validators = [pin_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )                         
+    )
+    
+    nombre = forms.CharField(
+        required   = True,
+        label      = "Nombre",
+        validators = [name_billetera_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Nombre'
+            , 'pattern'     : name_billetera_validator.regex.pattern
+            , 'message'     : name_billetera_validator.message
+            }
+        )
+    )
+    
+    CI = forms.CharField(
+        required   = True,
+        label      = "Cédula",
+        validators = [ci_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'X-xxxxxxxxx'
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
+            }
+        )
+    )
 
 class PagoForm(forms.Form):
     
@@ -284,18 +358,8 @@ class PagoForm(forms.Form):
     )
     
     card_validator = RegexValidator(
-        regex   = '([a-zA-Z_0-9]*)',
+        regex   = '^[0-9]{16}$',
         message = 'Introduzca un número de tarjeta válido de 16 dígitos.'
-    )
-    
-    pin_validator = RegexValidator(
-        regex   = '^[0-9]+$',
-        message = 'Introduzca un numero de PIN valido'
-    )
-    
-    idB_validator = RegexValidator(
-        regex   = '^[0-9]+$',
-        message = 'Introduzca un numero de id valido'
     )
     
     nombre = forms.CharField(
@@ -373,32 +437,6 @@ class PagoForm(forms.Form):
             , 'message'     : card_validator.message
             }
         )
-    )
-                        
-    pin = forms.CharField(
-        required = True,
-        label    = "PIN",
-        validators = [pin_validator],
-        widget = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'PIN'
-            , 'pattern'     : pin_validator.regex.pattern
-            , 'message'     : pin_validator.message
-            }
-        )                         
-    )
-    
-    idBilletera = forms.CharField(
-        required = True,
-        label    = "ID Billetera",
-        validators = [idB_validator],
-        widget = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'ID Billetera'
-            , 'pattern'     : idB_validator.regex.pattern
-            , 'message'     : idB_validator.message
-            }
-        )                         
     )
 
 class RifForm(forms.Form):
