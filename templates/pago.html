@@ -61,27 +61,32 @@
               </p>
               <table width="600" border="0" cellspacing="0">
                 <tr>
+                  <td><font size="32" color="green"><i class="fa fa-money"> </i></font></td>
                   <td><font size="32" color="blue"><i class="fa fa-cc-visa"> </i></font></td>
                   <td><font size="32" color="red"><i class="fa fa-cc-mastercard"> </i></font></td>
                   <td><font size="32" color="gray"><i class="fa fa-cc-amex"> </i></font></td>
-                  <td><font size="32" color="green"><i class="fa fa-money"> </i></font></td>
+                 
                 </tr>
                 <tr>
                   {% for choice in form.tarjetaTipo %}
                     <td> {{ choice }} </td>
                   {% endfor %}
+                </tr>               
+              </table>
+              <table border="0" cellpadding="0" >
+                <tr>
+                   <td width="280">{{form.idBilletera}}</td>
+                   <td width="280">{{form.tarjeta}}</td>
+                </tr>
+                <tr>
+                   <td width="280">{{form.pin}}</td>
+                   <td width="280">&nbsp;</td>
+                </tr>
+                <tr>
+                   <td width="280" height="50">&nbsp;</td>
+                   <td width="280" height="50">&nbsp;</td>
                 </tr>
               </table>
-              {{ form.tarjetaTipo.errors }}
-              <p>
-                {{ form.tarjeta }}
-                <span
-                  class='error'
-                  id='{{form.tarjeta.name}}_error'
-                  aria-live="polite"
-                ></span>
-              </p>
-              {{ form.tarjeta.errors }}
             </div>
           </div>
           <input

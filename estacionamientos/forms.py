@@ -2,6 +2,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 from django.forms.widgets import SplitDateTimeWidget
+from wsgiref.validate import validator
 
 class CustomSplitDateTimeWidget(SplitDateTimeWidget):
 
@@ -283,8 +284,18 @@ class PagoForm(forms.Form):
     )
     
     card_validator = RegexValidator(
-        regex   = '^[0-9]{16}$',
+        regex   = '([a-zA-Z_0-9]*)',
         message = 'Introduzca un número de tarjeta válido de 16 dígitos.'
+    )
+    
+    pin_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un numero de PIN valido'
+    )
+    
+    idB_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un numero de id valido'
     )
     
     nombre = forms.CharField(
@@ -342,10 +353,11 @@ class PagoForm(forms.Form):
         required = True,
         label    = 'tarjetaTipo',
         choices  = (
+            ('Billetera Electronica', 'BILLETERA ELECTRONICA'),
             ('Vista',  ' VISTA '),
             ('Mister', ' MISTER '),
-            ('Xpress', ' XPRESS '),
-            ('Billetera Electronica', 'BILLETERA ELECTRONICA')
+            ('Xpress', ' XPRESS ')
+            
         ),
         widget   = forms.RadioSelect()
     )
@@ -361,6 +373,32 @@ class PagoForm(forms.Form):
             , 'message'     : card_validator.message
             }
         )
+    )
+                        
+    pin = forms.CharField(
+        required = True,
+        label    = "PIN",
+        validators = [pin_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )                         
+    )
+    
+    idBilletera = forms.CharField(
+        required = True,
+        label    = "ID Billetera",
+        validators = [idB_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : idB_validator.regex.pattern
+            , 'message'     : idB_validator.message
+            }
+        )                         
     )
 
 class RifForm(forms.Form):
