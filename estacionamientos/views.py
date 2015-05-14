@@ -25,7 +25,6 @@ from estacionamientos.controller import (
 )
 
 from estacionamientos.forms import (
-    BilleteraElectronicaForm,
     EstacionamientoExtendedForm,
     EstacionamientoForm,
     ReservaForm,
@@ -34,7 +33,6 @@ from estacionamientos.forms import (
     CedulaForm,
 )
 from estacionamientos.models import (
-    BilleteraElectronica,
     Estacionamiento,
     Reserva,
     Pago,
@@ -499,74 +497,4 @@ def grafica_tasa_de_reservacion(request):
     return response
 
 def Billetera_Electronica(request, _id):
-    form = BilleteraElectronicaForm()
-    
-    try:
-        estacionamiento = Estacionamiento.objects.get(id = _id)
-    except ObjectDoesNotExist:
-        raise Http404
-    
-    if (estacionamiento.apertura is None):
-        return HttpResponse(status = 403) # No esta permitido acceder a esta vista aun
-    
-    if request.method == 'POST':
-        form = BilleteraElectronicaForm(request.POST)
-        if form.is_valid():
-            
-            inicioReserva = datetime(
-                year   = request.session['anioinicial'],
-                month  = request.session['mesinicial'],
-                day    = request.session['diainicial'],
-                hour   = request.session['inicioReservaHora'],
-                minute = request.session['inicioReservaMinuto']
-            )
-
-            finalReserva  = datetime(
-                year   = request.session['aniofinal'],
-                month  = request.session['mesfinal'],
-                day    = request.session['diafinal'],
-                hour   = request.session['finalReservaHora'],
-                minute = request.session['finalReservaMinuto']
-            )
-
-            reservaFinal = Reserva(
-                estacionamiento = estacionamiento,
-                inicioReserva   = inicioReserva,
-                finalReserva    = finalReserva,
-            )
-
-            # Se guarda la reserva en la base de datos
-            reservaFinal.save()
-
-            monto = Decimal(request.session['monto']).quantize(Decimal('1.00'))
-            pago = BilleteraElectronica(
-                fechaTransaccion = datetime.now(),
-                CI          = form.cleaned_data['CI'],               
-                monto            = monto,
-                reserva          = reservaFinal,
-            )
-
-
-            # Se guarda el recibo de pago en la base de datos
-            #pago.save()
-
-            return render(
-                request,
-                'Billetera-Electronica.html',
-                { "id"      : _id
-                , "pago"    : pago
-                , "color"   : "green"
-                , 'mensaje' : "Se realizo el pago de reserva satisfactoriamente."
-                }
-            )
-    
-    
-    return render(
-        request,
-        'Billetera-Electronica.html',
-        { "form" : form
-        }
-    )
-
-
-
+    return render(request, 'Billetera-Electronica.html')
