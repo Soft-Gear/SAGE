@@ -11,7 +11,7 @@ class CustomSplitDateTimeWidget(SplitDateTimeWidget):
 class PropietarioForm(forms.Form):
     
     ci_validator = RegexValidator(
-        regex   = '^[VE]-\d+$',
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
         message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
     )
     
@@ -21,7 +21,7 @@ class PropietarioForm(forms.Form):
     )
     
     name_validator = RegexValidator(
-        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚ ]+$',
+        regex   = '^[A-Za-zÃ¡Ã©Ã­Ã³ÃºÃ±Ã‘Ã�Ã‰Ã�Ã“Ãš ]+$',
         message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
     )
     
@@ -71,7 +71,7 @@ class EstacionamientoForm(forms.Form):
     )
     
     name_validator = RegexValidator(
-        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚ ]+$',
+        regex   = '^[A-Za-zÃ¡Ã©Ã­Ã³ÃºÃ±Ã‘Ã�Ã‰Ã�Ã“Ãš ]+$',
         message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
     )
     
@@ -323,12 +323,12 @@ class ReservaForm(forms.Form):
 class PagoForm(forms.Form):
     
     card_name_validator = RegexValidator(
-        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+        regex   = '^[a-zA-ZÃ¡Ã©Ã­Ã³ÃºÃ±Ã‘Ã�Ã‰Ã�Ã“Ãš][a-zA-ZÃ¡Ã©Ã­Ã³ÃºÃ±Ã‘Ã�Ã‰Ã�Ã“Ãš ]*$',
         message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
     )
     
     card_surname_validator = RegexValidator(
-        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+        regex   = '^[a-zA-ZÃ¡Ã©Ã­Ã³ÃºÃ±Ã‘Ã�Ã‰Ã�Ã“Ãš][a-zA-ZÃ¡Ã©Ã­Ã³ÃºÃ±Ã‘Ã�Ã‰Ã�Ã“Ãš ]*$',
         message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
     )
     
