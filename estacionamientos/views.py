@@ -552,7 +552,7 @@ def Billetera_Electronica(request, _id):
 
             return render(
                 request,
-                'billetera-electronica.html',
+                'Billetera-Electronica.html',
                 { "id"      : _id
                 , "pago"    : pago
                 , "color"   : "green"
@@ -563,7 +563,7 @@ def Billetera_Electronica(request, _id):
     
     return render(
         request,
-        'billetera-electronica.html',
+        'Billetera-Electronica.html',
         { "form" : form
         }
     )

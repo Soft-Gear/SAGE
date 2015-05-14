@@ -270,12 +270,12 @@ class BilleteraElectronicaForm(forms.Form):
     
     idB_validator = RegexValidator(
         regex   = '^[0-9]+$',
-        message = 'Introduzca un numero de id valido'
+        message = 'Introduzca un número de id valido'
     )
     
     pin_validator = RegexValidator(
         regex   = '^[0-9]+$',
-        message = 'Introduzca un numero de PIN valido'
+        message = 'Introduzca un número de PIN valido'
     )
     
     name_billetera_validator = RegexValidator(
@@ -284,8 +284,8 @@ class BilleteraElectronicaForm(forms.Form):
     )
     
     ci_validator = RegexValidator(
-        regex   = '^[VE]-[0-9]+$',
-        message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
+        message = 'Introduzca una cédula con un formato válido de la forma X-xxxxxxxx.'
     )
     
     idBilletera = forms.CharField(
@@ -333,7 +333,7 @@ class BilleteraElectronicaForm(forms.Form):
         validators = [ci_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'X-xxxxxxxxx'
+            , 'placeholder' : 'X-xxxxxxxx'
             , 'pattern'     : ci_validator.regex.pattern
             , 'message'     : ci_validator.message
             }
