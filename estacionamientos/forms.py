@@ -284,7 +284,7 @@ class BilleteraElectronicaForm(forms.Form):
     )
     
     ci_validator = RegexValidator(
-        regex   = '^[VE]-\d{8}-?\d$',
+        regex   = '^[VE]-[0-9]+$',
         message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'
     )
     
