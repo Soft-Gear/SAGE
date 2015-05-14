@@ -18,3 +18,4 @@ urlpatterns = patterns('',
     url(r'^grafica/.*$', views.grafica_tasa_de_reservacion, name = 'grafica_tasa_de_reservacion'),
     url(r'^(?P<_id>\d+)/Billetera-Electronica$',views.Billetera_Electronica, name = 'Billetera_Electronica')
 )
+#SoloPrueba
