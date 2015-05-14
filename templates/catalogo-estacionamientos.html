@@ -41,15 +41,16 @@
           <h3>No hay estacionamientos</h3>
         {% endif %}
       </table>
-      <hr>
+      <hr>      
     </div>
+    
     <div class="col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading">
           <div class="panel-title">
             <i class="glyphicon glyphicon-wrench pull-right"></i>
             <h4>
-              Crear estacionamiento
+              Crear Estacionamiento
             </h4>
           </div>
         </div>
@@ -72,6 +73,82 @@
               <div class="controls">
                 <button type="submit" class="btn btn-primary">
                   Crear estacionamiento
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> 
+  
+  <!-- Solucion para alinear la tabla de propietarios -->
+  <div class="col-sm-2"> 
+  </div>
+    
+  <div class="col-sm-10">
+    <h3><i class="fa fa-bus"></i>
+      Propietarios
+    </h3>
+    <hr>
+    <div class="col-md-8">
+      <table class="table table-striped">
+        {% if propietarios %}
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nombre</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in propietarios %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{obj.nombre}}</td>
+              <td>{{obj.ci}}</td>
+              <td>{{obj.tel}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        {% else %}
+          <h3>No hay propietarios</h3>
+        {% endif %}
+      </table>
+      <hr>      
+    </div>
+    
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <i class="glyphicon glyphicon-wrench pull-right"></i>
+            <h4>
+              Crear Propietario
+            </h4>
+          </div>
+        </div>
+        <div class="panel-body">
+          <form action="." method="post" class="form form-vertical">
+            {% csrf_token %}
+            {% for field in form2 %}
+              <div class="control-group">
+                <div class="controls">
+                  {{ field }}
+                  <span class='error' id='{{field.name}}_error' aria-live="polite">
+                    {{ field.errors }}
+                  </span>
+                  <p>
+                </div>
+              </div>
+            {% endfor %}
+            <div class="control-group">
+              <label></label>
+              <div class="controls">
+                <button type="submit" class="btn btn-primary">
+                  Crear propietario
                 </button>
               </div>
             </div>

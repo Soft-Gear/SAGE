@@ -1,0 +1,72 @@
+Al simplemente eliminar el atributo propietario de la clase Estacionamiento, y correr las pruebas se encuentran 57 errores todos producidos al intentar crear un estacionamiento para ser usado en una prueba, ya que requiere el atributo propietario.
+
+Errores a continuacion:
+
+En tests_consulta_reserva.py
+
+1. test_dos_estacionamientos_muchos_pagos
+2. test_estacionamiento_sin_pagos
+3. test_muchos_estacionamiento_con_disintos_rif #Test con error de gramatica en el nombre tambien?
+4. test_muchos_estacionamiento_mitad_sin_pagos
+5. test_muchos_estacionamiento_sin_pagos
+6. test_un_estacionamiento_muchos_pagos
+7. test_un_estacionamiento_un_pago
+
+En tests_integration.py
+
+8. test_llamada_a_la_generacion_de_grafica_bad_request
+9. test_llamada_a_la_generacion_de_grafica_empty_request
+10. test_llamada_a_la_generacion_de_grafica_normal_request
+11. test_llamada_a_la_reserva_por_sms_bad_request
+12. test_llamada_a_la_reserva_por_sms_empty_request
+13. test_llamada_a_los_detalles_de_un_estacionamiento
+14. test_llamada_a_pago_get
+15. test_llamada_a_pago_post
+16. test_llamada_a_pago_sin_parametros_especificados_aun
+17. test_llamada_a_reserva
+18. test_llamada_a_reserva_sin_parametros_especificados_aun
+19. test_llamada_a_tasa_sin_parametros_especificados_aun
+
+En tests_marzullo.py
+
+20. testAddThreeReservations
+21. testAddTwoReservation
+22. testAddTwoReservation2
+23. testAllSmallestReservations
+24. testFiveSpotsFiveReservation
+25. testFiveSpotsSixReservation
+26. testFiveSpotsSixReservationNoOverlapping
+27. testFullPlusOne
+28. testManyReservationsMaxOverlapping
+29. testManyReservationsOneOverlap
+30. testNoSpotParking
+31. testOneReservationEarly
+32. testOneReservationFullDay
+33. testOneReservationLate
+34. testOneReservationMax
+35. testSmallestReservation
+36. testTenSpotsOneReservation
+
+En tests_tasa_reservacion.py
+
+37. test_dos_reservaciones_mismo_dia
+38. test_estacionamiento_horario_restringido_mitad_capacidad_primer_dia
+39. test_estacionamiento_horario_restringido_toda_capacidad_primer_dia
+40. test_estacionamiento_reserva_siete_dias
+41. test_estacionamiento_reserva_siete_dias_antes_media_noche
+42. test_estacionamiento_reserva_un_dia_dos_casillas
+43. test_estacionamiento_reserva_un_dia_mas_un_minuto
+44. test_estacionamiento_reserva_un_dia_sola_casilla
+45. test_estacionamiento_reserva_un_dia_sola_casilla_menos_un_minuto
+46. test_estacionamiento_reserva_una_hora_cambio_fecha_mediaNoche
+47. test_estacionamiento_reserva_una_hora_dos_puestos
+48. test_estacionamiento_reserva_una_hora_sin_cambio_fecha
+49. test_estacionamiento_siempre_abierto_mitad_capacidad_primer_dia
+50. test_estacionamiento_sin_reservas
+51. test_estacionamiento_vacio
+52. test_horario_restringido_toda_capacidad_primer_dia_exceso_1_minuto
+53. test_horario_restringido_toda_capacidad_primer_dia_y_un_minuto
+54. test_reserva_6_dias_misma_hora
+55. test_reserva_inicio_antes_de_inicioVentana_fin_despues_inicioVentana
+56. test_reservaciones_de_una_hora_24_horas
+57. test_reservaciones_de_una_hora_6_a_18_horas

@@ -35,7 +35,7 @@ class ReservaFormControllerTestCase(TestCase):
         ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=1)
         ReservaFin=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=2)
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre)
-        self.assertEqual(x, (False, 'No puede haber reservas entre dos dias distintos'))
+        self.assertEqual(x, (False, 'No puede haber reservas entre dos días distintos'))
     #Borde
     def test_reservaHorarioCompleto(self):
         hoy=datetime.now()

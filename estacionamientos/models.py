@@ -6,8 +6,16 @@ from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
 from datetime import timedelta
 
+class Propietario(models.Model):	
+	nombre = models.CharField(max_length = 50)
+	ci     = models.CharField(max_length = 12)
+	tel    = models.CharField(max_length = 30)
+
+	def __str__(self):
+		return self.nombre+' '+str(self.id) 
+
 class Estacionamiento(models.Model):
-	propietario = models.CharField(max_length = 50, help_text = "Nombre Propio")
+	propietario = models.CharField(max_length = 30)
 	nombre      = models.CharField(max_length = 50)
 	direccion   = models.TextField(max_length = 120)
 	telefono1   = models.CharField(blank = True, null = True, max_length = 30)

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from estacionamientos.models import Estacionamiento, Reserva, Pago, TarifaMinuto,\
+from estacionamientos.models import Propietario, Estacionamiento, Reserva, Pago, TarifaMinuto,\
     TarifaHorayFraccion, TarifaHora, BilleteraElectronica
 
+admin.site.register(Propietario)
 admin.site.register(Estacionamiento)
 admin.site.register(Reserva)
 admin.site.register(Pago)

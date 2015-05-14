@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Archivo con funciones de control para SAGE
 from estacionamientos.models import Estacionamiento, Reserva, Pago
 from datetime import datetime, timedelta, time
@@ -23,7 +25,7 @@ def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
 		if finReserva-inicioReserva<=seven_days :
 			return (True,'')
 		else:
-			return(False,'Se puede reservar un puesto por un maximo de 7 dias.')
+			return(False,'Se puede reservar un puesto por un maximo de 7 días.')
 	else:
 		hora_inicio = time(hour = inicioReserva.hour, minute = inicioReserva.minute)
 		hora_final  = time(hour = finReserva.hour   , minute = finReserva.minute)
@@ -32,7 +34,7 @@ def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
 		if hora_final > cierre:
 			return (False, 'El horario de fin de la reserva debe estar en un horario válido.')
 		if inicioReserva.date()!=finReserva.date():
-			return (False, 'No puede haber reservas entre dos dias distintos')
+			return (False, 'No puede haber reservas entre dos días distintos')
 		return (True,'')
 
 def marzullo(idEstacionamiento, hIn, hOut):
