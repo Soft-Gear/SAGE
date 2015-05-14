@@ -9,7 +9,7 @@ from datetime import timedelta
 class Propietario(models.Model):	
 	nombre = models.CharField(max_length = 50)
 	ci     = models.CharField(max_length = 12)
-	tel    = models.CharField(blank = True, null = True, max_length = 30)
+	tel    = models.CharField(max_length = 30)
 
 	def __str__(self):
 		return self.nombre+' '+str(self.id) 

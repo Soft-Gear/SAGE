@@ -11,7 +11,7 @@ class CustomSplitDateTimeWidget(SplitDateTimeWidget):
 class PropietarioForm(forms.Form):
     
     ci_validator = RegexValidator(
-        regex   = '^[VE]-\d{8}$',
+        regex   = '^[VE]-\d+$',
         message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
     )
     
@@ -39,7 +39,7 @@ class PropietarioForm(forms.Form):
     )
     
     telefono = forms.CharField(
-        required   = False,
+        required   = True,
         validators = [phone_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
@@ -56,7 +56,7 @@ class PropietarioForm(forms.Form):
         validators = [ci_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'C/E: X-xxxxxxxxx'
+            , 'placeholder' : 'C/I: X-xxxxxxxxx'
             , 'pattern'     : ci_validator.regex.pattern
             , 'message'     : ci_validator.message
             }
