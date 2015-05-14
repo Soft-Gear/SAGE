@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Archivo con funciones de control para SAGE
 from estacionamientos.models import Estacionamiento, Reserva, Pago
 from datetime import datetime, timedelta, time
@@ -16,23 +18,23 @@ def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
 	if inicioReserva.date() < datetime.now().date():
 		return (False, 'La reserva no puede tener lugar en el pasado.')
 	if finReserva.date() > (datetime.now()+timedelta(days=6)).date():
-		return (False, 'La reserva debe estar dentro de los prÛximos 7 dÌas.')
+		return (False, 'La reserva debe estar dentro de los pr√≥ximos 7 d√≠as.')
 	if apertura.hour==0 and apertura.minute==0 \
 		and cierre.hour==23 and cierre.minute==59:
 		seven_days=timedelta(days=7)
 		if finReserva-inicioReserva<=seven_days :
 			return (True,'')
 		else:
-			return(False,'Se puede reservar un puesto por un maximo de 7 dias.')
+			return(False,'Se puede reservar un puesto por un maximo de 7 d√≠as.')
 	else:
 		hora_inicio = time(hour = inicioReserva.hour, minute = inicioReserva.minute)
 		hora_final  = time(hour = finReserva.hour   , minute = finReserva.minute)
 		if hora_inicio<apertura:
-			return (False, 'El horario de inicio de reserva debe estar en un horario v·lido.')
+			return (False, 'El horario de inicio de reserva debe estar en un horario v√°lido.')
 		if hora_final > cierre:
-			return (False, 'El horario de fin de la reserva debe estar en un horario v·lido.')
+			return (False, 'El horario de fin de la reserva debe estar en un horario v√°lido.')
 		if inicioReserva.date()!=finReserva.date():
-			return (False, 'No puede haber reservas entre dos dias distintos')
+			return (False, 'No puede haber reservas entre dos d√≠as distintos')
 		return (True,'')
 
 def marzullo(idEstacionamiento, hIn, hOut):
