@@ -417,7 +417,6 @@ class PagoForm(forms.Form):
         required = True,
         label    = 'tarjetaTipo',
         choices  = (
-            ('Billetera Electronica', 'BILLETERA ELECTRONICA'),
             ('Vista',  ' VISTA '),
             ('Mister', ' MISTER '),
             ('Xpress', ' XPRESS ')

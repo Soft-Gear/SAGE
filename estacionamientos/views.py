@@ -495,3 +495,6 @@ def grafica_tasa_de_reservacion(request):
     pyplot.close()
     
     return response
+
+def Billetera_Electronica(request, _id):
+    return render(request, 'Billetera-Electronica.html')
