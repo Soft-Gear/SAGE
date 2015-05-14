@@ -323,7 +323,7 @@ class ReservaForm(forms.Form):
 class PagoForm(forms.Form):
     
     card_name_validator = RegexValidator(
-		regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
         message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
     )
     
