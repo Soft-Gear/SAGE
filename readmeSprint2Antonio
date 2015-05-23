@@ -1,0 +1,5 @@
+Ya billetera electronica esta funcional y genera el id como lo pueden ver en la
+tabla. SE guarda correctamente en la base de datos. 
+
+Lo que falta son puras cuestiones esteticas, crear el nuevo template y mudar las
+cosas ahí, con esto creo que está funcional y se puede trabajar con las otras funciones.

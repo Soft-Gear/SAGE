@@ -27,6 +27,7 @@ from estacionamientos.controller import (
 from estacionamientos.forms import (
     EstacionamientoExtendedForm,
     PropietarioForm,
+    BilleteraElectronicaForm,
     EstacionamientoForm,
     ReservaForm,
     PagoForm,
@@ -36,6 +37,7 @@ from estacionamientos.forms import (
 from estacionamientos.models import (
     Estacionamiento,
     Propietario,
+    BilleteraElectronica,
     Reserva,
     Pago,
     TarifaHora,
@@ -49,17 +51,20 @@ from estacionamientos.models import (
 def estacionamientos_all(request):
     estacionamientos = Estacionamiento.objects.all()
     propietarios = Propietario.objects.all()
+    billeteras = BilleteraElectronica.objects.all()
 
     # Si es un GET, mandamos un formulario vacio
     if request.method == 'GET':
         form  = EstacionamientoForm()
-        form2 = PropietarioForm() 
+        form2 = PropietarioForm()
+        form3 = BilleteraElectronicaForm()
 
     # Si es POST, se verifica la información recibida
     elif request.method == 'POST':
         # Creamos un formulario con los datos que recibimos
         form  = EstacionamientoForm(request.POST)
         form2 = PropietarioForm(request.POST)
+        form3 = BilleteraElectronicaForm(request.POST)
 
         # Parte de la entrega era limitar la cantidad maxima de
         # estacionamientos a 5
@@ -98,15 +103,28 @@ def estacionamientos_all(request):
             )
             obj2.save()
             propietarios = Propietario.objects.all()
-            form2 = PropietarioForm()            
+            form2 = PropietarioForm()        
+            
+        if form3.is_valid():
+            obj3 = BilleteraElectronica(
+                nombre      = form3.cleaned_data['nombreUsu'],
+                CI          = form3.cleaned_data['ciUsu'],
+                PIN         = form3.cleaned_data['pinUsu'],
+                idBilletera = len(billeteras)
+            )
+            obj3.save()
+            billeteras = BilleteraElectronica.objects.all()
+            form3 = BilleteraElectronicaForm()
 
     return render(
         request,
         'catalogo-estacionamientos.html',
         { 'form': form
         , 'form2': form2
+        , 'form3' : form3
         , 'estacionamientos': estacionamientos
         , 'propietarios': propietarios
+        , 'billeteras' : billeteras
         }
     )
 
