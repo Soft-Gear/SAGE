@@ -33,7 +33,10 @@ from estacionamientos.forms import (
     PagoForm,
     RifForm,
     CedulaForm,
+    ConsultarSaldoForm,
+    RecargarSaldoForm
 )
+
 from estacionamientos.models import (
     Estacionamiento,
     Propietario,
@@ -533,3 +536,40 @@ def grafica_tasa_de_reservacion(request):
 
 def Billetera_Electronica(request, _id):
     return render(request, 'Billetera-Electronica.html')
+
+def billetera_electronica_saldo(request):
+    form = ConsultarSaldoForm()
+    estacionamiento = Estacionamiento.objects.all()
+    if request.method == 'POST':
+         return render(
+            request, 'template-mensaje.html',
+            { 'color'   : 'black'
+            , 'mensaje' : 'Su saldo es: 0.00 BsF '
+            }
+        )
+    
+    return render(request,  
+        'billetera_electronica_saldo.html',
+        { 'form': form
+        , 'estacionamiento': estacionamiento
+        }
+    )
+
+
+def billetera_electronica_recarga(request):
+    form = RecargarSaldoForm()
+    estacionamiento = Estacionamiento.objects.all()
+    if request.method == 'POST':
+         return render(
+            request, 'template-mensaje.html',
+            { 'color'   : 'black'
+            , 'mensaje' : 'Se ha recargado a su cuenta: 0.00 BsF '
+            }
+        )
+    
+    return render(request,  
+        'billetera_electronica_recarga.html',
+        { 'form': form
+        , 'estacionamiento': estacionamiento
+        }
+    )
