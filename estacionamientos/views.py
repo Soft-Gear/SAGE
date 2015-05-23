@@ -515,3 +515,33 @@ def grafica_tasa_de_reservacion(request):
 
 def Billetera_Electronica(request, _id):
     return render(request, 'Billetera-Electronica.html')
+
+def propietarios_all(request):
+    propietarios = Propietario.objects.all()
+
+    # Si es un GET, mandamos un formulario vacio
+    if request.method == 'GET':
+        form = PropietarioForm() 
+        
+    # Si es POST, se verifica la información recibida
+    elif request.method == 'POST':
+        # Creamos un formulario con los datos que recibimos
+        form = PropietarioForm(request.POST)
+        
+        if form.is_valid():
+            obj1 = Propietario(
+                nombre  = form.cleaned_data['nombreProp'],
+                ci      = form.cleaned_data['ci'],
+                tel     = form.cleaned_data['telefono']
+            )
+            obj1.save()
+            propietarios = Propietario.objects.all()
+            form = PropietarioForm()
+            
+    return render(
+        request,
+        'catalogo-propietarios.html',
+        { 'form': form
+        , 'propietarios': propietarios
+        }
+    )
