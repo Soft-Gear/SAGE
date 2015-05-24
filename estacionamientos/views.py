@@ -53,13 +53,11 @@ def estacionamientos_all(request):
     # Si es un GET, mandamos un formulario vacio
     if request.method == 'GET':
         form  = EstacionamientoForm()
-        form2 = PropietarioForm() 
 
     # Si es POST, se verifica la información recibida
     elif request.method == 'POST':
         # Creamos un formulario con los datos que recibimos
         form  = EstacionamientoForm(request.POST)
-        form2 = PropietarioForm(request.POST)
 
         # Parte de la entrega era limitar la cantidad maxima de
         # estacionamientos a 5
@@ -90,23 +88,11 @@ def estacionamientos_all(request):
             estacionamientos = Estacionamiento.objects.all()
             form = EstacionamientoForm()
             
-        if form2.is_valid():
-            obj2 = Propietario(
-                nombre  = form2.cleaned_data['nombreProp'],
-                ci      = form2.cleaned_data['ci'],
-                tel     = form2.cleaned_data['telefono']
-            )
-            obj2.save()
-            propietarios = Propietario.objects.all()
-            form2 = PropietarioForm()            
-
     return render(
         request,
         'catalogo-estacionamientos.html',
         { 'form': form
-        , 'form2': form2
         , 'estacionamientos': estacionamientos
-        , 'propietarios': propietarios
         }
     )
 
