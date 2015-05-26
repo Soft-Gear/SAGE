@@ -120,6 +120,44 @@ class BilleteraElectronicaForm(forms.Form):
             }
         )
     )
+    
+class ValidarBilleteraForm(forms.Form):
+
+    pin_validator = RegexValidator(
+        regex =   '^\d{4}$',
+        message = 'EL PIN debe ser 4 digitos'
+    )
+    
+    id_validator = RegexValidator(
+        regex   = '^\[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    idValid = forms.CharField(
+        required   = True,
+        label      = "ID",
+        validators = [id_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID'
+            , 'pattern'     : id_validator.regex.pattern
+            , 'message'     : id_validator.message
+            }
+        )
+    )
+       
+    pinValid = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
 
 class EstacionamientoForm(forms.Form):
 
@@ -253,8 +291,8 @@ class ConsultarSaldoForm(forms.Form):
     )
     
     id_validator = RegexValidator(
-        regex   = '^\d{4}$',
-        message = 'Introduzca un id de 4 digitos'
+        regex   = '^\[0-9]+$',
+        message = 'Introduzca un id de digitos'
     )
     
     idBill = forms.CharField(
@@ -287,12 +325,12 @@ class ConsultarSaldoForm(forms.Form):
 class RecargarSaldoForm(forms.Form):
     
     card_name_validator = RegexValidator(
-        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ ]*$',
         message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
     )
     
     card_surname_validator = RegexValidator(
-        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚ ]*$',
+        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ ]*$',
         message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
     )
     
@@ -372,8 +410,8 @@ class RecargarSaldoForm(forms.Form):
     
     
     id_validator = RegexValidator(
-        regex   = '^\d{4}$',
-        message = 'Introduzca un id de 4 digitos'
+        regex   = '^\[0-9]+$',
+        message = 'Introduzca un id de digitos'
     )
     
     idBill = forms.CharField(

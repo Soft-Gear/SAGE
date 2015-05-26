@@ -1,5 +1,5 @@
-Ya billetera electronica esta funcional y genera el id como lo pueden ver en la
-tabla. SE guarda correctamente en la base de datos. 
+Ya la billetera tiene su template y se puede crear satisfactoriamente la billetera
+falta recargar, consulta saldo y pagar con la billetera. 
 
-Lo que falta son puras cuestiones esteticas, crear el nuevo template y mudar las
-cosas ahí, con esto creo que está funcional y se puede trabajar con las otras funciones.
+Necesio ayuda con los botones de consultar saldo y recargar porqe no llevan al link
+que quiero, por favor si ienes idea explicame para arreglarlo. Mientras busco por internet.
