@@ -524,7 +524,7 @@ def grafica_tasa_de_reservacion(request):
 
 def billetera_electronica(request):
 
-    if request.method =="GET":     
+    if request.method =="GET":   
         form = ValidarBilleteraForm()    
         return render(
             request, 'Billetera-Electronica.html',
@@ -535,12 +535,12 @@ def billetera_electronica(request):
     if request.method == 'POST':
     
         form = ValidarBilleteraForm(request.POST)
-        
         #Guarda lo que introdujo el usuario
         if form.is_valid():
             identificador = form.cleaned_data['idValid']
+            print(identificador)
             pinVal = form.cleaned_data['pinValid']
-        
+            print(pinVal)
             #Busca la billetera en la base de datos    
             try:    
                 billetera = BilleteraElectronica.get(id = identificador)
@@ -568,6 +568,7 @@ def billetera_electronica(request):
             )
             
         else:
+            print("hola mundo")
             return render(request,'404.html')
     
 def billetera_electronica_crear(request):

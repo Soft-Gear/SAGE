@@ -129,7 +129,7 @@ class ValidarBilleteraForm(forms.Form):
     )
     
     id_validator = RegexValidator(
-        regex   = '^\[0-9]+$',
+        regex   = '^[0-9]+$',
         message = 'Introduzca un id de digitos'
     )
     
@@ -146,7 +146,7 @@ class ValidarBilleteraForm(forms.Form):
         )
     )
        
-    pinValid = forms.CharField(
+    pinValid = forms.IntegerField(
         required   = True,
         label      = "PIN",
         validators = [pin_validator],

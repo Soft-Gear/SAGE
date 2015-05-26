@@ -73,7 +73,7 @@ class BilleteraElectronica(models.Model):
 	#reserva     = models.ForeignKey(Reserva)
 	
 	def __str__(self):
-		return self.nombre + " " + self.idBilletera + " " + str(self.id)
+		return self.nombre + " " + self.idBilletera + " " + str(self.id)    
 
 class EsquemaTarifario(models.Model):
 

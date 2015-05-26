@@ -14,8 +14,7 @@
           </div>
         </div>
         <div class="panel-body">
-          <form action="." method="post" class="form form-vertical">
-            {% csrf_token %}
+
             {% for field in form %}
               <div class="control-group">
                 <div class="controls">
@@ -29,17 +28,22 @@
             {% endfor %}
             <div class="control-group">
               <label></label>
-              <a href="/estacionamientos/billetera_electronica">
-                <div class="controls">
+              
+              <div class="controls">
+              <form action ="/estacionamientos/billetera_electronica" method="post" class="form form-vertical">
+                {% csrf_token %}
                 <button type="submit" class="btn btn-primary">
                   Consultar Saldo
                 </button>
-              </a>
-              <a href="/estacionamientos/billetera_electronica/recargar">
+              </form>
+             
+              <form action ="/estacionamientos/billetera_electronica/recargar" method="post" class="form form-vertical">
+                  {% csrf_token %}
                   <button type="submit" class="btn btn-primary">
                       Recargar Saldo
                   </button>
-              </a>
+              </form>
+              
               <div class="controls">
               <a href="/estacionamientos/billetera_electronica/crear">
                   Crear Billetera Nueva
@@ -47,7 +51,6 @@
               </div>
             </div>
           </div>
-        </form>
       </div>
     </div>
   </div>
