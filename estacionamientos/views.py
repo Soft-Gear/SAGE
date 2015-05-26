@@ -515,12 +515,12 @@ def propietarios_all(request):
         form = PropietarioForm(request.POST)
         
         if form.is_valid():
-            obj1 = Propietario(
+            obj = Propietario(
                 nombre  = form.cleaned_data['nombreProp'],
                 ci      = form.cleaned_data['ci'],
                 tel     = form.cleaned_data['telefono']
             )
-            obj1.save()
+            obj.save()
             propietarios = Propietario.objects.all()
             form = PropietarioForm()
             
