@@ -48,7 +48,6 @@ from estacionamientos.models import (
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
     estacionamientos = Estacionamiento.objects.all()
-    propietarios = Propietario.objects.all()
 
     # Si es un GET, mandamos un formulario vacio
     if request.method == 'GET':
@@ -76,7 +75,7 @@ def estacionamientos_all(request):
                 objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['propietario'])
                 
                 obj = Estacionamiento(
-                    propietario = objetoPropietario,
+                    ci_propietario = objetoPropietario,
                     nombre      = form.cleaned_data['nombre'],
                     direccion   = form.cleaned_data['direccion'],
                     rif         = form.cleaned_data['rif'],
