@@ -8,14 +8,14 @@ from datetime import timedelta
 
 class Propietario(models.Model):
 	nombre = models.CharField(max_length = 50)
-	ci     = models.CharField(max_length = 12, primary_key=True)
+	ci     = models.CharField(max_length = 12, unique = True)
 	tel    = models.CharField(max_length = 30)
 
 	def __str__(self):
-		return self.nombre+' '+self.ci+' '+self.tel
+		return self.nombre
 
 class Estacionamiento(models.Model):
-	propietario = models.ForeignKey("Propietario") #CI del propietario! No el nombre.
+	ci_propietario = models.ForeignKey("Propietario") #CI del propietario! No el nombre.
 	nombre      = models.CharField(max_length = 50)
 	direccion   = models.TextField(max_length = 120)
 	telefono1   = models.CharField(blank = True, null = True, max_length = 30)
@@ -35,7 +35,7 @@ class Estacionamiento(models.Model):
 	capacidad    = models.IntegerField(blank = True, null = True)
 
 	def __str__(self):
-		return self.nombre+' '+str(self.propietario)
+		return self.nombre+' '+str(self.ci_propietario)
 
 class Reserva(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
