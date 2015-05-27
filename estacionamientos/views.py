@@ -72,7 +72,7 @@ def estacionamientos_all(request):
         # el constructor del modelo
         if form.is_valid():
             try: 
-                objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['propietario'])
+                objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['ci_propietario'])
                 
                 obj = Estacionamiento(
                     ci_propietario = objetoPropietario,
@@ -91,7 +91,12 @@ def estacionamientos_all(request):
                 form = EstacionamientoForm()
             
             except:
-                pass
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'CI no pertenece a ningun propietario.'
+                    }
+                )
             
     return render(
         request,
