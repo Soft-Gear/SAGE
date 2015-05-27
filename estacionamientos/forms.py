@@ -70,8 +70,13 @@ class EstacionamientoForm(forms.Form):
         message = 'Debe introducir un formato válido de teléfono.'
     )
     
-    name_validator = RegexValidator(
+    nameP_validator = RegexValidator(
         regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ\'\- ]+$',
+        message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
+    )
+    
+    nameE_validator = RegexValidator(
+        regex   = '^[A-Za-z0-9áéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ\'\-\! ]+$',
         message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
     )
     
@@ -84,12 +89,12 @@ class EstacionamientoForm(forms.Form):
     propietario = forms.CharField(
         required   = True,
         label      = "Propietario",
-        validators = [name_validator],
+        validators = [nameP_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Propietario'
-            , 'pattern'     : name_validator.regex.pattern
-            , 'message'     : name_validator.message
+            , 'pattern'     : nameP_validator.regex.pattern
+            , 'message'     : nameP_validator.message
             }
         )
     )
@@ -97,12 +102,12 @@ class EstacionamientoForm(forms.Form):
     nombre = forms.CharField(
         required = True,
         label    = "Nombre del Estacionamiento",
-        validators = [name_validator],
+        validators = [nameE_validator],
         widget   = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre del Estacionamiento'
-            , 'pattern'     : name_validator.regex.pattern
-            , 'message'     : name_validator.message
+            , 'pattern'     : nameE_validator.regex.pattern
+            , 'message'     : nameE_validator.message
             }
         )
     )
