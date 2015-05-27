@@ -27,15 +27,21 @@ from estacionamientos.controller import (
 from estacionamientos.forms import (
     EstacionamientoExtendedForm,
     PropietarioForm,
+    BilleteraElectronicaForm,
+    ValidarBilleteraForm,
     EstacionamientoForm,
     ReservaForm,
     PagoForm,
     RifForm,
     CedulaForm,
+    ConsultarSaldoForm,
+    RecargarSaldoForm
 )
+
 from estacionamientos.models import (
     Estacionamiento,
     Propietario,
+    BilleteraElectronica,
     Reserva,
     Pago,
     TarifaHora,
@@ -52,12 +58,10 @@ def estacionamientos_all(request):
     # Si es un GET, mandamos un formulario vacio
     if request.method == 'GET':
         form  = EstacionamientoForm()
-
     # Si es POST, se verifica la información recibida
     elif request.method == 'POST':
         # Creamos un formulario con los datos que recibimos
         form  = EstacionamientoForm(request.POST)
-
         # Parte de la entrega era limitar la cantidad maxima de
         # estacionamientos a 5
         if len(estacionamientos) >= 5:
@@ -350,6 +354,9 @@ def estacionamiento_pago(request,_id):
         'pago.html',
         { 'form' : form }
     )
+    
+def estacionamiento_pago_billetera(request,_id):
+    pass
 
 def estacionamiento_ingreso(request):
     form = RifForm()
@@ -509,9 +516,6 @@ def grafica_tasa_de_reservacion(request):
     
     return response
 
-def Billetera_Electronica(request, _id):
-    return render(request, 'Billetera-Electronica.html')
-
 def propietarios_all(request):
     propietarios = Propietario.objects.all()
 
@@ -539,5 +543,114 @@ def propietarios_all(request):
         'catalogo-propietarios.html',
         { 'form': form
         , 'propietarios': propietarios
+
+def billetera_electronica(request):
+    
+    if request.method =="GET":   
+        form = ValidarBilleteraForm()
+    
+    #Si recibe los datos del usuario    
+    if request.method == 'POST':
+    
+        form = ValidarBilleteraForm(request.POST)
+        #Guarda lo que introdujo el usuario
+        if form.is_valid():
+            identificador = form.cleaned_data['idValid']
+            pinVal = form.cleaned_data['pinValid']
+            #Busca la billetera en la base de datos    
+            try:    
+                billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
+            except ObjectDoesNotExist:
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'black'
+                , 'mensaje' : 'Información invalida '
+                }
+            )
+            
+            #Verifica que el PIN sea el correcto    
+            if pinVal != billetera.PIN:
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'black'
+                , 'mensaje' : 'Información invalida '
+                }
+            )
+            
+            return render(
+                request,
+                'billetera_electronica_saldo.html',
+                {'billetera' : billetera}
+            )
+        
+        return render(
+            request, 'Billetera-Electronica.html',
+            {'form': form}
+        )
+            
+    
+def billetera_electronica_crear(request):
+    billeteras = BilleteraElectronica.objects.all()
+    
+    if request.method == 'GET':
+        form = BilleteraElectronicaForm()
+
+    elif request.method == 'POST':
+        
+        form = BilleteraElectronicaForm(request.POST) 
+        if form.is_valid():
+            obj = BilleteraElectronica(
+                nombre      = form.cleaned_data['nombreUsu'],
+                CI          = form.cleaned_data['ciUsu'],
+                PIN         = form.cleaned_data['pinUsu'],
+                idBilletera = len(billeteras),
+                saldo       = 0
+            )
+            obj.save()
+            billeteras = BilleteraElectronica.objects.all()
+            form = BilleteraElectronicaForm()
+            
+    return render(
+        request,
+        'billetera_electronica_crear.html',
+        { 'form': form
+        , 'billeteras' : billeteras
+        }
+    )
+
+def billetera_electronica_saldo(request):
+    form = ConsultarSaldoForm()
+    estacionamiento = Estacionamiento.objects.all()
+    if request.method == 'POST':
+         return render(
+            request, 'template-mensaje.html',
+            { 'color'   : 'black'
+            , 'mensaje' : 'Su saldo es: 0.00 BsF '
+            }
+        )
+    
+    return render(request,  
+        'billetera_electronica_saldo.html',
+        { 'form': form
+        , 'estacionamiento': estacionamiento
+        }
+    )
+
+
+def billetera_electronica_recargar(request):
+    form = RecargarSaldoForm()
+    estacionamiento = Estacionamiento.objects.all()
+    if request.method == 'POST':
+         return render(
+            request, 'template-mensaje.html',
+            { 'color'   : 'black'
+            , 'mensaje' : 'Se ha recargado a su cuenta: 0.00 BsF '
+            }
+        )
+    
+    return render(request,  
+        'billetera_electronica_recarga.html',
+        { 'form': form
+        , 'estacionamiento': estacionamiento
         }
     )

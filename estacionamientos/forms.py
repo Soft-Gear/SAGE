@@ -3,6 +3,7 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.forms.widgets import SplitDateTimeWidget
 
+
 class CustomSplitDateTimeWidget(SplitDateTimeWidget):
 
     def format_output(self, rendered_widgets):
@@ -56,9 +57,104 @@ class PropietarioForm(forms.Form):
         validators = [ci_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'C/I: X-xxxxxxxxx'
+            , 'placeholder' : 'C/E: X-xxxxxxxxx'
             , 'pattern'     : ci_validator.regex.pattern
             , 'message'     : ci_validator.message
+            }
+        )
+    )
+    
+class BilleteraElectronicaForm(forms.Form):
+
+    name_validator = RegexValidator(
+        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ ]+$',
+        message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
+    )
+    
+    pin_validator = RegexValidator(
+        regex =   '^\d{4}$',
+        message = 'EL PIN debe ser 4 digitos'
+    )
+    
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
+        message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
+    )
+    
+    nombreUsu = forms.CharField(
+        required   = True,
+        label      = "Nombre",
+        validators = [name_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Nombre'
+            , 'pattern'     : name_validator.regex.pattern
+            , 'message'     : name_validator.message
+
+            }
+        )
+    )
+    
+    ciUsu = forms.CharField(
+        required   = True,
+        label      = "Cédula",
+        validators = [ci_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'C/E: X-xxxxxxxxx'
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
+            }
+        )
+    )
+    
+    pinUsu = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
+    
+class ValidarBilleteraForm(forms.Form):
+
+    pin_validator = RegexValidator(
+        regex =   '^[0-9]{4}$',
+        message = 'EL PIN debe ser 4 digitos'
+    )
+    
+    id_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un id de digitos sin caracteres'
+    )
+      
+    idValid = forms.CharField(
+        required   = True,
+        label      = "ID",
+        validators = [id_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID'
+            , 'pattern'     : id_validator.regex.pattern
+            , 'message'     : id_validator.message
+            }
+        )
+    )
+       
+    pinValid = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
             }
         )
     )
@@ -191,7 +287,171 @@ class EstacionamientoForm(forms.Form):
             }
         )
     )
+    
+class ConsultarSaldoForm(forms.Form):
+    
+    pin_validator = RegexValidator(
+        regex =   '^\d{4}$',
+        message = 'EL PIN debe ser 4 digitos'
+    )
+    
+    id_validator = RegexValidator(
+        regex   = '^\[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    idBill = forms.CharField(
+        required   = True,
+        label      = "ID Billetera",
+        validators = [id_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : id_validator.regex.pattern
+            , 'message'     : id_validator.message
+            }
+        )
+    )
+    
+    pinUsu = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
+    
+    
+class RecargarSaldoForm(forms.Form):
+    
+    card_name_validator = RegexValidator(
+        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ ]*$',
+        message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
+    )
+    
+    card_surname_validator = RegexValidator(
+        regex   = '^[a-zA-ZáéíóúñÑÁÉÍÓÚ][a-zA-ZáéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ ]*$',
+        message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
+    )
+    
+    id_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'La cédula solo puede contener caracteres numéricos.'
+    )
+    
+    card_validator = RegexValidator(
+        regex   = '^[0-9]{16}$',
+        message = 'Introduzca un número de tarjeta válido de 16 dígitos.'
+    )
+    
+    nombre = forms.CharField(
+        required   = True,
+        label      = "Nombre del Tarjetahabiente",
+        validators = [card_name_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Nombre del Tarjetahabiente'
+            , 'pattern'     : card_name_validator.regex.pattern
+            , 'message'     : card_name_validator.message
+            }
+        )
+    )
 
+    apellido = forms.CharField(
+        required   = True,
+        label      = "Apellido del Tarjetahabiente",
+        validators = [card_surname_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'      : 'form-control'
+            , 'placeholder' : 'Apellido del Tarjetahabiente'
+            , 'pattern'     : card_surname_validator.regex.pattern
+            , 'message'     : card_surname_validator.message
+            }
+        )
+    )
+
+    cedulaTipo = forms.ChoiceField(
+        required = True,
+        label    = 'cedulaTipo',
+        choices  = (
+            ('V', 'V'),
+            ('E', 'E')
+        ),
+        widget   = forms.Select(attrs =
+            { 'class' : 'form-control' }
+        )
+    )
+
+    cedula = forms.CharField(
+        required   = True,
+        label      = "Cédula",
+        validators = [id_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Cédula'
+            , 'pattern'     : id_validator.regex.pattern
+            , 'message'     : id_validator.message
+            }
+        )
+    )
+
+    tarjeta = forms.CharField(
+        required   = True,
+        label      = "Tarjeta de Credito",
+        validators = [card_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Tarjeta de Credito'
+            , 'pattern'     : card_validator.regex.pattern
+            , 'message'     : card_validator.message
+            }
+        )
+    )
+    
+    
+    id_validator = RegexValidator(
+        regex   = '^\[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    idBill = forms.CharField(
+        required   = True,
+        label      = "ID Billetera",
+        validators = [id_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : id_validator.regex.pattern
+            , 'message'     : id_validator.message
+            }
+        )
+    )
+    
+    monto_validator = RegexValidator(
+        regex   = '^\d{1,4}$',
+        message = 'Introduzca un monto menor a 10000'
+    )
+    
+    monto = forms.CharField(
+        required   = True,
+        label      = "Monto",
+        validators = [monto_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Monto'
+            , 'pattern'     : monto_validator.regex.pattern
+            , 'message'     : monto_validator.message
+            }
+        )
+    )
+    
+    
+    
 class EstacionamientoExtendedForm(forms.Form):
     
     tarifa_validator = RegexValidator(
@@ -321,80 +581,6 @@ class ReservaForm(forms.Form):
             { 'class'       : 'form-control'
             , 'type'        : 'date'
             , 'placeholder' : 'Hora Final Reserva'
-            }
-        )
-    )
-    
-class BilleteraElectronicaForm(forms.Form):
-    
-    idB_validator = RegexValidator(
-        regex   = '^[0-9]+$',
-        message = 'Introduzca un número de id valido'
-    )
-    
-    pin_validator = RegexValidator(
-        regex   = '^[0-9]+$',
-        message = 'Introduzca un número de PIN valido'
-    )
-    
-    name_billetera_validator = RegexValidator(
-        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚ ]+$',
-        message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
-    )
-    
-    ci_validator = RegexValidator(
-        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
-        message = 'Introduzca una cédula con un formato válido de la forma X-xxxxxxxx.'
-    )
-    
-    idBilletera = forms.CharField(
-        required = True,
-        label    = "ID Billetera",
-        validators = [idB_validator],
-        widget = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'ID Billetera'
-            , 'pattern'     : idB_validator.regex.pattern
-            , 'message'     : idB_validator.message
-            }
-        )                         
-    )
-    
-    PIN = forms.CharField(
-        required = True,
-        label    = "PIN",
-        validators = [pin_validator],
-        widget = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'PIN'
-            , 'pattern'     : pin_validator.regex.pattern
-            , 'message'     : pin_validator.message
-            }
-        )                         
-    )
-    
-    nombre = forms.CharField(
-        required   = True,
-        label      = "Nombre",
-        validators = [name_billetera_validator],
-        widget = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Nombre'
-            , 'pattern'     : name_billetera_validator.regex.pattern
-            , 'message'     : name_billetera_validator.message
-            }
-        )
-    )
-    
-    CI = forms.CharField(
-        required   = True,
-        label      = "Cédula",
-        validators = [ci_validator],
-        widget = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'X-xxxxxxxx'
-            , 'pattern'     : ci_validator.regex.pattern
-            , 'message'     : ci_validator.message
             }
         )
     )

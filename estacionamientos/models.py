@@ -65,14 +65,15 @@ class Pago(models.Model):
 		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
 
 class BilleteraElectronica(models.Model):
-	idBilletera = models.CharField(max_length = 30)
-	PIN         = models.CharField(max_length = 30)
+	idBilletera = models.IntegerField()
+	PIN         = models.CharField(max_length = 4)
 	nombre      = models.CharField(max_length = 50)
 	CI          = models.CharField(max_length = 10)
-	reserva     = models.ForeignKey(Reserva)
+	saldo       = models.DecimalField(decimal_places= 2, max_digits = 256)
+	#reserva     = models.ForeignKey(Reserva)
 	
 	def __str__(self):
-		return self.nombre + " " + self.idBilletera + " " + str(self.id)
+		return self.nombre + " " + self.idBilletera + " " + str(self.id)    
 
 class EsquemaTarifario(models.Model):
 
