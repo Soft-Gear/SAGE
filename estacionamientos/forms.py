@@ -124,7 +124,7 @@ class BilleteraElectronicaForm(forms.Form):
 class ValidarBilleteraForm(forms.Form):
 
     pin_validator = RegexValidator(
-        regex =   '^\d{4}$',
+        regex =   '^[0-9]{4}$',
         message = 'EL PIN debe ser 4 digitos'
     )
     
@@ -146,7 +146,7 @@ class ValidarBilleteraForm(forms.Form):
         )
     )
        
-    pinValid = forms.IntegerField(
+    pinValid = forms.CharField(
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
