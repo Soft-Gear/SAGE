@@ -543,6 +543,8 @@ def propietarios_all(request):
         'catalogo-propietarios.html',
         { 'form': form
         , 'propietarios': propietarios
+        }
+    )
 
 def billetera_electronica(request):
     
@@ -583,11 +585,10 @@ def billetera_electronica(request):
                 {'billetera' : billetera}
             )
         
-        return render(
-            request, 'Billetera-Electronica.html',
-            {'form': form}
-        )
-            
+    return render(
+        request, 'Billetera-Electronica.html',
+        {'form': form}
+    )
     
 def billetera_electronica_crear(request):
     billeteras = BilleteraElectronica.objects.all()
@@ -618,30 +619,12 @@ def billetera_electronica_crear(request):
         }
     )
 
-def billetera_electronica_saldo(request):
-    form = ConsultarSaldoForm()
-    estacionamiento = Estacionamiento.objects.all()
-    if request.method == 'POST':
-         return render(
-            request, 'template-mensaje.html',
-            { 'color'   : 'black'
-            , 'mensaje' : 'Su saldo es: 0.00 BsF '
-            }
-        )
-    
-    return render(request,  
-        'billetera_electronica_saldo.html',
-        { 'form': form
-        , 'estacionamiento': estacionamiento
-        }
-    )
-
-
+#Intento de recargar saldo, view incompleto
 def billetera_electronica_recargar(request):
     form = RecargarSaldoForm()
     estacionamiento = Estacionamiento.objects.all()
     if request.method == 'POST':
-         return render(
+        return render(
             request, 'template-mensaje.html',
             { 'color'   : 'black'
             , 'mensaje' : 'Se ha recargado a su cuenta: 0.00 BsF '
