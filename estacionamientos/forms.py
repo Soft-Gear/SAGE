@@ -130,9 +130,9 @@ class ValidarBilleteraForm(forms.Form):
     
     id_validator = RegexValidator(
         regex   = '^[0-9]+$',
-        message = 'Introduzca un id de digitos'
+        message = 'Introduzca un id de digitos sin caracteres'
     )
-    
+      
     idValid = forms.CharField(
         required   = True,
         label      = "ID",
