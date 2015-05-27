@@ -48,18 +48,15 @@ from estacionamientos.models import (
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
     estacionamientos = Estacionamiento.objects.all()
-    propietarios = Propietario.objects.all()
 
     # Si es un GET, mandamos un formulario vacio
     if request.method == 'GET':
         form  = EstacionamientoForm()
-        form2 = PropietarioForm() 
 
     # Si es POST, se verifica la información recibida
     elif request.method == 'POST':
         # Creamos un formulario con los datos que recibimos
         form  = EstacionamientoForm(request.POST)
-        form2 = PropietarioForm(request.POST)
 
         # Parte de la entrega era limitar la cantidad maxima de
         # estacionamientos a 5
@@ -74,39 +71,38 @@ def estacionamientos_all(request):
         # Si el formulario es valido, entonces creamos un objeto con
         # el constructor del modelo
         if form.is_valid():
-            obj = Estacionamiento(
-                propietario = form.cleaned_data['propietario'],
-                nombre      = form.cleaned_data['nombre'],
-                direccion   = form.cleaned_data['direccion'],
-                rif         = form.cleaned_data['rif'],
-                telefono1   = form.cleaned_data['telefono_1'],
-                telefono2   = form.cleaned_data['telefono_2'],
-                telefono3   = form.cleaned_data['telefono_3'],
-                email1      = form.cleaned_data['email_1'],
-                email2      = form.cleaned_data['email_2']
-            )
-            obj.save()
-            # Recargamos los estacionamientos ya que acabamos de agregar
-            estacionamientos = Estacionamiento.objects.all()
-            form = EstacionamientoForm()
+            try: 
+                objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['ci_propietario'])
+                
+                obj = Estacionamiento(
+                    ci_propietario = objetoPropietario,
+                    nombre      = form.cleaned_data['nombre'],
+                    direccion   = form.cleaned_data['direccion'],
+                    rif         = form.cleaned_data['rif'],
+                    telefono1   = form.cleaned_data['telefono_1'],
+                    telefono2   = form.cleaned_data['telefono_2'],
+                    telefono3   = form.cleaned_data['telefono_3'],
+                    email1      = form.cleaned_data['email_1'],
+                    email2      = form.cleaned_data['email_2']
+                )
+                obj.save()
+                # Recargamos los estacionamientos ya que acabamos de agregar
+                estacionamientos = Estacionamiento.objects.all()
+                form = EstacionamientoForm()
             
-        if form2.is_valid():
-            obj2 = Propietario(
-                nombre  = form2.cleaned_data['nombreProp'],
-                ci      = form2.cleaned_data['ci'],
-                tel     = form2.cleaned_data['telefono']
-            )
-            obj2.save()
-            propietarios = Propietario.objects.all()
-            form2 = PropietarioForm()            
-
+            except:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'CI no pertenece a ningun propietario.'
+                    }
+                )
+            
     return render(
         request,
         'catalogo-estacionamientos.html',
         { 'form': form
-        , 'form2': form2
         , 'estacionamientos': estacionamientos
-        , 'propietarios': propietarios
         }
     )
 
@@ -515,3 +511,33 @@ def grafica_tasa_de_reservacion(request):
 
 def Billetera_Electronica(request, _id):
     return render(request, 'Billetera-Electronica.html')
+
+def propietarios_all(request):
+    propietarios = Propietario.objects.all()
+
+    # Si es un GET, mandamos un formulario vacio
+    if request.method == 'GET':
+        form = PropietarioForm() 
+        
+    # Si es POST, se verifica la información recibida
+    elif request.method == 'POST':
+        # Creamos un formulario con los datos que recibimos
+        form = PropietarioForm(request.POST)
+        
+        if form.is_valid():
+            obj = Propietario(
+                nombre  = form.cleaned_data['nombreProp'],
+                ci      = form.cleaned_data['ci'],
+                tel     = form.cleaned_data['telefono']
+            )
+            obj.save()
+            propietarios = Propietario.objects.all()
+            form = PropietarioForm()
+            
+    return render(
+        request,
+        'catalogo-propietarios.html',
+        { 'form': form
+        , 'propietarios': propietarios
+        }
+    )

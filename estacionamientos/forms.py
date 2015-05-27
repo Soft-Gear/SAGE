@@ -80,16 +80,21 @@ class EstacionamientoForm(forms.Form):
         message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'
     )
 
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
+        message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
+    )
+    
     # Nombre del dueno del estacionamiento (no se permiten digitos)
-    propietario = forms.CharField(
+    ci_propietario = forms.CharField(
         required   = True,
-        label      = "Propietario",
-        validators = [name_validator],
+        label      = "Cedula del Propietario",
+        validators = [ci_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Propietario'
-            , 'pattern'     : name_validator.regex.pattern
-            , 'message'     : name_validator.message
+            , 'placeholder' : 'Cedula del Propietario'
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
             }
         )
     )
