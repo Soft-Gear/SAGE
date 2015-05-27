@@ -541,20 +541,23 @@ def billetera_electronica(request):
         #Guarda lo que introdujo el usuario
         if form.is_valid():
             identificador = form.cleaned_data['idValid']
-            print(identificador)
             pinVal = form.cleaned_data['pinValid']
-            print(pinVal)
             #Busca la billetera en la base de datos    
             try:    
-                billetera = BilleteraElectronica.objects.get(id = identificador)
+                billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
             except ObjectDoesNotExist:
+                #print('hola mundo')
                 return render(
                 request, 'template-mensaje.html',
                 { 'color'   : 'black'
                 , 'mensaje' : 'Información invalida '
                 }
             )
-                
+            
+            print('esta es el id introducido: ' + str(identificador))
+            print('este es el id en la BD: '+str(billetera.idBilletera))
+            print('este es el pin de la billetera: '+str(billetera.PIN))
+            print('este es el pin introducido: '+str(pinVal))
             #Verifica que el PIN sea el correcto    
             if pinVal != billetera.PIN:
                 return render(
@@ -571,7 +574,6 @@ def billetera_electronica(request):
             )
             
         else:
-            print("hola mundo")
             return render(request,'404.html')
     
 def billetera_electronica_crear(request):
