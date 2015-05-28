@@ -72,7 +72,7 @@ class ValidarBilleteraElectronicaFormTestCase(TestCase):
     #malicia
     def test_pin_letras_en_el_campo(self):
         form_data = {
-            'idValid': '12345667',
+            'idValid': '123456678',
             'pinValid': '00ab'
         }
         form = ValidarBilleteraForm(data = form_data)
