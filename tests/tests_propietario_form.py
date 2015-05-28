@@ -42,6 +42,26 @@ class PropietarioAllFormTestCase(TestCase):
         }
         form = PropietarioForm(data = form_data)
         self.assertTrue(form.is_valid())
+        
+    # caso borde
+    def test_nombre_valido_dieresis_acento(self):
+        form_data = {
+            'nombreProp': 'María Güilo',
+            'ci': 'V-12345678',
+            'telefono': '02129322878'
+        }
+        form = PropietarioForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    # caso borde
+    def test_nombre_valido_guion_comilla(self):
+        form_data = {
+            'nombreProp': 'D\'Angostino-FebresÑu',
+            'ci': 'V-12345678',
+            'telefono': '02129322878'
+        }
+        form = PropietarioForm(data = form_data)
+        self.assertTrue(form.is_valid())
 
     # malicia
     def test_nombre_invalido_digitos_en_campo(self):
