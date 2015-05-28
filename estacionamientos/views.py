@@ -402,7 +402,8 @@ def estacionamiento_pago_billetera(request,_id):
                     , 'mensaje' : 'Saldo insuficiente '
                     }
                 )
-            
+          
+            billetera.saldo -=monto  
             inicioReserva = datetime(
                 year   = request.session['anioinicial'],
                 month  = request.session['mesinicial'],
@@ -430,8 +431,7 @@ def estacionamiento_pago_billetera(request,_id):
 
             pago = Pago_billetera(
                 fechaTransaccion = datetime.now(),
-                cedula           = form.cleaned_data['cedula'],
-                cedulaTipo       = form.cleaned_data['cedulaTipo'],
+                cedula           = billetera.CI,
                 monto            = monto,
                 reserva          = reservaFinal,
             )

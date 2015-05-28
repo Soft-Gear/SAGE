@@ -66,7 +66,6 @@ class Pago(models.Model):
 		
 class Pago_billetera(models.Model):
 	fechaTransaccion = models.DateTimeField()
-	cedulaTipo       = models.CharField(max_length = 1)
 	cedula           = models.CharField(max_length = 10)
 	reserva          = models.ForeignKey(Reserva)
 	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
