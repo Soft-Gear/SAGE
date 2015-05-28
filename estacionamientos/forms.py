@@ -13,7 +13,7 @@ class PropietarioForm(forms.Form):
     
     ci_validator = RegexValidator(
         regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
-        message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
+        message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
     )
     
     phone_validator = RegexValidator(
@@ -57,7 +57,7 @@ class PropietarioForm(forms.Form):
         validators = [ci_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'C/E: X-xxxxxxxxx'
+            , 'placeholder' : 'CI: V/E-xxxxxxxx'
             , 'pattern'     : ci_validator.regex.pattern
             , 'message'     : ci_validator.message
             }
@@ -68,7 +68,7 @@ class CambiarPropietarioForm(forms.Form):
     
     ci_validator = RegexValidator(
         regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
-        message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
+        message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
     )
     
     # CI del dueno del estacionamiento
@@ -99,7 +99,7 @@ class BilleteraElectronicaForm(forms.Form):
     
     ci_validator = RegexValidator(
         regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
-        message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
+        message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
     )
     
     nombreUsu = forms.CharField(
@@ -122,7 +122,7 @@ class BilleteraElectronicaForm(forms.Form):
         validators = [ci_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'C/E: X-xxxxxxxxx'
+            , 'placeholder' : 'V/E-xxxxxxxx'
             , 'pattern'     : ci_validator.regex.pattern
             , 'message'     : ci_validator.message
             }
@@ -194,12 +194,12 @@ class EstacionamientoForm(forms.Form):
     
     rif_validator = RegexValidator(
         regex   = '^[JVD]-\d{8}-?\d$',
-        message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'
+        message = 'Introduzca un RIF con un formato válido de la forma J/V/D-xxxxxxxxx.'
     )
 
     ci_validator = RegexValidator(
         regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
-        message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
+        message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
     )
     
     # Nombre del dueno del estacionamiento (no se permiten digitos)
@@ -302,7 +302,7 @@ class EstacionamientoForm(forms.Form):
         validators = [rif_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'RIF: X-xxxxxxxxx'
+            , 'placeholder' : 'RIF: J/V/D-xxxxxxxx'
             , 'pattern'     : rif_validator.regex.pattern
             , 'message'     : rif_validator.message
             }
@@ -708,7 +708,7 @@ class RifForm(forms.Form):
     
     rif_validator = RegexValidator(
         regex   = '^[JVD]-\d{8}-?\d$',
-        message = 'Introduzca un RIF con un formato válido de la forma X-xxxxxxxxx.'                              
+        message = 'Introduzca un RIF con un formato válido de la forma J/V/D-xxxxxxxxx.'                              
     )
     
     rif = forms.CharField(
@@ -717,7 +717,7 @@ class RifForm(forms.Form):
         validators = [rif_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'RIF: X-xxxxxxxxx'
+            , 'placeholder' : 'RIF: J/V/D-xxxxxxxxx'
             , 'pattern'     : rif_validator.regex.pattern
             , 'message'     : rif_validator.message
             }
