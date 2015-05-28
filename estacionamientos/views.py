@@ -381,17 +381,17 @@ def estacionamiento_pago_billetera(request,_id):
             except ObjectDoesNotExist:
                 return render(
                     request, 'template-mensaje-popup.html',
-                    { 'color'   : 'black'
-                    , 'mensaje' : 'Información invalida '
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Autenticación denegada'
                     }
                 )
             
             #Verifica que el PIN sea el correcto    
             if pinVal != billetera.PIN:
                 return render(
-                    request, 'template-mensaje.html',
-                    { 'color'   : 'black'
-                    , 'mensaje' : 'Información invalida '
+                    request, 'template-mensaje-popup.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Autenticación denegada'
                     }
                 )
             
@@ -704,8 +704,8 @@ def billetera_electronica(request):
             except ObjectDoesNotExist:
                 return render(
                 request, 'template-mensaje.html',
-                { 'color'   : 'black'
-                , 'mensaje' : 'Información invalida '
+                { 'color'   : 'red'
+                , 'mensaje' : 'Autenticación denegada'
                 }
             )
             
@@ -713,8 +713,8 @@ def billetera_electronica(request):
             if pinVal != billetera.PIN:
                 return render(
                 request, 'template-mensaje.html',
-                { 'color'   : 'black'
-                , 'mensaje' : 'Información invalida '
+                { 'color'   : 'red'
+                , 'mensaje' : 'Autenticación denegada'
                 }
             )
             
