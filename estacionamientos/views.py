@@ -35,7 +35,8 @@ from estacionamientos.forms import (
     RifForm,
     CedulaForm,
     ConsultarSaldoForm,
-    RecargarSaldoForm
+    RecargarSaldoForm,
+    CambiarPropietarioForm
 )
 
 from estacionamientos.models import (
@@ -545,6 +546,47 @@ def propietarios_all(request):
         , 'propietarios': propietarios
         }
     )
+    
+def cambiar_propietario(request, _id):
+    _id = int(_id)
+    # Verificamos que el objeto exista antes de continuar
+    try:
+        estacionamiento = Estacionamiento.objects.get(id = _id)
+    except ObjectDoesNotExist:
+        raise Http404
+
+    # Verificamos que el estacionamiento este parametrizado
+    if (estacionamiento.apertura is None):
+        return HttpResponse(status = 403) # Esta prohibido entrar aun
+
+    # Si se hace un GET renderizamos los estacionamientos con su formulario
+    if request.method == 'GET':
+        form = CambiarPropietarioForm()
+
+    # Si es un POST estan mandando un request
+    elif request.method == 'POST':
+        form = CambiarPropietarioForm(request.POST)
+        # Verificamos si es valido con los validadores del formulario
+        if form.is_valid():
+            try:
+                objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['ci_propietario'])
+                
+                estacionamiento.ci_propietario = objetoPropietario
+            
+            except:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'CI no pertenece a ningun propietario.'
+                    }
+                )
+    
+    return render(
+        request,
+        'cambiar-propietario.html',
+        { 'form': form,
+          'estacionamiento' : estacionamiento
+        })
 
 def billetera_electronica(request):
     
