@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-  SAGE - Reservar en estacionamiento {{estacionamiento.nombre}}
+  SAGE - Cambiar propietario en estacionamiento {{estacionamiento.nombre}}
 {% endblock %}
 {% block innerContents%}
   <div class="col-sm-10">
@@ -15,8 +15,9 @@
     <div class="col-md-4">
       {% include "parametros.html" %}
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4" style="color:{{color}}">
       {% include "cambiar-propietario-form.html" %}
+      {{ mensaje }}
     </div>
   </div>
 {% endblock %}

@@ -669,14 +669,28 @@ def cambiar_propietario(request, _id):
                 objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['ci_propietario'])
                 
                 estacionamiento.ci_propietario = objetoPropietario
+                estacionamiento.save()
             
             except:
                 return render(
-                    request, 'template-mensaje.html',
-                    { 'color'   : 'red'
-                    , 'mensaje' : 'CI no pertenece a ningun propietario.'
+                    request,
+                    'cambiar-propietario.html',
+                    { 'form': form,
+                      'estacionamiento' : estacionamiento,
+                      'mensaje' : 'CI no pertenece a ningun propietario',
+                      'color' : 'red'
                     }
                 )
+                
+        return render(
+            request,
+            'cambiar-propietario.html',
+            { 'form': form,
+                'estacionamiento' : estacionamiento,
+                'mensaje' : 'Cambio del propietario satisfactorio',
+                'color' : 'green'
+            }
+        )
     
     return render(
         request,
