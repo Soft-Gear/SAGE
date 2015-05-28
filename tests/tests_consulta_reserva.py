@@ -7,6 +7,7 @@ from estacionamientos.controller import consultar_ingresos
 from estacionamientos.models import (
                                         Pago,
                                         Estacionamiento,
+                                        Propietario,
                                         Reserva
                                     )
 
@@ -22,8 +23,14 @@ class consultaReservaTestCase(TestCase):
 
     # TDD
     def test_estacionamiento_sin_pagos(self):
+        pro = Propietario(
+            nombre = "Pepe",
+            ci = 'V-12345678',
+            tel = "0412-1234567"
+        )
+        pro.save()
         e = Estacionamiento(
-            propietario = "prop",
+            ci_propietario = pro,
             nombre      = "nom",
             direccion   = "dir",
             rif         = "J-123456789",
@@ -37,8 +44,14 @@ class consultaReservaTestCase(TestCase):
 
     # TDD
     def test_un_estacionamiento_un_pago(self):
+        pro = Propietario(
+            nombre = "Pepe",
+            ci = 'V-12345678',
+            tel = "0412-1234567"
+        )
+        pro.save()
         e = Estacionamiento(
-            propietario = "prop",
+            ci_propietario = pro,
             nombre      = "nom",
             direccion   = "dir",
             rif         = "J-123456789",
@@ -67,8 +80,14 @@ class consultaReservaTestCase(TestCase):
     # TDD malicia
     def test_un_estacionamiento_muchos_pagos(self):
         n = 1000
+        pro = Propietario(
+            nombre = "Pepe",
+            ci = 'V-12345678',
+            tel = "0412-1234567"
+        )
+        pro.save()
         e = Estacionamiento(
-            propietario = "prop",
+            ci_propietario = pro,
             nombre      = "nom",
             direccion   = "dir",
             rif         = "J-123456789",
@@ -99,8 +118,14 @@ class consultaReservaTestCase(TestCase):
     # malicia
     def test_dos_estacionamiento_muchos_pagos(self):
         n  = 1000
+        pro1 = Propietario(
+            nombre = "PepeUn",
+            ci = 'V-12345678',
+            tel = "0412-1234567"
+        )
+        pro1.save()
         e1 = Estacionamiento(
-            propietario = "prop1",
+            ci_propietario = pro1,
             nombre      = "nom1",
             direccion   = "dir1",
             rif         = "J-123456789",
@@ -108,8 +133,14 @@ class consultaReservaTestCase(TestCase):
             apertura    = time(0,0),
             cierre      = time(23,59),
         )
+        pro2 = Propietario(
+            nombre = "PepeDos",
+            ci = 'V-12345679',
+            tel = "0412-1234568"
+        )
+        pro2.save()
         e2 = Estacionamiento(
-            propietario = "prop2",
+            ci_propietario = pro2,
             nombre      = "nom2",
             direccion   = "dir3",
             rif         = "J-123456789",
@@ -160,9 +191,21 @@ class consultaReservaTestCase(TestCase):
         n  = 100
         m  = 10
         for i in range(0,n):
-
+            
+            pro1 = Propietario(
+            nombre = "prop1%d"%i,
+            ci = "V-12345678%d"%i,
+            tel = "0412-1234567"
+            )
+            pro2 = Propietario(
+            nombre = "prop2%d"%(i+1),
+            ci = "V-12345679%d"%(i+1),
+            tel = "0412-1234567"
+            )
+            pro1.save()
+            pro2.save()
             e1 = Estacionamiento(
-                propietario = "prop%d"%i,
+                ci_propietario = pro1,
                 nombre      = "nom%d"%i,
                 direccion   = "dir1",
                 rif         = "J-123456789",
@@ -171,7 +214,7 @@ class consultaReservaTestCase(TestCase):
                 cierre      = time(23,59),
             )
             e2 = Estacionamiento(
-                propietario = "pro%d"%i,
+                ci_propietario = pro2,
                 nombre      = "no%d"%i,
                 direccion   = "dir3",
                 rif         = "J-123456789",
@@ -204,8 +247,14 @@ class consultaReservaTestCase(TestCase):
     def test_muchos_estacionamiento_sin_pagos(self):
         n  = 1000
         for i in range(0,n):
+            pro = Propietario(
+                nombre = "prop%d"%i,
+                ci = 'V-12345678%d'%i,
+                tel = "0412-1234567"
+            )
+            pro.save()
             e1 = Estacionamiento(
-                propietario = "prop%d"%i,
+                ci_propietario = pro,
                 nombre      = "nom%d"%i,
                 direccion   = "dir1",
                 rif         = "J-123456789",
@@ -220,8 +269,14 @@ class consultaReservaTestCase(TestCase):
     def test_muchos_estacionamiento_con_disintos_rif(self):
         n  = 1000
         for i in range(0,n):
+            pro = Propietario(
+                nombre = "prop%d"%i,
+                ci = 'V-12345678%d'%i,
+                tel = "0412-1234567"
+            )
+            pro.save()    
             e1 = Estacionamiento(
-                propietario = "prop%d"%i,
+                ci_propietario = pro,
                 nombre      = "nom%d"%i,
                 direccion   = "dir1",
                 rif         = "J-%i"%(123456789-i),

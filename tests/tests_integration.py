@@ -5,7 +5,10 @@ from django.test import TestCase
 
 from datetime import time
 
-from estacionamientos.models import Estacionamiento
+from estacionamientos.models import (
+                                        Estacionamiento,
+                                        Propietario
+                                    )
 
 ###################################################################
 #                    ESTACIONAMIENTO VISTA DISPONIBLE
@@ -17,8 +20,14 @@ class IntegrationTest(TestCase):
         self.client = Client()
         
     def crear_estacionamiento(self, puestos,hora_apertura=time(0,0),hora_cierre=time(23,59)):
+        pro = Propietario(
+            nombre = "Pablo",
+            ci = 'V-12345678',
+            tel = "0412-1234567"
+        )
+        pro.save()
         e = Estacionamiento(
-            propietario = "prop",
+            ci_propietario = pro,
             nombre = "nom",
             direccion = "dir",
             rif = "rif",
@@ -54,8 +63,14 @@ class IntegrationTest(TestCase):
     
     # integracion TDD
     def test_llamada_a_reserva(self):
+        pro = Propietario(
+            nombre = "Juana",
+            ci = 'V-12345679',
+            tel = "0412-1238567"
+        )
+        pro.save()
         e = Estacionamiento(
-            propietario = "prop",
+            ci_propietario = pro,
             nombre = "nom",
             direccion = "dir",
             rif = "rif",
@@ -136,8 +151,14 @@ class IntegrationTest(TestCase):
     
     # integracion TDD
     def test_llamada_a_pago_get(self):
+        pro = Propietario(
+            nombre = "Juana",
+            ci = 'V-12345679',
+            tel = "0412-1238567"
+        )
+        pro.save()
         e = Estacionamiento(
-            propietario = "prop",
+            ci_propietario = pro,
             nombre = "nom",
             direccion = "dir",
             rif = "rif",
@@ -152,8 +173,14 @@ class IntegrationTest(TestCase):
     
     # integracion TDD  
     def test_llamada_a_pago_post(self):
+        pro = Propietario(
+            nombre = "Juana",
+            ci = 'V-12345679',
+            tel = "0412-1238567"
+        )
+        pro.save()
         e = Estacionamiento(
-            propietario = "prop",
+            ci_propietario = pro,
             nombre = "nom",
             direccion = "dir",
             rif = "rif",
