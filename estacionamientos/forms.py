@@ -64,6 +64,27 @@ class PropietarioForm(forms.Form):
         )
     )
     
+class CambiarPropietarioForm(forms.Form):
+    
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
+        message = 'Introduzca un CI con un formato válido de la forma X-xxxxxxxx.'
+    )
+    
+    # CI del dueno del estacionamiento
+    ci_propietario = forms.CharField(
+        required   = True,
+        label      = "Cedula del Propietario",
+        validators = [ci_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Cedula del Propietario'
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
+            }
+        )
+    )
+    
 class BilleteraElectronicaForm(forms.Form):
 
     name_validator = RegexValidator(
