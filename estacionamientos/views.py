@@ -45,6 +45,7 @@ from estacionamientos.models import (
     BilleteraElectronica,
     Reserva,
     Pago,
+    Pago_billetera,
     TarifaHora,
     TarifaMinuto,
     TarifaHorayFraccion,
@@ -357,7 +358,103 @@ def estacionamiento_pago(request,_id):
     )
     
 def estacionamiento_pago_billetera(request,_id):
-    pass
+    form = ValidarBilleteraForm()
+    
+    try:
+        estacionamiento = Estacionamiento.objects.get(id = _id)
+    except ObjectDoesNotExist:
+        raise Http404
+    
+    if (estacionamiento.apertura is None):
+        return HttpResponse(status = 403) # No esta permitido acceder a esta vista aun
+    
+    if request.method == 'POST':
+    
+        form = ValidarBilleteraForm(request.POST)
+        #Guarda lo que introdujo el usuario
+        if form.is_valid():
+            identificador = form.cleaned_data['idValid']
+            pinVal = form.cleaned_data['pinValid']
+            #Busca la billetera en la base de datos    
+            try:    
+                billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
+            except ObjectDoesNotExist:
+                return render(
+                    request, 'template-mensaje-popup.html',
+                    { 'color'   : 'black'
+                    , 'mensaje' : 'Información invalida '
+                    }
+                )
+            
+            #Verifica que el PIN sea el correcto    
+            if pinVal != billetera.PIN:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'black'
+                    , 'mensaje' : 'Información invalida '
+                    }
+                )
+            
+            monto = Decimal(request.session['monto']).quantize(Decimal('1.00'))
+            if billetera.saldo < monto:
+                return render(
+                    request, 'template-mensaje-popup.html',
+                    { 'color'   : 'black'
+                    , 'mensaje' : 'Saldo insuficiente '
+                    }
+                )
+          
+            billetera.saldo -=monto  
+            inicioReserva = datetime(
+                year   = request.session['anioinicial'],
+                month  = request.session['mesinicial'],
+                day    = request.session['diainicial'],
+                hour   = request.session['inicioReservaHora'],
+                minute = request.session['inicioReservaMinuto']
+            )
+
+            finalReserva  = datetime(
+                year   = request.session['aniofinal'],
+                month  = request.session['mesfinal'],
+                day    = request.session['diafinal'],
+                hour   = request.session['finalReservaHora'],
+                minute = request.session['finalReservaMinuto']
+            )
+
+            reservaFinal = Reserva(
+                estacionamiento = estacionamiento,
+                inicioReserva   = inicioReserva,
+                finalReserva    = finalReserva,
+            )
+
+            # Se guarda la reserva en la base de datos
+            reservaFinal.save()
+
+            pago = Pago_billetera(
+                fechaTransaccion = datetime.now(),
+                cedula           = billetera.CI,
+                monto            = monto,
+                reserva          = reservaFinal,
+            )
+
+            # Se guarda el recibo de pago en la base de datos
+            pago.save()
+
+            return render(
+                request,
+                'pago_billetera.html',
+                { "id"      : _id
+                , "pago"    : pago
+                , "color"   : "green"
+                , 'mensaje' : "Se realizo el pago de reserva satisfactoriamente."
+                }
+            )
+
+    return render(
+        request,
+        'pago_billetera.html',
+        { 'form' : form }
+    )
 
 def estacionamiento_ingreso(request):
     form = RifForm()
