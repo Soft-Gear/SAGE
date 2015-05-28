@@ -11,7 +11,13 @@
     <div class="col-md-4"> 
 	   <table>
 	      <tr><td>
+	      {% if billetera.saldo = 0 %}
+            Su saldo es: {{billetera.saldo}} Por favor recarge
+          {% endif %}
+          
+          {%if billetera.saldo > 0 %}
             Su saldo es: {{billetera.saldo}}
+          {% endif %}
           </tr></td>
           <tr><td>
             &nbsp;
