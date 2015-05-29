@@ -6,39 +6,33 @@
 {% block innerContents%}
   <div class="col-sm-10">
     <h3><i class="fa fa-bus"></i>
-      Estacionamientos
+      Propietarios
     </h3>
     <hr>
     <div class="col-md-8">
       <table class="table table-striped">
-        {% if estacionamientos %}
+        {% if propietarios %}
         <thead>
           <tr>
             <th></th>
-            <th>Dueño</th>
             <th>Nombre</th>
-            <th>RIF</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {% for obj in estacionamientos %}
+          {% for obj in propietarios %}
             <tr>
               <td>{{forloop.counter}}</td>
-              <td>{{obj.ci_propietario}}</td>
               <td>{{obj.nombre}}</td>
-              <td>{{obj.rif}}</td>
-              <td><a href="./{{obj.id}}">
-                  <i class="fa fa-search"></i>
-              </a></td>
-              <td><a href="./{{obj.id}}/tasa">
-                  <i class="fa fa-bar-chart"></i>
-              </a></td>
+              <td>{{obj.ci}}</td>
+              <td>{{obj.tel}}</td>
             </tr>
           {% endfor %}
         </tbody>
         {% else %}
-          <h3>No hay estacionamientos</h3>
+          <h3>No hay propietarios</h3>
         {% endif %}
       </table>
       <hr>      
@@ -50,12 +44,12 @@
           <div class="panel-title">
             <i class="glyphicon glyphicon-wrench pull-right"></i>
             <h4>
-              Crear Estacionamiento
+              Crear Propietario
             </h4>
           </div>
         </div>
         <div class="panel-body">
-          <form action="." method="post" class="form form-vertical">
+          <form action="propietarios" method="post" class="form form-vertical">
             {% csrf_token %}
             {% for field in form %}
               <div class="control-group">
@@ -72,7 +66,7 @@
               <label></label>
               <div class="controls">
                 <button type="submit" class="btn btn-primary">
-                  Crear estacionamiento
+                  Crear propietario
                 </button>
               </div>
             </div>
@@ -80,8 +74,8 @@
         </div>
       </div>
     </div>
-  </div> 
-
+  </div>
+  
 {% endblock %}
 {% block scripts %}
   {% include "validator.js.html" %}

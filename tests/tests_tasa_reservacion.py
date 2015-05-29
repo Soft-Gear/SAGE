@@ -16,6 +16,7 @@ from estacionamientos.controller import (
 
 from estacionamientos.models import (
     Estacionamiento,
+    Propietario,
     Reserva
 )
 
@@ -26,8 +27,14 @@ from estacionamientos.models import (
 class TestTasaEstacionamiento(TestCase):
     
     def crear_estacionamiento(self, puestos,hora_apertura=time(0,0),hora_cierre=time(23,59)):
+        pro = Propietario(
+            nombre = "María Lourdes",
+            ci = 'V-23456789',
+            tel = "0412-7654321"
+        )
+        pro.save()
         e = Estacionamiento(
-            propietario = "prop",
+            ci_propietario = pro,
             nombre = "nom",
             direccion = "dir",
             rif = "rif",

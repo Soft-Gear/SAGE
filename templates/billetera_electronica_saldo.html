@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}
+  SAGE - Recargar Billetera
+{% endblock %}
+{% block innerContents%}
+  <div class="col-sm-10">
+    <h3><i class="fa fa-bus"></i>
+     Billetera de {{billetera.nombre}}
+    </h3>
+    <hr>
+    <div class="col-md-4"> 
+	   <table>
+	      <tr><td>
+	      {% if billetera.saldo = 0 %}
+            Su saldo es: {{billetera.saldo}}, Se recomienda recargar.
+          {% endif %}
+          
+          {%if billetera.saldo > 0 %}
+            Su saldo es: {{billetera.saldo}}
+          {% endif %}
+          </tr></td>
+          <tr><td>
+            &nbsp;
+          </tr></td>
+          <tr><td>
+            
+          </tr></td>
+       </table>
+    </div>
+    
+  </div>
+{% endblock %}
+

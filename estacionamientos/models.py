@@ -6,16 +6,16 @@ from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
 from datetime import timedelta
 
-class Propietario(models.Model):	
+class Propietario(models.Model):
 	nombre = models.CharField(max_length = 50)
-	ci     = models.CharField(max_length = 12)
+	ci     = models.CharField(max_length = 12, unique = True)
 	tel    = models.CharField(max_length = 30)
 
 	def __str__(self):
-		return self.nombre+' '+str(self.id) 
+		return self.nombre
 
 class Estacionamiento(models.Model):
-	propietario = models.CharField(max_length = 30)
+	ci_propietario = models.ForeignKey("Propietario") #CI del propietario! No el nombre.
 	nombre      = models.CharField(max_length = 50)
 	direccion   = models.TextField(max_length = 120)
 	telefono1   = models.CharField(blank = True, null = True, max_length = 30)
@@ -35,7 +35,7 @@ class Estacionamiento(models.Model):
 	capacidad    = models.IntegerField(blank = True, null = True)
 
 	def __str__(self):
-		return self.nombre+' '+str(self.id)
+		return self.nombre+' '+str(self.ci_propietario)
 
 class Reserva(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
@@ -63,16 +63,26 @@ class Pago(models.Model):
 
 	def __str__(self):
 		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
+		
+class Pago_billetera(models.Model):
+	fechaTransaccion = models.DateTimeField()
+	cedula           = models.CharField(max_length = 10)
+	reserva          = models.ForeignKey(Reserva)
+	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
+
+	def __str__(self):
+		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
 
 class BilleteraElectronica(models.Model):
-	idBilletera = models.CharField(max_length = 30)
-	PIN         = models.CharField(max_length = 30)
+	idBilletera = models.IntegerField()
+	PIN         = models.CharField(max_length = 4)
 	nombre      = models.CharField(max_length = 50)
 	CI          = models.CharField(max_length = 10)
-	reserva     = models.ForeignKey(Reserva)
+	saldo       = models.DecimalField(decimal_places= 2, max_digits = 256)
+	#reserva     = models.ForeignKey(Reserva)
 	
 	def __str__(self):
-		return self.nombre + " " + self.idBilletera + " " + str(self.id)
+		return self.nombre + " " + self.idBilletera + " " + str(self.id)    
 
 class EsquemaTarifario(models.Model):
 
