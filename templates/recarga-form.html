@@ -32,4 +32,6 @@
     </form>
   </div>
 </div>
-{% include "validator.js.html" %}
+{% block scripts %}
+  {% include "validator.js.html" %}
+{% endblock %}

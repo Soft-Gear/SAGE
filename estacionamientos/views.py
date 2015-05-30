@@ -774,19 +774,44 @@ def billetera_electronica_crear(request):
 
 #Intento de recargar saldo, view incompleto
 def billetera_electronica_recargar(request):
-    form = RecargarSaldoForm()
-    estacionamiento = Estacionamiento.objects.all()
+    
+    if request.method == 'GET':
+        form = RecargarSaldoForm()
     if request.method == 'POST':
-        return render(
-            request, 'template-mensaje.html',
-            { 'color'   : 'black'
-            , 'mensaje' : 'Se ha recargado a su cuenta: 0.00 BsF '
-            }
-        )
+        form = RecargarSaldoForm(request.POST)
+        #Guarda lo que introdujo el usuario
+        if form.is_valid():
+            identificador = form.cleaned_data['idBill']
+            monto = form.cleaned_data['monto']
+            try:    
+                billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
+            except ObjectDoesNotExist:
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'La billetera no exite, introduzca un ID valido'
+                }
+            )
+            if billetera.saldo + int(monto) > 10000:
+                resto = 10000 - billetera.saldo
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'La recarga excede el limite de 10.000 BsF. Solo puede recargar un maximo de ' + str(resto) + ' restante'
+                }
+                )
+            billetera.saldo += int(monto)
+            billetera.save()
+            return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'black'                
+                , 'mensaje' : 'Se ha recargado a su cuenta:'+ monto +' BsF'
+                }
+            )
+        
     
     return render(request,  
         'billetera_electronica_recarga.html',
         { 'form': form
-        , 'estacionamiento': estacionamiento
         }
     )

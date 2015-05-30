@@ -317,7 +317,7 @@ class ConsultarSaldoForm(forms.Form):
     )
     
     id_validator = RegexValidator(
-        regex   = '^\[0-9]+$',
+        regex   = '^[0-9]+$',
         message = 'Introduzca un id de digitos'
     )
     
@@ -351,12 +351,12 @@ class ConsultarSaldoForm(forms.Form):
 class RecargarSaldoForm(forms.Form):
     
     card_name_validator = RegexValidator(
-        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ\'\- ]+$',
+        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ\'\-]+$',
         message = 'El nombre no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
     )
     
     card_surname_validator = RegexValidator(
-        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ\'\- ]+$',
+        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ\'\-]+$',
         message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
     )
     
@@ -434,28 +434,27 @@ class RecargarSaldoForm(forms.Form):
         )
     )
     
-    
-    id_validator = RegexValidator(
-        regex   = '^\[0-9]+$',
+    idBill_validator = RegexValidator(
+        regex   = '^[0-9]+$',
         message = 'Introduzca un id de digitos'
     )
     
     idBill = forms.CharField(
         required   = True,
         label      = "ID Billetera",
-        validators = [id_validator],
+        validators = [idBill_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'ID Billetera'
-            , 'pattern'     : id_validator.regex.pattern
-            , 'message'     : id_validator.message
+            , 'pattern'     : idBill_validator.regex.pattern
+            , 'message'     : idBill_validator.message
             }
         )
     )
     
     monto_validator = RegexValidator(
         regex   = '^\d{1,4}$',
-        message = 'Introduzca un monto menor a 10000'
+        message = 'Introduzca un monto valido, menor a 10000'
     )
     
     monto = forms.CharField(
@@ -470,6 +469,9 @@ class RecargarSaldoForm(forms.Form):
             }
         )
     )
+    
+    
+   
     
     
     
