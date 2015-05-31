@@ -51,7 +51,7 @@ from estacionamientos.models import (
     TarifaHorayFraccion,
     TarifaFinDeSemana,
     TarifaHoraPico
-)
+, Recarga_billetera)
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
@@ -801,10 +801,20 @@ def billetera_electronica_recargar(request):
                 }
                 )
             billetera.saldo += int(monto)
-            billetera.save()
+            billetera.save()          
+            recarga = Recarga_billetera(
+                fechaTransaccion = datetime.now(),
+                cedula           = form.cleaned_data['cedula'],
+                cedulaTipo       = form.cleaned_data['cedulaTipo'],
+                nombre           = form.cleaned_data['nombre'],
+                apellido         = form.cleaned_data['apellido'],
+                monto            = form.cleaned_data['monto'],                        
+            )
+            recarga.save()
             return render(
-                request, 'template-mensaje.html',
-                { 'color'   : 'black'                
+                request, 'recarga.html',
+                { 'color'   : 'black'  
+                , 'pago'    : recarga             
                 , 'mensaje' : 'Se ha recargado a su cuenta:'+ monto +' BsF'
                 }
             )
