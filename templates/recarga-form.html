@@ -8,28 +8,106 @@
     </div>
   </div>
   <div class="panel-body">
-    <form action="/estacionamientos/billetera_electronica_recarga" method="post" class="form form-vertical">
+    <form action="/estacionamientos/billetera_electronica/recargar" method="post" class="form form-vertical">
       {% csrf_token %}
-      {% for field in form %}
         <div class="control-group">
-          <div class="controls">
-            {{ field }}
-            <span class='error' id='{{field.name}}_error' aria-live="polite">
-              {{ field.errors }}
-            </span>
-            <p>
-          </div>
-        </div>
-      {% endfor %}
-      <div class="control-group">
-        <label></label>
-        <div class="controls">
-          <button type="submit" class="btn btn-primary">
-            Recargar
-          </button>
-        </div>
-      </div>
+           <div class="controls">
+             <p>
+               {{ form.nombre }}
+               <span
+                 class='error'
+                 id='{{form.nombre.name}}_error'
+                 aria-live="polite"
+               ></span>
+             </p>
+             {{ form.nombre.errors }}
+             <p>
+               {{ form.apellido }}
+               <span
+                 class='error'
+                 id='{{form.apellido.name}}_error'
+                 aria-live="polite"
+               ></span>
+             </p>
+             {{ form.apellido.errors }}
+             <p>
+               <table><tbody><tr>
+                 <td>
+                   {{ form.cedulaTipo }}
+                 </td>
+                 <td>
+                   {{ form.cedula }}
+                 </td>
+               </tr></tbody></table>
+               <span
+                 class='error'
+                 id='{{form.cedula.name}}_error'
+                 aria-live="polite"
+               ></span>
+               {{ form.cedula.errors }}
+             </p>
+             <table width="300" border="0" cellspacing="0">
+               <tr>
+                 <td><font size="32" color="blue"><i class="fa fa-cc-visa"> </i></font></td>
+                 <td><font size="32" color="red"><i class="fa fa-cc-mastercard"> </i></font></td>
+                 <td><font size="32" color="gray"><i class="fa fa-cc-amex"> </i></font></td>
+               </tr>
+               <tr>
+                 {% for choice in form.tarjetaTipo %}
+                   <td> {{ choice }} </td>
+                 {% endfor %}
+               </tr>
+             </table>
+             {{ form.tarjetaTipo.errors }}
+             <p>
+               {{ form.tarjeta }}
+               <span
+                 class='error'
+                 id='{{form.tarjeta.name}}_error'
+                 aria-live="polite"
+               ></span>
+             </p>
+             {{ form.tarjeta.errors }}
+             <p>
+               {{ form.idBill }}
+               <span
+                 class='error'
+                 id='{{form.idBill.name}}_error'
+                 aria-live="polite"
+               ></span>
+             </p>
+             {{ form.idBill.errors }}
+             <p>
+               {{ form.pinValid }}
+               <span
+                 class='error'
+                 id='{{form.pinValid.name}}_error'
+                 aria-live="polite"
+               ></span>
+             </p>
+             {{ form.pinValid.errors }}
+             <p>
+               {{ form.monto }}
+               <span
+                 class='error'
+                 id='{{form.monto.name}}_error'
+                 aria-live="polite"
+               ></span>
+             </p>
+             {{ form.monto.errors }}
+           </div>
+         </div>
+       <div class="control-group">
+         <label></label>
+       <div class="controls">
+         <button type="submit" class="btn btn-primary">
+           Recargar
+         </button>
+       </div>
+     </div>
     </form>
   </div>
 </div>
-{% include "validator.js.html" %}
+{% block scripts %}
+  {% include "validator.js.html" %}
+{% endblock %}

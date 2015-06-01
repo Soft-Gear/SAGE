@@ -50,7 +50,7 @@ from estacionamientos.models import (
     TarifaHorayFraccion,
     TarifaFinDeSemana,
     TarifaHoraPico
-)
+, Recarga_billetera)
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
@@ -775,19 +775,65 @@ def billetera_electronica_crear(request):
 
 #Intento de recargar saldo, view incompleto
 def billetera_electronica_recargar(request):
-    form = RecargarSaldoForm()
-    estacionamiento = Estacionamiento.objects.all()
+    
+    if request.method == 'GET':
+        form = RecargarSaldoForm()
     if request.method == 'POST':
-        return render(
-            request, 'template-mensaje.html',
-            { 'color'   : 'black'
-            , 'mensaje' : 'Se ha recargado a su cuenta: 0.00 BsF '
-            }
-        )
+        form = RecargarSaldoForm(request.POST)
+        #Guarda lo que introdujo el usuario
+        if form.is_valid():
+            identificador = form.cleaned_data['idBill']
+            monto = form.cleaned_data['monto']
+            pinVal = form.cleaned_data['pinValid']
+            try:    
+                billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
+            except ObjectDoesNotExist:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Autenticación denegada'
+                    }
+                )
+                
+            if pinVal != billetera.PIN:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Autenticación denegada'
+                    }
+                )
+            
+            if billetera.saldo + int(monto) > 10000:
+                resto = 10000 - billetera.saldo
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'La recarga excede el limite de 10.000 BsF. Solo puede recargar un maximo de ' + str(resto) + ' restante'
+                }
+                )
+            billetera.saldo += int(monto)
+            billetera.save()          
+            recarga = Recarga_billetera(
+                fechaTransaccion = datetime.now(),
+                idBilletera      = identificador,
+                cedula           = form.cleaned_data['cedula'],
+                cedulaTipo       = form.cleaned_data['cedulaTipo'],
+                nombre           = form.cleaned_data['nombre'],
+                apellido         = form.cleaned_data['apellido'],
+                monto            = form.cleaned_data['monto'],                        
+            )
+            recarga.save()
+            return render(
+                request, 'recarga.html',
+                { 'color'   : 'black'  
+                , 'pago'    : recarga             
+                , 'mensaje' : 'Se ha recargado a su cuenta:'+ monto +' BsF'
+                }
+            )
+        
     
     return render(request,  
         'billetera_electronica_recarga.html',
         { 'form': form
-        , 'estacionamiento': estacionamiento
         }
     )

@@ -63,13 +63,24 @@ class Pago(models.Model):
 	def __str__(self):
 		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
 		
+class Recarga_billetera(models.Model):
+	fechaTransaccion = models.DateTimeField()
+	idBilletera 	 = models.IntegerField()
+	nombre		     = models.CharField(max_length = 30)
+	apellido         = models.CharField(max_length = 30)
+	cedulaTipo       = models.CharField(max_length = 1)
+	cedula           = models.CharField(max_length = 10)
+	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
+	
+	def __str__(self):
+		return self.nombre + " " + self.idBilletera + " " + str(self.id)
+
 class BilleteraElectronica(models.Model):
 	idBilletera = models.IntegerField()
 	PIN         = models.CharField(max_length = 4)
 	nombre      = models.CharField(max_length = 50)
 	CI          = models.CharField(max_length = 10)
 	saldo       = models.DecimalField(decimal_places= 2, max_digits = 256)
-	#reserva     = models.ForeignKey(Reserva)
 	
 	def __str__(self):
 		return self.nombre + " " + self.idBilletera + " " + str(self.id)    

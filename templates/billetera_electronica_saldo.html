@@ -12,7 +12,7 @@
 	   <table>
 	      <tr><td>
 	      {% if billetera.saldo = 0 %}
-            Su saldo es: {{billetera.saldo}}, Se recomienda recargar.
+            Su saldo es: {{billetera.saldo}}, <font color="red">Se recomienda recargar.</font>
           {% endif %}
           
           {%if billetera.saldo > 0 %}
