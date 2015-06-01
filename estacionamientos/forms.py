@@ -618,9 +618,9 @@ class PagoForm(forms.Form):
         message = 'El apellido no puede iniciar con espacio en blanco ni contener números ni caracteres desconocidos.'
     )
     
-    id_validator = RegexValidator(
-        regex   = '^[0-9]+$',
-        message = 'La cédula solo puede contener caracteres numéricos.'
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
+        message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
     )
     
     card_validator = RegexValidator(
@@ -654,27 +654,15 @@ class PagoForm(forms.Form):
         )
     )
 
-    cedulaTipo = forms.ChoiceField(
-        required = True,
-        label    = 'cedulaTipo',
-        choices  = (
-            ('V', 'V'),
-            ('E', 'E')
-        ),
-        widget   = forms.Select(attrs =
-            { 'class' : 'form-control' }
-        )
-    )
-
     cedula = forms.CharField(
         required   = True,
         label      = "Cédula",
-        validators = [id_validator],
+        validators = [ci_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
-            , 'pattern'     : id_validator.regex.pattern
-            , 'message'     : id_validator.message
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
             }
         )
     )
@@ -726,20 +714,20 @@ class RifForm(forms.Form):
 
 class CedulaForm(forms.Form):
     
-    id_validator = RegexValidator(
-        regex   = '^[0-9]+$',
-        message = 'La cédula solo puede contener caracteres numéricos.'
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
+        message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
     )
     
     cedula = forms.CharField(
         required   = True,
         label      = "Cédula",
-        validators = [id_validator],
+        validators = [ci_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
-            , 'pattern'     : id_validator.regex.pattern
-            , 'message'     : id_validator.message
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
             }
         )
     )

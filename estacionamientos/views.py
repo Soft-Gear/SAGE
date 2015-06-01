@@ -45,7 +45,6 @@ from estacionamientos.models import (
     BilleteraElectronica,
     Reserva,
     Pago,
-    Pago_billetera,
     TarifaHora,
     TarifaMinuto,
     TarifaHorayFraccion,
@@ -331,9 +330,8 @@ def estacionamiento_pago(request,_id):
             pago = Pago(
                 fechaTransaccion = datetime.now(),
                 cedula           = form.cleaned_data['cedula'],
-                cedulaTipo       = form.cleaned_data['cedulaTipo'],
                 monto            = monto,
-                tarjetaTipo      = form.cleaned_data['tarjetaTipo'],
+                tipoPago         = "Tarjeta",
                 reserva          = reservaFinal,
             )
 
@@ -404,7 +402,9 @@ def estacionamiento_pago_billetera(request,_id):
                     }
                 )
           
-            billetera.saldo -=monto  
+            billetera.saldo -=monto 
+            billetera.save() #Actualiza el saldo
+            
             inicioReserva = datetime(
                 year   = request.session['anioinicial'],
                 month  = request.session['mesinicial'],
@@ -429,11 +429,12 @@ def estacionamiento_pago_billetera(request,_id):
 
             # Se guarda la reserva en la base de datos
             reservaFinal.save()
-
-            pago = Pago_billetera(
+            
+            pago = Pago(
                 fechaTransaccion = datetime.now(),
                 cedula           = billetera.CI,
                 monto            = monto,
+                tipoPago         = "Billetera",
                 reserva          = reservaFinal,
             )
 
