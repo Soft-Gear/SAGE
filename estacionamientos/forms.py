@@ -365,6 +365,11 @@ class RecargarSaldoForm(forms.Form):
         message = 'La cédula solo puede contener caracteres numéricos.'
     )
     
+    pin_validator = RegexValidator(
+        regex =   '^\d{4}$',
+        message = 'EL PIN debe ser 4 digitos'
+    )
+    
     card_validator = RegexValidator(
         regex   = '^[0-9]{16}$',
         message = 'Introduzca un número de tarjeta válido de 16 dígitos.'
@@ -448,6 +453,19 @@ class RecargarSaldoForm(forms.Form):
             , 'placeholder' : 'ID Billetera'
             , 'pattern'     : idBill_validator.regex.pattern
             , 'message'     : idBill_validator.message
+            }
+        )
+    )
+    
+    pinValid = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
             }
         )
     )

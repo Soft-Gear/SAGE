@@ -783,15 +783,25 @@ def billetera_electronica_recargar(request):
         if form.is_valid():
             identificador = form.cleaned_data['idBill']
             monto = form.cleaned_data['monto']
+            pinVal = form.cleaned_data['pinValid']
             try:    
                 billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
             except ObjectDoesNotExist:
                 return render(
-                request, 'template-mensaje.html',
-                { 'color'   : 'red'
-                , 'mensaje' : 'La billetera no exite, introduzca un ID valido'
-                }
-            )
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Autenticación denegada'
+                    }
+                )
+                
+            if pinVal != billetera.PIN:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Autenticación denegada'
+                    }
+                )
+            
             if billetera.saldo + int(monto) > 10000:
                 resto = 10000 - billetera.saldo
                 return render(
@@ -804,6 +814,7 @@ def billetera_electronica_recargar(request):
             billetera.save()          
             recarga = Recarga_billetera(
                 fechaTransaccion = datetime.now(),
+                idBilletera      = identificador,
                 cedula           = form.cleaned_data['cedula'],
                 cedulaTipo       = form.cleaned_data['cedulaTipo'],
                 nombre           = form.cleaned_data['nombre'],

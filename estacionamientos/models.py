@@ -75,6 +75,7 @@ class Pago_billetera(models.Model):
 	
 class Recarga_billetera(models.Model):
 	fechaTransaccion = models.DateTimeField()
+	idBilletera 	 = models.IntegerField()
 	nombre		     = models.CharField(max_length = 30)
 	apellido         = models.CharField(max_length = 30)
 	cedulaTipo       = models.CharField(max_length = 1)
