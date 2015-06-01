@@ -425,6 +425,18 @@ class RecargarSaldoForm(forms.Form):
             }
         )
     )
+    
+    tarjetaTipo = forms.ChoiceField(
+        required = True,
+        label    = 'tarjetaTipo',
+        choices  = (
+            ('Vista',  ' VISTA '),
+            ('Mister', ' MISTER '),
+            ('Xpress', ' XPRESS ')
+            
+        ),
+        widget   = forms.RadioSelect()
+    )
 
     tarjeta = forms.CharField(
         required   = True,
