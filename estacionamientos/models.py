@@ -68,7 +68,6 @@ class Recarga_billetera(models.Model):
 	idBilletera 	 = models.IntegerField()
 	nombre		     = models.CharField(max_length = 30)
 	apellido         = models.CharField(max_length = 30)
-	cedulaTipo       = models.CharField(max_length = 1)
 	cedula           = models.CharField(max_length = 10)
 	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
 	

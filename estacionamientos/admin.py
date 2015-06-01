@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from estacionamientos.models import Propietario, Estacionamiento, Reserva, Pago, TarifaMinuto,\
-    TarifaHorayFraccion, TarifaHora, BilleteraElectronica, Pago_billetera,\
-    Recarga_billetera
+    TarifaHorayFraccion, TarifaHora, BilleteraElectronica, Recarga_billetera
 
 admin.site.register(Propietario)
 admin.site.register(Estacionamiento)

@@ -444,10 +444,11 @@ def estacionamiento_pago_billetera(request,_id):
             return render(
                 request,
                 'pago_billetera.html',
-                { "id"      : _id
-                , "pago"    : pago
-                , "color"   : "green"
-                , 'mensaje' : "Se realizo el pago de reserva satisfactoriamente."
+                { "id"       : _id
+                , "pago"     : pago
+                , "billetera": billetera
+                , "color"    : "green"
+                , 'mensaje'  : "Se realizo el pago de reserva satisfactoriamente."
                 }
             )
 
@@ -817,7 +818,6 @@ def billetera_electronica_recargar(request):
                 fechaTransaccion = datetime.now(),
                 idBilletera      = identificador,
                 cedula           = form.cleaned_data['cedula'],
-                cedulaTipo       = form.cleaned_data['cedulaTipo'],
                 nombre           = form.cleaned_data['nombre'],
                 apellido         = form.cleaned_data['apellido'],
                 monto            = form.cleaned_data['monto'],                        

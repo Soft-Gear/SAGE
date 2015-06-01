@@ -116,6 +116,18 @@
                 <tr><td>
                   BsF. {{pago.monto|floatformat:2|intcomma }}
                 </td></tr>
+                
+                <tr><td><b><i class="fa fa-money"></i>
+                  Saldo restante:
+                </b></td></tr>
+                <tr><td>
+                  {% if billetera.saldo = 0 %}
+                    {{billetera.saldo}} <font color="red"> Se recomienda recargar.</font>
+                  {% endif %}
+                  {% if billetera.saldo > 0 %}
+                    {{billetera.saldo}}
+                  {% endif %}
+                </td></tr>
               </tbody>
             </table>
             <div>
