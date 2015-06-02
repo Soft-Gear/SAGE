@@ -76,6 +76,15 @@
                 </div>
               </div>
           </form>
+          <tr><td>
+            &nbsp;
+          </tr></td>
+          <form action ="./cancelar_reserva" method="get" class="form form-vertical">
+            {% csrf_token %}
+            <button type ="submit" class = "btn btn-primary">
+              Cancelar Reservación
+            </button>
+          </form>
         </div>
       </div>
     </div>

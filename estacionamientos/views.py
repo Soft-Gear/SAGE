@@ -36,7 +36,8 @@ from estacionamientos.forms import (
     CedulaForm,
     ConsultarSaldoForm,
     RecargarSaldoForm,
-    CambiarPropietarioForm
+    CambiarPropietarioForm,
+    CancelarReservaForm
 )
 
 from estacionamientos.models import (
@@ -45,6 +46,7 @@ from estacionamientos.models import (
     BilleteraElectronica,
     Reserva,
     Pago,
+    Factura_devolucion,
     TarifaHora,
     TarifaMinuto,
     TarifaHorayFraccion,
@@ -285,6 +287,111 @@ def estacionamiento_reserva(request, _id):
         , 'estacionamiento': estacionamiento
         }
     )
+    
+def estacionamiento_cancelar_reserva(request):
+        
+    if request.method == 'GET': 
+        form = CancelarReservaForm()
+        
+    if request.method == 'POST': 
+        form = CancelarReservaForm(request.POST)
+        
+        if form.is_valid():
+            idReserva = form.cleaned_data['idReserva']
+            ced       = form.cleaned_data['cedula']
+            
+            #Intenta conseguir la reserva
+            try:    
+                pagoReserva = Pago.objects.get(id = idReserva)
+            except ObjectDoesNotExist:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Id no existe o CI no corresponde al registrado en el recibo de pago'
+                    }
+                )
+        
+            #Verifica que sea la cedula correcta
+            if pagoReserva.cedula != ced:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Id no existe o CI no corresponde al registrado en el recibo de pago'
+                    }
+                )
+                
+            #Guarda la información del pago y de la reserva    
+            request.session['idPagoReserva'] = pagoReserva.id
+            request.session['idReserva']     = pagoReserva.reserva.id
+        
+            #Forma para verificar la billetera a recargar 
+            billetera = ValidarBilleteraForm()
+            return render(
+                request,
+                'cancelar-info-billetera.html',
+                { 'billetera' : billetera }
+            )
+        
+    return render(
+        request,
+        'cancelar.html',
+        { 'form': form
+        }
+    )
+    
+#Recibe el 'post' luego de introducir la billetera
+def estacionamiento_cancelar_reserva_billetera(request): 
+
+    if request.method == 'POST':
+    
+        form = ValidarBilleteraForm(request.POST)
+        #Guarda lo que introdujo el usuario
+        if form.is_valid():
+            identificador = form.cleaned_data['idValid']
+            pinVal = form.cleaned_data['pinValid']
+            #Busca la billetera en la base de datos    
+            try:    
+                billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
+            except ObjectDoesNotExist:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Autenticación denegada'
+                    }
+                )
+            
+            #Verifica que el PIN sea el correcto    
+            if pinVal != billetera.PIN:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Autenticación denegada'
+                    }
+                )
+    
+        #Recoge la información del pago y reserva de la persona para borrarlos de la BD
+        idPago    = request.session['idPagoReserva']
+        idReserva = request.session['idReserva']
+        
+        pago    = Pago.objects.get(id = idPago)
+        reserva = Reserva.objects.get(id = idReserva)
+        
+        devolucion = Factura_devolucion(
+            fechaTransaccion = datetime.now(),
+            cedula = billetera.CI,
+            monto  = pago.monto,
+        )
+        
+        billetera.saldo += pago.monto
+        billetera.save()
+        pago.delete() 
+        reserva.delete()
+        devolucion.save()
+        
+        return render(
+            request, 'factura-devolucion.html',
+            { 'devolucion' : devolucion }
+        )
 
 def estacionamiento_pago(request,_id):
     form = PagoForm()

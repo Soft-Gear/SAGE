@@ -3,12 +3,12 @@
     <div class="panel-title">
       <i class="glyphicon glyphicon-wrench pull-right"></i>
       <h4>
-        Reservar
+        Cancelar
       </h4>
     </div>
   </div>
   <div class="panel-body">
-    <form action="./reserva" method="post" class="form form-vertical">
+    <form action="./cancelar_reserva" method="post" class="form form-vertical">
       {% csrf_token %}
       {% for field in form %}
         <div class="control-group">
@@ -23,23 +23,10 @@
         <label></label>
         <div class="controls">
           <button type="submit" class="btn btn-primary">
-            Chequear Disponibilidad
+            Proceder
           </button>
         </div>
       </div>
     </form> 
   </div>
 </div>
-{% block scripts%}
-  {% include "validator.js.html" %}
-  <script type="text/javascript">
-    inicioDate = document.getElementById('id_inicio_0');
-    inicioTime = document.getElementById('id_inicio_1');
-    finDate = document.getElementById('id_final_0');
-    finTime = document.getElementById('id_final_1');
-    inicioDate.placeholder="Fecha Inicio Reserva"
-    inicioTime.placeholder="Hora Inicio Reserva"
-    finDate.placeholder="Fecha Fin Reserva"
-    finTime.placeholder="Hora Fin Reserva"
-  </script>
-{% endblock %}
