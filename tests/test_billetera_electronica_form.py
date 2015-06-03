@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 
-from estacionamientos.forms import BilleteraElectronicaForm, ValidarBilleteraForm
+from estacionamientos.forms import BilleteraElectronicaForm, ValidarBilleteraForm, RecargarSaldoForm
 
 ###################################################################
 #                    BILLETERAELECTRONICA_ALL FORM
@@ -310,6 +310,194 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
             'pinValid': '000'
         }
         form = ValidarBilleteraForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    def test_RecargarBilletera_vacio(self):
+        form_data = {}
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_unCampo(self):
+        form_data = {
+            'nombre': 'Pedro1'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_dosCampos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_tresCampos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedula': '123456789'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_cuatroCampos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_cincoCampos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_seisCampos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_sieteCampos(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_completo(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'500'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertTrue(form.is_valid())
+        
+    #malicia
+    def test_RecargarBilletera_caracteres_en_ID(self):
+        form_data = {
+            'nombre': 'Pedro1',
+            'apellido': 'Perez',
+            'cedula': '123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0fhfdhgfg',
+            'pinValid':'0000',
+            'monto':'500'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_pinTresDigitos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'000',
+            'monto':'500'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+     #borde
+    def test_RecargarBilletera_pinCincoDigitos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'00000',
+            'monto':'500'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+        
+    #malicia
+    def test_RecargarBilletera_pin_con_caracteres(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'00j0',
+            'monto':'500'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_montoCuatroDigitos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'1000'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertTrue(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_montoCincoDigitos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'10000'
+        }
+        form = RecargarSaldoForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     
