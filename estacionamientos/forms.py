@@ -745,3 +745,41 @@ class CedulaForm(forms.Form):
             }
         )
     )
+    
+class CancelarReservaForm(forms.Form):
+
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
+        message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
+    )
+    
+    idBill_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    cedula = forms.CharField(
+        required   = True,
+        label      = "Cédula",
+        validators = [ci_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Cédula'
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
+            }
+        )
+    )
+    
+    idReserva = forms.CharField(
+        required   = True,
+        label      = "ID",
+        validators = [idBill_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Pago'
+            , 'pattern'     : idBill_validator.regex.pattern
+            , 'message'     : idBill_validator.message
+            }
+        )
+    )
