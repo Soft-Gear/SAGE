@@ -804,7 +804,7 @@ def billetera_electronica_recargar(request):
                     }
                 )
             
-            if billetera.saldo + int(monto) > 10000:
+            if billetera.saldo + Decimal(monto) > 10000:
                 resto = 10000 - billetera.saldo
                 return render(
                 request, 'template-mensaje.html',
@@ -812,7 +812,7 @@ def billetera_electronica_recargar(request):
                 , 'mensaje' : 'La recarga excede el limite de 10.000 BsF. Solo puede recargar un maximo de ' + str(resto) + ' restante'
                 }
                 )
-            billetera.saldo += int(monto)
+            billetera.saldo += Decimal(monto)
             billetera.save()          
             recarga = Recarga_billetera(
                 fechaTransaccion = datetime.now(),

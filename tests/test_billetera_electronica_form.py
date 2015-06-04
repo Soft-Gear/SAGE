@@ -499,5 +499,95 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
         }
         form = RecargarSaldoForm(data = form_data)
         self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_montoUnDecimal(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'100.1'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertTrue(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_montoDosDecimales(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'100.11'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertTrue(form.is_valid())
+        
+    #malicia
+    def test_RecargarBilletera_montoSinDecimales(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'100.'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_montoMinimo(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'0.01'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertTrue(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_montoInvalido(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'0.00'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #borde
+    def test_RecargarBilletera_montoInvalidoDos(self):
+        form_data = {
+            'nombre': 'Pedro',
+            'apellido': 'Perez',
+            'cedula': 'V-123456789',
+            'tarjetaTipo': 'Vista',
+            'tarjeta': '1234567890123456',
+            'idBill' : '0',
+            'pinValid':'0000',
+            'monto':'2.0'
+        }
+        form = RecargarSaldoForm(data = form_data)
+        self.assertFalse(form.is_valid())
 
     
