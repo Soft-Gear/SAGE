@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}
+  SAGE - Pago
+{% endblock %}
+
+{% block body%}
+  <body {% if mensaje %} onunload="openlink()" {% endif %}>
+{% endblock %}
+{% block innerContents%}        
+    <div class="row">
+      <div class="col-md-7" style="color:{{color}}">
+        {{mensaje}}
+        <hr>
+      </div>
+      <div class="col-md-4">
+        <table class="table table-striped">
+          <tbody>
+            <tr><td><b><i class="fa fa-circle"></i>
+              Número de Transacción:
+            </b></td></tr>
+            <tr><td>
+              {{devolucion.id}}
+            </td></tr>
+
+            <tr><td><b><i class="fa fa-clock-o"></i>
+              Fecha de Transacción:
+            </b></td></tr>
+            <tr><td>
+              {{devolucion.fechaTransaccion}}
+            </td></tr>
+
+            <tr><td><b><i class="fa fa-user"></i>
+              Numero de reserva cancelada:
+            </b></td></tr>
+            <tr><td>
+             {{devolucion.numReciboPago}}
+            </td></tr>
+            
+            <tr><td><b><i class="fa fa-user"></i>
+              Id billetera recargada:
+            </b></td></tr>
+            <tr><td>
+             {{devolucion.idBilleteraRecargada}}
+            </td></tr>
+
+            <tr><td><b><i class="fa fa-money"></i>
+              Monto:
+            </b></td></tr>
+            <tr><td>
+              BsF. {{devolucion.monto|floatformat:2|intcomma }}
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+{% endblock %}

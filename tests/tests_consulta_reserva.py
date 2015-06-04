@@ -68,9 +68,8 @@ class consultaReservaTestCase(TestCase):
         r.save()
         p = Pago(
                 fechaTransaccion = datetime.now(),
-                cedulaTipo       = "V",
-                cedula           = "1234567",
-                tarjetaTipo      = "VISTA",
+                cedula           = "V-1234567",
+                tipoPago      = "VISTA",
                 reserva          = r,
                 monto            = 150,
             )
@@ -105,9 +104,8 @@ class consultaReservaTestCase(TestCase):
             r.save()
             p = Pago(
                     fechaTransaccion = datetime.now(),
-                    cedulaTipo       = "V",
-                    cedula           = "1234567",
-                    tarjetaTipo      = "VISTA",
+                    cedula           = "V-1234567",
+                    tipoPago      = "VISTA",
                     reserva          = r,
                     monto            = 100,
                 )
@@ -159,9 +157,8 @@ class consultaReservaTestCase(TestCase):
             r.save()
             p = Pago(
                     fechaTransaccion = datetime.now(),
-                    cedulaTipo       = "V",
-                    cedula           = "1234567",
-                    tarjetaTipo      = "VISTA",
+                    cedula           = "V-1234567",
+                    tipoPago         = "VISTA",
                     reserva          = r,
                     monto            = 100,
                 )
@@ -175,9 +172,8 @@ class consultaReservaTestCase(TestCase):
             r.save()
             p = Pago(
                     fechaTransaccion = datetime.now(),
-                    cedulaTipo       = "V",
-                    cedula           = "1234567",
-                    tarjetaTipo      = "VISTA",
+                    cedula           = "V-1234567",
+                    tipoPago         = "VISTA",
                     reserva          = r,
                     monto            = 100,
                 )
@@ -233,9 +229,8 @@ class consultaReservaTestCase(TestCase):
                 r.save()
                 p = Pago(
                         fechaTransaccion = datetime.now(),
-                        cedulaTipo       = "V",
-                        cedula           = "1234567",
-                        tarjetaTipo      = "VISTA",
+                        cedula           = "V-1234567",
+                        tipoPago      = "VISTA",
                         reserva          = r,
                         monto            = 100,
                     )
@@ -293,9 +288,8 @@ class consultaReservaTestCase(TestCase):
             r.save()
             p = Pago(
                     fechaTransaccion = datetime.now(),
-                    cedulaTipo       = "V",
-                    cedula           = "1234567",
-                    tarjetaTipo      = "VISTA",
+                    cedula           = "V-1234567",
+                    tipoPago         = "VISTA",
                     reserva          = r,
                     monto            = 100,
                 )

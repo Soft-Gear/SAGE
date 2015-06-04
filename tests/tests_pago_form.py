@@ -70,8 +70,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
         form_data = {
             'nombre': 'Pedro',
             'apellido': 'Perez',
-            'cedulaTipo': 'V',
-            'cedula': '24277100',
+            'cedula': 'V-24277100',
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234567890123456',
         }
@@ -188,8 +187,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
         form_data = {
             'nombre': 'Pedro',
             'apellido': 'Perez',
-            'cedulaTipo': 'V',
-            'cedula': '999999999',
+            'cedula': 'V-999999999',
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234567890123456',
         }
@@ -201,8 +199,7 @@ class PagoTarjetaDeCreditoFormTestCase(TestCase):
         form_data = {
             'nombre': 'Pedro',
             'apellido': 'Perez',
-            'cedulaTipo': 'V',
-            'cedula': '0',
+            'cedula': 'V-10000000',
             'tarjetaTipo': 'Vista',
             'tarjeta': '1234567890123456',
         }
