@@ -64,10 +64,10 @@ class Pago(models.Model):
 		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
 		
 class Factura_devolucion(models.Model):
-    fechaTransaccion     = models.DateTimeField()
-    numReciboPago        = models.IntegerField()
-    idBilleteraRecargada = models.IntegerField()
-    monto                = models.DecimalField(decimal_places = 2, max_digits = 256)
+	fechaTransaccion     = models.DateTimeField()
+	numReciboPago        = models.IntegerField()
+	idBilleteraRecargada = models.IntegerField()
+	monto                = models.DecimalField(decimal_places = 2, max_digits = 256)
 		
 class Recarga_billetera(models.Model):
 	fechaTransaccion = models.DateTimeField()
