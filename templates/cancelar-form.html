@@ -20,7 +20,6 @@
         <br/>
       {% endfor %}
       <div class="control-group">
-        <label></label>
         <div class="controls">
           <button type="submit" class="btn btn-primary">
             Proceder
@@ -35,9 +34,13 @@
     
     <form action ="/estacionamientos/consulta_reserva" method ="get" class = "form form-vertical">
       {% csrf_token %}
-       <button type="submit" class="btn btn-primary">
-          Devolver
-       </button>
-     </form>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary">
+            Volver
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

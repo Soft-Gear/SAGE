@@ -753,7 +753,7 @@ class CancelarReservaForm(forms.Form):
         message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
     )
     
-    idBill_validator = RegexValidator(
+    id_validator = RegexValidator(
         regex   = '^[0-9]+$',
         message = 'Introduzca un id de digitos'
     )
@@ -774,12 +774,12 @@ class CancelarReservaForm(forms.Form):
     idReserva = forms.CharField(
         required   = True,
         label      = "ID",
-        validators = [idBill_validator],
+        validators = [id_validator],
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'ID Pago'
-            , 'pattern'     : idBill_validator.regex.pattern
-            , 'message'     : idBill_validator.message
+            , 'pattern'     : id_validator.regex.pattern
+            , 'message'     : id_validator.message
             }
         )
     )
