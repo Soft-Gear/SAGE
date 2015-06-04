@@ -470,7 +470,7 @@ class RecargarSaldoForm(forms.Form):
     )
     
     monto_validator = RegexValidator(
-        regex   = '^([0-9]{1,4}(\.[0-9]*[1-9])?)$',
+        regex   = '^([0-9]+(\.[0-9]{1,2})?)$',
         message = 'Introduzca un monto valido, menor a 10000'
     )
     
