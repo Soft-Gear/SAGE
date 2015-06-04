@@ -368,7 +368,7 @@ def estacionamiento_cancelar_reserva_billetera(request):
                     , 'mensaje' : 'Autenticación denegada'
                     }
                 )
-    
+       
         #Recoge la información del pago y reserva de la persona para borrarlos de la BD
         idPago    = request.session['idPagoReserva']
         idReserva = request.session['idReserva']
@@ -376,9 +376,19 @@ def estacionamiento_cancelar_reserva_billetera(request):
         pago    = Pago.objects.get(id = idPago)
         reserva = Reserva.objects.get(id = idReserva)
         
+        #Verificación de que la reserva no esté en curso
+        if ((reserva.finalReserva >= datetime.now()) and (datetime.now()>=reserva.inicioReserva)):
+            return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'La reserva está en curso. No puede cancelarla'
+                }
+            )
+        
         devolucion = Factura_devolucion(
             fechaTransaccion = datetime.now(),
-            cedula = billetera.CI,
+            numReciboPago = pago.id,
+            idBilleteraRecargada = billetera.idBilletera,
             monto  = pago.monto,
         )
         
