@@ -519,7 +519,7 @@ def estacionamiento_pago_billetera(request,_id):
                     }
                 )
           
-            billetera.saldo -=monto 
+            billetera.saldo -= monto 
             billetera.save() #Actualiza el saldo
             
             inicioReserva = datetime(

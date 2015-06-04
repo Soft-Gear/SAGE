@@ -204,3 +204,56 @@ class IntegrationTest(TestCase):
         response = self.client.get('/estacionamientos/1/pago')
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, '404.html')
+
+    # Borde
+    def test_vista_propietarios(self):
+        response = self.client.get('/estacionamientos/propietarios')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'catalogo-propietarios.html')
+    
+    # Borde
+    def test_vista_billetera_electronica(self):
+        response = self.client.get('/estacionamientos/billetera_electronica')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'Billetera-Electronica.html')
+
+    # Borde
+    def test_vista_billetera_electronica_recargar(self):
+        response = self.client.get('/estacionamientos/billetera_electronica/recargar')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'billetera_electronica_recarga.html')
+    
+    # Borde
+    def test_vista_crear_billetera_electronica(self):
+        response = self.client.get('/estacionamientos/billetera_electronica/crear')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'billetera_electronica_crear.html')
+
+    # Borde
+    def test_vista_pagar_con_billetera_electronica(self):
+        pro = Propietario(
+            nombre = "Juana",
+            ci = 'V-12345679',
+            tel = "0412-1238567"
+        )
+        pro.save()
+        e = Estacionamiento(
+            ci_propietario = pro,
+            nombre = "nom",
+            direccion = "dir",
+            rif = "rif",
+            capacidad = 20,
+            apertura = time(0,0),
+            cierre = time(23,59),
+        )
+        e.save()
+        response = self.client.get('/estacionamientos/1/pago_billetera')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'pago_billetera.html')
+    
+    # Borde
+    def test_vista_cancelar_reserva(self):
+        response = self.client.get('/estacionamientos/cancelar_reserva')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'cancelar.html')
+    
