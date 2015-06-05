@@ -384,6 +384,25 @@ def estacionamiento_cancelar_reserva_billetera(request):
                 , 'mensaje' : 'La reserva está en curso. No puede cancelarla'
                 }
             )
+            
+        #Verificación de que la reserva no sea de una fecha pasada
+        if (reserva.finalReserva < datetime.now()): 
+            return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'La reserva ya pasó. No puede cancelarla'
+                }
+            )
+        
+        if (billetera.saldo + pago.monto > 10000):
+            return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'Abonar a esta billetera no es posible ya que\
+                     el saldo sobrepasaría los 100000 Bs.F. Por favor introduzca otra\
+                     billetera'
+                }
+            )
         
         devolucion = Factura_devolucion(
             fechaTransaccion = datetime.now(),
@@ -394,7 +413,8 @@ def estacionamiento_cancelar_reserva_billetera(request):
         
         billetera.saldo += pago.monto
         billetera.save()
-        pago.delete() 
+        pago.estado = False
+        pago.save()
         reserva.delete()
         devolucion.save()
         
@@ -474,6 +494,7 @@ def estacionamiento_pago(request,_id):
     
 def estacionamiento_pago_billetera(request,_id):
     form = ValidarBilleteraForm()
+    cedula1 = CedulaForm()
     
     try:
         estacionamiento = Estacionamiento.objects.get(id = _id)
@@ -486,8 +507,9 @@ def estacionamiento_pago_billetera(request,_id):
     if request.method == 'POST':
     
         form = ValidarBilleteraForm(request.POST)
+        cedula1 = CedulaForm(request.POST)
         #Guarda lo que introdujo el usuario
-        if form.is_valid():
+        if form.is_valid() and cedula1.is_valid():
             identificador = form.cleaned_data['idValid']
             pinVal = form.cleaned_data['pinValid']
             #Busca la billetera en la base de datos    
@@ -549,7 +571,7 @@ def estacionamiento_pago_billetera(request,_id):
             
             pago = Pago(
                 fechaTransaccion = datetime.now(),
-                cedula           = billetera.CI,
+                cedula           = cedula1.cleaned_data['cedula'],
                 monto            = monto,
                 tipoPago         = "Billetera",
                 reserva          = reservaFinal,
@@ -572,7 +594,9 @@ def estacionamiento_pago_billetera(request,_id):
     return render(
         request,
         'pago_billetera.html',
-        { 'form' : form }
+        { 'form' : form
+        , 'cedula1': cedula1
+        }
     )
 
 def estacionamiento_ingreso(request):
@@ -606,7 +630,7 @@ def estacionamiento_consulta_reserva(request):
         if form.is_valid():
 
             cedula        = form.cleaned_data['cedula']
-            facturas      = Pago.objects.filter(cedula = cedula)
+            facturas      = Pago.objects.filter(cedula = cedula).filter(estado = True)
             listaFacturas = []
 
             listaFacturas = sorted(
@@ -929,6 +953,15 @@ def billetera_electronica_recargar(request):
                 , 'mensaje' : 'La recarga excede el limite de 10.000 BsF. Solo puede recargar un maximo de ' + str(resto) + ' restante'
                 }
                 )
+                
+            if Decimal(monto) < 0.01:
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'No puedes recargar este monto a la billetera'
+                }
+                )
+                
             billetera.saldo += Decimal(monto)
             billetera.save()          
             recarga = Recarga_billetera(
@@ -942,9 +975,10 @@ def billetera_electronica_recargar(request):
             recarga.save()
             return render(
                 request, 'recarga.html',
-                { 'color'   : 'black'  
-                , 'pago'    : recarga             
-                , 'mensaje' : 'Se ha recargado a su cuenta:'+ monto +' BsF'
+                { 'color'     : 'black'  
+                , 'pago'      : recarga     
+                , 'billetera' : billetera       
+                , 'mensaje'   : 'Se ha recargado a su cuenta:'+ monto +' BsF'
                 }
             )
         

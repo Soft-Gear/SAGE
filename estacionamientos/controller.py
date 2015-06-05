@@ -105,7 +105,7 @@ def consultar_ingresos(rif):
     for estacionamiento in listaEstacionamientos:
         listaFacturas = Pago.objects.filter(
             reserva__estacionamiento__nombre = estacionamiento.nombre
-        )
+        ).filter(estado = True)
         ingreso       = [estacionamiento.nombre, 0]
         for factura in listaFacturas:
             ingreso[1] += factura.monto

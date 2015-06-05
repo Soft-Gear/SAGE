@@ -29,7 +29,7 @@
                 {{ form.idValid }}
                 <span
                   class='error'
-                  id='{{form.nombre.name}}_error'
+                  id='{{form.idValid.name}}_error'
                   aria-live="polite"
                 ></span>
               </p>
@@ -38,12 +38,20 @@
                 {{ form.pinValid }}
                 <span
                   class='error'
-                  id='{{form.apellido.name}}_error'
+                  id='{{form.pinValid.name}}_error'
                   aria-live="polite"
                 ></span>
               </p>
               {{ form.pinValid.errors }}
-              
+              <p>
+                {{ cedula1.cedula }}
+                <span
+                  class='error'
+                  id='{{cedula1.cedula.name}}_error'
+                  aria-live="polite"
+                ></span>
+              </p>
+              {{ cedula1.cedula.errors }}
             </div>
           </div>
           <input
