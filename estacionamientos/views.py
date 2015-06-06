@@ -398,9 +398,7 @@ def estacionamiento_cancelar_reserva_billetera(request):
             return render(
                 request, 'template-mensaje.html',
                 { 'color'   : 'red'
-                , 'mensaje' : 'Abonar a esta billetera no es posible ya que\
-                     el saldo sobrepasaría los 100000 Bs.F. Por favor introduzca otra\
-                     billetera'
+                , 'mensaje' : 'Abonar a esta billetera no es posible ya que el saldo sobrepasaría los 10000. Por favor introduzca otra billetera'
                 }
             )
         
@@ -950,11 +948,11 @@ def billetera_electronica_recargar(request):
                 return render(
                 request, 'template-mensaje.html',
                 { 'color'   : 'red'
-                , 'mensaje' : 'La recarga excede el limite de 10.000 BsF. Solo puede recargar un maximo de ' + str(resto) + ' restante'
+                , 'mensaje' : 'La recarga excede el limite de 10.000. Solo puede recargar un maximo de ' + str(resto) + ' restante'
                 }
                 )
                 
-            if Decimal(monto) < 0.01:
+            if Decimal(monto) <= 0:
                 return render(
                 request, 'template-mensaje.html',
                 { 'color'   : 'red'
@@ -978,7 +976,7 @@ def billetera_electronica_recargar(request):
                 { 'color'     : 'black'  
                 , 'pago'      : recarga     
                 , 'billetera' : billetera       
-                , 'mensaje'   : 'Se ha recargado a su cuenta:'+ monto +' BsF'
+                , 'mensaje'   : 'Se ha recargado a su cuenta: '+ monto
                 }
             )
         
