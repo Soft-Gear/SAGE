@@ -51,8 +51,8 @@ from estacionamientos.models import (
     TarifaMinuto,
     TarifaHorayFraccion,
     TarifaFinDeSemana,
-    TarifaHoraPico
-, Recarga_billetera)
+    TarifaHoraPico,
+    HistorialBilleteraElectronica)
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
@@ -872,13 +872,22 @@ def billetera_electronica(request):
                 , 'mensaje' : 'Autenticación denegada'
                 }
             )
+
+            if "saldo" in request.POST:
+                return render(
+                    request,
+                    'billetera_electronica_saldo.html',
+                    {'billetera' : billetera}
+                )
             
-            return render(
-                request,
-                'billetera_electronica_saldo.html',
-                {'billetera' : billetera}
-            )
-        
+            elif "historial" in request.POST:
+                return render(
+                    request,
+                    'billetera_electronica_historial.html',
+                    {'billetera' : billetera,
+                     'historial' : HistorialBilleteraElectronica.objects.filter(billetera = billetera)}   
+                )
+                
     return render(
         request, 'Billetera-Electronica.html',
         {'form': form}
@@ -961,25 +970,28 @@ def billetera_electronica_recargar(request):
                 )
                 
             billetera.saldo += Decimal(monto)
-            billetera.save()          
-            recarga = Recarga_billetera(
+            billetera.save()
+            
+            recarga = HistorialBilleteraElectronica(
+                billetera        = billetera,
                 fechaTransaccion = datetime.now(),
-                idBilletera      = identificador,
-                cedula           = form.cleaned_data['cedula'],
+                tipo             = "Recarga",
                 nombre           = form.cleaned_data['nombre'],
                 apellido         = form.cleaned_data['apellido'],
-                monto            = form.cleaned_data['monto'],                        
-            )
+                cedula           = form.cleaned_data['cedula'],
+                tarjeta          = "****" + form.cleaned_data['tarjeta'][-4:],
+                credito          = Decimal(form.cleaned_data['monto'])
+                )
+            
             recarga.save()
             return render(
                 request, 'recarga.html',
                 { 'color'     : 'black'  
                 , 'pago'      : recarga     
                 , 'billetera' : billetera       
-                , 'mensaje'   : 'Se ha recargado a su cuenta: '+ monto
+                , 'mensaje'   : 'Su nuevo saldo es '+ str(billetera.saldo)
                 }
             )
-        
     
     return render(request,  
         'billetera_electronica_recarga.html',

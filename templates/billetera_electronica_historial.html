@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}
+  SAGE - Billetera Electronica
+{% endblock %}
+{% block innerContents%}
+  <div class="col-sm-10">
+    <h3><i class="fa fa-bus"></i>
+     Billetera de {{billetera.nombre}}
+    </h3>
+    <hr>
+    <div class="col-md-4"> 
+	   <table>
+	      <tr><td>
+	      {% if billetera.saldo = 0 %}
+            Su saldo es: {{billetera.saldo}}, <font color="red">Se recomienda recargar.</font>
+          {% endif %}
+          
+          {%if billetera.saldo > 0 %}
+            Su saldo es: {{billetera.saldo}}
+          {% endif %}
+          </tr></td>
+          <tr><td>
+            &nbsp;
+          </tr></td>
+       </table>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <table class="table table-striped">
+      {% if historial %}
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Cedula</th>
+            <th>Tarjeta</th>
+            <th>Debito</th>
+            <th>Credito</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in historial %}
+            <tr>
+              <td>{{obj.id}}</td>
+              <td>{{obj.fechaTransaccion}}</td>
+              <td>{{obj.tipo}}</td>
+              <td>{{obj.nombre}}</td>
+              <td>{{obj.apellido}}</td>
+              <td>{{obj.cedula}}</td>
+              <td>{{obj.tarjeta}}</td>
+              {% if obj.debito %}
+                <td><font color="red">{{obj.debito}}</font></td>
+              {% else %}
+                <td></td>
+              {% endif %}
+              {% if obj.credito %}
+                <td><font color="green">{{obj.credito}}</font></td>
+              {% else %}
+                <td></td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      {% else %}
+        No hay movimientos en esta billetera.
+      {% endif %}
+    </table>
+  </div>
+{% endblock %}
+

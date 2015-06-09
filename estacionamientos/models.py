@@ -71,18 +71,6 @@ class Factura_devolucion(models.Model):
 	monto                = models.DecimalField(decimal_places = 2, max_digits = 256)
 	estado               = models.BooleanField(default = True)
 		
-class Recarga_billetera(models.Model):
-	fechaTransaccion = models.DateTimeField()
-	idBilletera 	 = models.IntegerField()
-	nombre		     = models.CharField(max_length = 30)
-	apellido         = models.CharField(max_length = 30)
-	cedula           = models.CharField(max_length = 10)
-	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
-	estado           = models.BooleanField(default = True)
-	
-	def __str__(self):
-		return self.nombre + " " + self.idBilletera + " " + str(self.id)
-
 class BilleteraElectronica(models.Model):
 	idBilletera = models.IntegerField()
 	PIN         = models.CharField(max_length = 4)
@@ -93,6 +81,20 @@ class BilleteraElectronica(models.Model):
 	def __str__(self):
 		return self.nombre + " " + self.idBilletera + " " + str(self.id)    
 
+class HistorialBilleteraElectronica(models.Model):
+	billetera		 = models.ForeignKey(BilleteraElectronica)
+	fechaTransaccion = models.DateTimeField()
+	tipo			 = models.CharField(max_length = 10)
+	nombre		     = models.CharField(max_length = 30)
+	apellido         = models.CharField(max_length = 30)
+	cedula           = models.CharField(max_length = 10)
+	tarjeta			 = models.CharField(blank = True, max_length = 16)
+	debito 			 = models.DecimalField(decimal_places= 2, max_digits = 256, blank = True, null = True)
+	credito			 = models.DecimalField(decimal_places= 2, max_digits = 256, blank = True, null = True)
+	
+	def __str__(self):
+		return str(self.billetera.idBilletera) + " " + str(self.fechaTransaccion) + " " + self.tipo + " " + self.nombre
+	
 class EsquemaTarifario(models.Model):
 
 	# No se cuantos digitos deberiamos poner
