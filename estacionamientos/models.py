@@ -141,7 +141,7 @@ class TarifaHora(EsquemaTarifario):
 			return(Decimal(self.tarifa_microbus*a).quantize(Decimal('1.00')))
 		elif tipoVehiculo == 'Autobus':
 			return(Decimal(self.tarifa_autobus*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'Especial':
+		elif tipoVehiculo == 'Vehículo Especial':
 			return(Decimal(self.tarifa_especiales*a).quantize(Decimal('1.00')))
 	def tipo(self):
 		return("Por Hora")
@@ -160,7 +160,7 @@ class TarifaMinuto(EsquemaTarifario):
 			return (Decimal(minutes)*Decimal(self.tarifa_microbus/60)).quantize(Decimal('1.00'))
 		elif tipoVehiculo == 'Autobus':
 			return (Decimal(minutes)*Decimal(self.tarifa_autobus/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'Especial':
+		elif tipoVehiculo == 'Vehículo Especial':
 			return (Decimal(minutes)*Decimal(self.tarifa_especiales/60)).quantize(Decimal('1.00'))
 	def tipo(self):
 		return("Por Minuto")
@@ -180,7 +180,7 @@ class TarifaHorayFraccion(EsquemaTarifario):
 			tarifa = self.tarifa_microbus
 		elif tipoVehiculo == 'Autobus':
 			tarifa = self.tarifa_autobus
-		elif tipoVehiculo == 'Especial':
+		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 
 		if(time>3600):
@@ -220,7 +220,7 @@ class TarifaFinDeSemana(EsquemaTarifario):
 		elif tipoVehiculo == 'Autobus':
 			tarifa = self.tarifa_autobus
 			tarifa2 = self.tarifa2_autobus
-		elif tipoVehiculo == 'Especial':
+		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 			tarifa2 = self.tarifa2_especiales
 
@@ -266,7 +266,7 @@ class TarifaHoraPico(EsquemaTarifario):
 		elif tipoVehiculo == 'Autobus':
 			tarifa = self.tarifa_autobus
 			tarifa2 = self.tarifa2_autobus
-		elif tipoVehiculo == 'Especial':
+		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 			tarifa2 = self.tarifa2_especiales
 

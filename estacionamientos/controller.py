@@ -50,7 +50,7 @@ def marzullo(idEstacionamiento, hIn, hOut, tipoVehiculo):
 		capacidad = e.capacidad_microbus
 	elif tipoVehiculo == 'Autobus':
 		capacidad = e.capacidad_autobus
-	elif tipoVehiculo == 'Especial':
+	elif tipoVehiculo == 'Vehículo Especial':
 		capacidad = e.capacidad_especiales
 
 	for reserva in e.reserva_set.filter(tipoVehiculo = tipoVehiculo):
