@@ -44,7 +44,7 @@ class ExtendedFormTestCase(TestCase):
         self.assertFalse(form.is_valid())
 
     # caso borde
-    def test_estacionamiento_extended_form_todos_campos_bien(self):
+    def test_estacionamiento_extended_form_cinco_campos_bien(self):
         form_data = { 'puestos': 2,
                       'horarioin': time(hour = 6,  minute = 0),
                       'horarioout': time(hour = 19,  minute = 0),
@@ -52,46 +52,417 @@ class ExtendedFormTestCase(TestCase):
                       'esquema':'TarifaMinuto'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertTrue(form.is_valid())
-        
-    # caso borde
-    def test_estacionamiento_extended_form_puestos_1(self):
-        form_data = { 'puestos': 1,
-                      'horarioin': time(hour = 6,  minute = 0),
-                      'horarioout': time(hour = 19,  minute = 0),
-                      'tarifa': '12',
-                      'esquema':'TarifaHora'}
+        self.assertFalse(form.is_valid())
+
+    #TDD
+    def test_estacionamiento_extended_form_todos_los_campos_correctos_por_hora(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHora'
+                    }
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertTrue(form.is_valid())
 
-    # caso borde
-    def test_estacionamiento_extended_form_puestos_0(self):
-        form_data = { 'puestos': 0,
-                      'horarioin': time(hour = 6,  minute = 0),
-                      'horarioout': time(hour = 19,  minute = 0),
-                      'tarifa': '12',
-                      'esquema':'TarifaHora'}
+    #TDD
+    def test_estacionamiento_extended_form_todos_los_campos_correctos_por_minuto(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaMinuto'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    #TDD
+    def test_estacionamiento_extended_form_todos_los_campos_correctos_por_hora_fraccion(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    #TDD
+    def test_estacionamiento_extended_form_todos_los_campos_correctos_por_hora_pico(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHoraPico'
+                    'tarifa2_motos': '12',
+                    'tarifa2_carros': '12',
+                    'tarifa2_autobus': '12',
+                    'tarifa2_microbus': '12',
+                    'tarifa2_camiones': '12',
+                    'tarifa2_especiales': '12',
+                    'inicioTarifa2' : time(hour = 10,  minute = 0),
+                    'finTarifa2'    : time(hour = 12,  minute = 0),
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid()) 
+
+    #TDD
+    def test_estacionamiento_extended_form_todos_los_campos_correctos_por_fin_semana(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaFinDeSemana'
+                    'tarifa2_motos': '12',
+                    'tarifa2_carros': '12',
+                    'tarifa2_autobus': '12',
+                    'tarifa2_microbus': '12',
+                    'tarifa2_camiones': '12',
+                    'tarifa2_especiales': '12',
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_motos_1(self):
+      form_data = { 'puestos_motos': 1,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_carros_1(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 1,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_autobus_1(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 1,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_microbus_1(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 1,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+        
+    #Borde
+    def test_estacionamiento_extended_form_puestos_camiones_1(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 1,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_especiales_1(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 1,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertTrue(form.is_valid())
+
+        #Borde
+    def test_estacionamiento_extended_form_puestos_motos_0(self):
+      form_data = { 'puestos_motos': 0,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_carros_0(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 0,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_autobus_0(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 0,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_microbus_0(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 0,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertFalse(form.is_valid())
+        
+    #Borde
+    def test_estacionamiento_extended_form_puestos_camiones_0(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 0,
+                    'puestos_especiales': 2,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
+        form = EstacionamientoExtendedForm(data = form_data)
+        self.assertFalse(form.is_valid())
+
+    #Borde
+    def test_estacionamiento_extended_form_puestos_especiales_0(self):
+      form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 0,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
+                    }
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertFalse(form.is_valid())
 
     # caso borde
     def test_estacionamiento_extended_form_hora_inicio_igual_hora_cierre(self):
-        form_data = { 'puestos': 2,
-                      'horarioin': time(hour = 6,  minute = 0),
-                      'horarioout': time(hour = 6,  minute = 0),
-                      'tarifa': '12',
-                      'esquema':'TarifaHora'
+        form_data = { 'puestos_motos': 2,
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 0,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 6,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertTrue(form.is_valid())
 
     # malicia
     def test_estacionamiento_extended_form_string_en_campo_puesto(self):
-        form_data = { 'puestos': 'hola',
-                      'horarioin': time(hour = 6,  minute = 0),
-                      'horarioout': time(hour = 19,  minute = 0),
-                      'tarifa': '12',
-                      'esquema':'TarifaHora'
+        form_data = { 'puestos_motos': "Hola",
+                    'puestos_carros': 2,
+                    'puestos_autobus': 2,
+                    'puestos_microbus': 2,
+                    'puestos_camiones': 2,
+                    'puestos_especiales': 0,
+                    'horarioin': time(hour = 6,  minute = 0),
+                    'horarioout': time(hour = 19,  minute = 0),
+                    'tarifa_motos': '12',
+                    'tarifa_carros': '12',
+                    'tarifa_autobus': '12',
+                    'tarifa_microbus': '12',
+                    'tarifa_camiones': '12',
+                    'tarifa_especiales': '12',
+                    'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertFalse(form.is_valid())
