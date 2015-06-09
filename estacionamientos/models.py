@@ -27,16 +27,16 @@ class Estacionamiento(models.Model):
 
 	# Campos para referenciar al esquema de tarifa
 
-	content_type = models.ForeignKey(ContentType, null = True)
-	object_id    = models.PositiveIntegerField(null = True)
-	tarifa       = GenericForeignKey()
-	apertura     = models.TimeField(blank = True, null = True)
-	cierre       = models.TimeField(blank = True, null = True)
-	capacidad_motos    = models.IntegerField(blank = True, null = True)
-	capacidad_carros    = models.IntegerField(blank = True, null = True)
-	capacidad_camiones    = models.IntegerField(blank = True, null = True)
-	capacidad_microbus    = models.IntegerField(blank = True, null = True)
-	capacidad_autobus    = models.IntegerField(blank = True, null = True)
+	content_type 			= models.ForeignKey(ContentType, null = True)
+	object_id    			= models.PositiveIntegerField(null = True)
+	tarifa       			= GenericForeignKey()
+	apertura     			= models.TimeField(blank = True, null = True)
+	cierre       			= models.TimeField(blank = True, null = True)
+	capacidad_motos    		= models.IntegerField(blank = True, null = True)
+	capacidad_carros    	= models.IntegerField(blank = True, null = True)
+	capacidad_camiones  	= models.IntegerField(blank = True, null = True)
+	capacidad_microbus  	= models.IntegerField(blank = True, null = True)
+	capacidad_autobus   	= models.IntegerField(blank = True, null = True)
 	capacidad_especiales    = models.IntegerField(blank = True, null = True)
 
 
@@ -47,6 +47,7 @@ class Reserva(models.Model):
 	estacionamiento = models.ForeignKey(Estacionamiento)
 	inicioReserva   = models.DateTimeField()
 	finalReserva    = models.DateTimeField()
+	tipoVehiculo	= models.CharField(max_length = 10)
 
 	def __str__(self):
 		return self.estacionamiento.nombre+' ('+str(self.inicioReserva)+','+str(self.finalReserva)+')'
@@ -103,19 +104,19 @@ class EsquemaTarifario(models.Model):
 
 	# No se cuantos digitos deberiamos poner
 	tarifa_motos         = models.DecimalField(max_digits=20, decimal_places=2)
-	tarifa_carros         = models.DecimalField(max_digits=20, decimal_places=2)
-	tarifa_camiones         = models.DecimalField(max_digits=20, decimal_places=2)
-	tarifa_microbus         = models.DecimalField(max_digits=20, decimal_places=2)
-	tarifa_autobus         = models.DecimalField(max_digits=20, decimal_places=2)
-	tarifa_especiales         = models.DecimalField(max_digits=20, decimal_places=2)
+	tarifa_carros        = models.DecimalField(max_digits=20, decimal_places=2)
+	tarifa_camiones      = models.DecimalField(max_digits=20, decimal_places=2)
+	tarifa_microbus      = models.DecimalField(max_digits=20, decimal_places=2)
+	tarifa_autobus       = models.DecimalField(max_digits=20, decimal_places=2)
+	tarifa_especiales    = models.DecimalField(max_digits=20, decimal_places=2)
 	tarifa2_motos        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
-	tarifa2_carros        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
-	tarifa2_camiones        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
-	tarifa2_microbus        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
-	tarifa2_autobus        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
-	tarifa2_especiales        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
-	inicioEspecial = models.TimeField(blank = True, null = True)
-	finEspecial    = models.TimeField(blank = True, null = True)
+	tarifa2_carros       = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
+	tarifa2_camiones     = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
+	tarifa2_microbus     = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
+	tarifa2_autobus      = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
+	tarifa2_especiales   = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
+	inicioEspecial 		 = models.TimeField(blank = True, null = True)
+	finEspecial    		 = models.TimeField(blank = True, null = True)
 
 	class Meta:
 		abstract = True
@@ -201,7 +202,7 @@ class TarifaFinDeSemana(EsquemaTarifario):
 		minutosFinDeSemana = 0
 		tiempoActual       = inicio
 		minuto             = timedelta(minutes=1)
-
+		#tarifa segun tipo de vehículo
 		if tipoVehiculo == 'moto':
 			tarifa = self.tarifa_motos
 			tarifa2 = self.tarifa2_motos
@@ -247,7 +248,7 @@ class TarifaHoraPico(EsquemaTarifario):
 		minutosValle = 0
 		tiempoActual = reservaInicio
 		minuto       = timedelta(minutes=1)
-
+		#tarifa segun tipo de vehículo
 		if tipoVehiculo == 'moto':
 			tarifa = self.tarifa_motos
 			tarifa2 = self.tarifa2_motos

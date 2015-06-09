@@ -37,12 +37,23 @@ def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
 			return (False, 'No puede haber reservas entre dos días distintos')
 		return (True,'')
 
-def marzullo(idEstacionamiento, hIn, hOut):
+def marzullo(idEstacionamiento, hIn, hOut, tipoVehiculo):
 	e = Estacionamiento.objects.get(id = idEstacionamiento)
 	ocupacion = []
-	capacidad = e.capacidad
+	if tipoVehiculo == 'moto':
+		capacidad = e.capacidad_motos
+	elif tipoVehiculo == 'carro':
+		capacidad = e.capacidad_carros
+	elif tipoVehiculo == 'camion':
+		capacidad = e.capacidad_camiones
+	elif tipoVehiculo == 'microbus':
+		capacidad = e.capacidad_microbus
+	elif tipoVehiculo == 'autobus':
+		capacidad = e.capacidad_autobus
+	elif tipoVehiculo == 'especial':
+		capacidad = e.capacidad_especiales
 
-	for reserva in e.reserva_set.all():
+	for reserva in e.reserva_set.filter(tipoVehiculo = tipoVehiculo):
 		ocupacion += [(reserva.inicioReserva, 1), (reserva.finalReserva, -1)]
 	ocupacion += [(hIn, 1), (hOut, -1)]
 

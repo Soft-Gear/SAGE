@@ -30,7 +30,7 @@ class PropietarioForm(forms.Form):
         required   = True,
         label      = "Nombre",
         validators = [name_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre'
             , 'pattern'     : name_validator.regex.pattern
@@ -55,7 +55,7 @@ class PropietarioForm(forms.Form):
         required   = True,
         label      = "Cédula",
         validators = [ci_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'CI: V/E-xxxxxxxx'
             , 'pattern'     : ci_validator.regex.pattern
@@ -76,7 +76,7 @@ class CambiarPropietarioForm(forms.Form):
         required   = True,
         label      = "Cedula del Propietario",
         validators = [ci_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cedula del Propietario'
             , 'pattern'     : ci_validator.regex.pattern
@@ -93,7 +93,7 @@ class BilleteraElectronicaForm(forms.Form):
     )
     
     pin_validator = RegexValidator(
-        regex =   '^\d{4}$',
+        regex   = '^\d{4}$',
         message = 'EL PIN debe ser 4 digitos'
     )
     
@@ -106,7 +106,7 @@ class BilleteraElectronicaForm(forms.Form):
         required   = True,
         label      = "Nombre",
         validators = [name_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre'
             , 'pattern'     : name_validator.regex.pattern
@@ -120,7 +120,7 @@ class BilleteraElectronicaForm(forms.Form):
         required   = True,
         label      = "Cédula",
         validators = [ci_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'V/E-xxxxxxxx'
             , 'pattern'     : ci_validator.regex.pattern
@@ -145,7 +145,7 @@ class BilleteraElectronicaForm(forms.Form):
 class ValidarBilleteraForm(forms.Form):
 
     pin_validator = RegexValidator(
-        regex =   '^[0-9]{4}$',
+        regex   = '^[0-9]{4}$',
         message = 'EL PIN debe ser 4 digitos'
     )
     
@@ -158,7 +158,7 @@ class ValidarBilleteraForm(forms.Form):
         required   = True,
         label      = "ID",
         validators = [id_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'ID'
             , 'pattern'     : id_validator.regex.pattern
@@ -207,7 +207,7 @@ class EstacionamientoForm(forms.Form):
         required   = True,
         label      = "Cedula del Propietario",
         validators = [ci_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cedula del Propietario'
             , 'pattern'     : ci_validator.regex.pattern
@@ -217,10 +217,10 @@ class EstacionamientoForm(forms.Form):
     )
 
     nombre = forms.CharField(
-        required = True,
-        label    = "Nombre del Estacionamiento",
+        required   = True,
+        label      = "Nombre del Estacionamiento",
         validators = [name_validator],
-        widget   = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre del Estacionamiento'
             , 'pattern'     : name_validator.regex.pattern
@@ -300,7 +300,7 @@ class EstacionamientoForm(forms.Form):
         required   = True,
         label      = "RIF",
         validators = [rif_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'RIF: J/V/D-xxxxxxxx'
             , 'pattern'     : rif_validator.regex.pattern
@@ -312,7 +312,7 @@ class EstacionamientoForm(forms.Form):
 class ConsultarSaldoForm(forms.Form):
     
     pin_validator = RegexValidator(
-        regex =   '^\d{4}$',
+        regex   = '^\d{4}$',
         message = 'EL PIN debe ser 4 digitos'
     )
     
@@ -325,7 +325,7 @@ class ConsultarSaldoForm(forms.Form):
         required   = True,
         label      = "ID Billetera",
         validators = [id_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'ID Billetera'
             , 'pattern'     : id_validator.regex.pattern
@@ -365,7 +365,7 @@ class RecargarSaldoForm(forms.Form):
     )
     
     pin_validator = RegexValidator(
-        regex =   '^\d{4}$',
+        regex   = '^\d{4}$',
         message = 'EL PIN debe ser 4 digitos'
     )
     
@@ -378,7 +378,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "Nombre del Tarjetahabiente",
         validators = [card_name_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre del Tarjetahabiente'
             , 'pattern'     : card_name_validator.regex.pattern
@@ -391,7 +391,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "Apellido del Tarjetahabiente",
         validators = [card_surname_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'      : 'form-control'
             , 'placeholder' : 'Apellido del Tarjetahabiente'
             , 'pattern'     : card_surname_validator.regex.pattern
@@ -404,7 +404,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "Cédula",
         validators = [ci_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
             , 'pattern'     : ci_validator.regex.pattern
@@ -429,7 +429,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "Tarjeta de Credito",
         validators = [card_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Tarjeta de Credito'
             , 'pattern'     : card_validator.regex.pattern
@@ -447,7 +447,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "ID Billetera",
         validators = [idBill_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'ID Billetera'
             , 'pattern'     : idBill_validator.regex.pattern
@@ -478,7 +478,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "Monto",
         validators = [monto_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Monto'
             , 'pattern'     : monto_validator.regex.pattern
@@ -790,8 +790,8 @@ class ReservaForm(forms.Form):
     
     inicio = forms.SplitDateTimeField(
         required = True,
-        label = 'Horario Inicio Reserva',
-        widget= CustomSplitDateTimeWidget(attrs=
+        label    = 'Horario Inicio Reserva',
+        widget   = CustomSplitDateTimeWidget(attrs=
             { 'class'       : 'form-control'
             , 'type'        : 'date'
             , 'placeholder' : 'Hora Inicio Reserva'
@@ -809,6 +809,15 @@ class ReservaForm(forms.Form):
             }
         )
     )
+
+    choices_tipoVehiculo = [
+        ('moto', 'Moto'),
+        ('carro', 'Carro'),
+        ('camion', 'Camion'),
+        ('microbus', 'Microbus'),
+        ('autobus', 'Autobus'),
+        ('vehículo especial','Vehículo Especial')
+    ]
 
 class PagoForm(forms.Form):
     
@@ -836,7 +845,7 @@ class PagoForm(forms.Form):
         required   = True,
         label      = "Nombre del Tarjetahabiente",
         validators = [card_name_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre del Tarjetahabiente'
             , 'pattern'     : card_name_validator.regex.pattern
@@ -849,7 +858,7 @@ class PagoForm(forms.Form):
         required   = True,
         label      = "Apellido del Tarjetahabiente",
         validators = [card_surname_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'      : 'form-control'
             , 'placeholder' : 'Apellido del Tarjetahabiente'
             , 'pattern'     : card_surname_validator.regex.pattern
@@ -862,7 +871,7 @@ class PagoForm(forms.Form):
         required   = True,
         label      = "Cédula",
         validators = [ci_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
             , 'pattern'     : ci_validator.regex.pattern
@@ -887,7 +896,7 @@ class PagoForm(forms.Form):
         required   = True,
         label      = "Tarjeta de Credito",
         validators = [card_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Tarjeta de Credito'
             , 'pattern'     : card_validator.regex.pattern
@@ -907,7 +916,7 @@ class RifForm(forms.Form):
         required   = True,
         label      = "RIF",
         validators = [rif_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'RIF: J/V/D-xxxxxxxxx'
             , 'pattern'     : rif_validator.regex.pattern
@@ -927,7 +936,7 @@ class CedulaForm(forms.Form):
         required   = True,
         label      = "Cédula",
         validators = [ci_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
             , 'pattern'     : ci_validator.regex.pattern
@@ -952,7 +961,7 @@ class CancelarReservaForm(forms.Form):
         required   = True,
         label      = "Cédula",
         validators = [ci_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Cédula'
             , 'pattern'     : ci_validator.regex.pattern
@@ -965,7 +974,7 @@ class CancelarReservaForm(forms.Form):
         required   = True,
         label      = "ID",
         validators = [id_validator],
-        widget = forms.TextInput(attrs =
+        widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'ID Pago'
             , 'pattern'     : id_validator.regex.pattern

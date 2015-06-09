@@ -82,15 +82,15 @@ def estacionamientos_all(request):
                 objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['ci_propietario'])
                 
                 obj = Estacionamiento(
-                    ci_propietario = objetoPropietario,
-                    nombre      = form.cleaned_data['nombre'],
-                    direccion   = form.cleaned_data['direccion'],
-                    rif         = form.cleaned_data['rif'],
-                    telefono1   = form.cleaned_data['telefono_1'],
-                    telefono2   = form.cleaned_data['telefono_2'],
-                    telefono3   = form.cleaned_data['telefono_3'],
-                    email1      = form.cleaned_data['email_1'],
-                    email2      = form.cleaned_data['email_2']
+                    ci_propietario  = objetoPropietario,
+                    nombre          = form.cleaned_data['nombre'],
+                    direccion       = form.cleaned_data['direccion'],
+                    rif             = form.cleaned_data['rif'],
+                    telefono1       = form.cleaned_data['telefono_1'],
+                    telefono2       = form.cleaned_data['telefono_2'],
+                    telefono3       = form.cleaned_data['telefono_3'],
+                    email1          = form.cleaned_data['email_1'],
+                    email2          = form.cleaned_data['email_2']
                 )
                 obj.save()
                 # Recargamos los estacionamientos ya que acabamos de agregar
@@ -125,29 +125,29 @@ def estacionamiento_detail(request, _id):
         if estacionamiento.tarifa:
             
             form_data = {
-                'horarioin' : estacionamiento.apertura,
-                'horarioout' : estacionamiento.cierre,
-                'tarifa_motos' : estacionamiento.tarifa.tarifa_motos,
-                'tarifa_carros' : estacionamiento.tarifa.tarifa_carros,
-                'tarifa_camiones' : estacionamiento.tarifa.tarifa_camiones,
-                'tarifa_microbus' : estacionamiento.tarifa.tarifa_microbus,
-                'tarifa_autobuses' : estacionamiento.tarifa.tarifa_autobuses,
-                'tarifa_especiales' : estacionamiento.tarifa.tarifa_especiales,
-                'tarifa2_motos' : estacionamiento.tarifa.tarifa2_motos,
-                'tarifa2_carros' : estacionamiento.tarifa.tarifa2_carros,
-                'tarifa2_camiones' : estacionamiento.tarifa.tarifa2_camiones,
-                'tarifa2_microbus' : estacionamiento.tarifa.tarifa2_microbus,
-                'tarifa2_autobus' : estacionamiento.tarifa.tarifa2_autobus,
-                'tarifa2_especiales' : estacionamiento.tarifa.tarifa2_especiales,
-                'inicioTarifa2' : estacionamiento.tarifa.inicioEspecial,
-                'finTarifa2' : estacionamiento.tarifa.finEspecial,
-                'puestos_motos' : estacionamiento.capacidad_motos,
-                'puestos_carros' : estacionamiento.capacidad_carros,
-                'puestos_camiones' : estacionamiento.capacidad_camiones,
-                'puestos_microbus' : estacionamiento.capacidad_microbus,
-                'puestos_autobus' : estacionamiento.capacidad_autobus,
-                'puestos_especiales' : estacionamiento.capacidad_especiales,
-                'esquema' : estacionamiento.tarifa.__class__.__name__
+                'horarioin'             : estacionamiento.apertura,
+                'horarioout'            : estacionamiento.cierre,
+                'tarifa_motos'          : estacionamiento.tarifa.tarifa_motos,
+                'tarifa_carros'         : estacionamiento.tarifa.tarifa_carros,
+                'tarifa_camiones'       : estacionamiento.tarifa.tarifa_camiones,
+                'tarifa_microbus'       : estacionamiento.tarifa.tarifa_microbus,
+                'tarifa_autobus'        : estacionamiento.tarifa.tarifa_autobus,
+                'tarifa_especiales'     : estacionamiento.tarifa.tarifa_especiales,
+                'tarifa2_motos'         : estacionamiento.tarifa.tarifa2_motos,
+                'tarifa2_carros'        : estacionamiento.tarifa.tarifa2_carros,
+                'tarifa2_camiones'      : estacionamiento.tarifa.tarifa2_camiones,
+                'tarifa2_microbus'      : estacionamiento.tarifa.tarifa2_microbus,
+                'tarifa2_autobus'       : estacionamiento.tarifa.tarifa2_autobus,
+                'tarifa2_especiales'    : estacionamiento.tarifa.tarifa2_especiales,
+                'inicioTarifa2'         : estacionamiento.tarifa.inicioEspecial,
+                'finTarifa2'            : estacionamiento.tarifa.finEspecial,
+                'puestos_motos'         : estacionamiento.capacidad_motos,
+                'puestos_carros'        : estacionamiento.capacidad_carros,
+                'puestos_camiones'      : estacionamiento.capacidad_camiones,
+                'puestos_microbus'      : estacionamiento.capacidad_microbus,
+                'puestos_autobus'       : estacionamiento.capacidad_autobus,
+                'puestos_especiales'    : estacionamiento.capacidad_especiales,
+                'esquema'               : estacionamiento.tarifa.__class__.__name__
             }
             form = EstacionamientoExtendedForm(data = form_data)
         else:
@@ -178,19 +178,19 @@ def estacionamiento_detail(request, _id):
 
             esquemaTarifa = eval(tipo)(
                 tarifa_motos         = tarifa_motos,
-                tarifa_carros         = tarifa_carros,
-                tarifa_camiones         = tarifa_camiones,
-                tarifa_microbus         = tarifa_microbus,
-                tarifa_autobus         = tarifa_autobus,
-                tarifa_especiales         = tarifa_especiales,
+                tarifa_carros        = tarifa_carros,
+                tarifa_camiones      = tarifa_camiones,
+                tarifa_microbus      = tarifa_microbus,
+                tarifa_autobus       = tarifa_autobus,
+                tarifa_especiales    = tarifa_especiales,
                 tarifa2_motos        = tarifa2_motos,
-                tarifa2_carros        = tarifa2_carros,
-                tarifa2_camiones        = tarifa2_camiones,
-                tarifa2_microbus        = tarifa2_microbus,
-                tarifa2_autobus        = tarifa2_autobus,
-                tarifa2_especiales        = tarifa2_especiales,
-                inicioEspecial = inicioTarifa2,
-                finEspecial    = finTarifa2
+                tarifa2_carros       = tarifa2_carros,
+                tarifa2_camiones     = tarifa2_camiones,
+                tarifa2_microbus     = tarifa2_microbus,
+                tarifa2_autobus      = tarifa2_autobus,
+                tarifa2_especiales   = tarifa2_especiales,
+                inicioEspecial       = inicioTarifa2,
+                finEspecial          = finTarifa2
             )
 
             esquemaTarifa.save()
@@ -205,14 +205,14 @@ def estacionamiento_detail(request, _id):
                     }
                 )
             # debería funcionar con excepciones
-            estacionamiento.tarifa    = esquemaTarifa
-            estacionamiento.apertura  = horaIn
-            estacionamiento.cierre    = horaOut
-            estacionamiento.capacidad_motos = form.cleaned_data['puestos_motos']
-            estacionamiento.capacidad_carros = form.cleaned_data['puestos_carros']
-            estacionamiento.capacidad_camiones = form.cleaned_data['puestos_camiones']
-            estacionamiento.capacidad_microbus = form.cleaned_data['puestos_microbus']
-            estacionamiento.capacidad_autobus = form.cleaned_data['puestos_autobus']
+            estacionamiento.tarifa               = esquemaTarifa
+            estacionamiento.apertura             = horaIn
+            estacionamiento.cierre               = horaOut
+            estacionamiento.capacidad_motos      = form.cleaned_data['puestos_motos']
+            estacionamiento.capacidad_carros     = form.cleaned_data['puestos_carros']
+            estacionamiento.capacidad_camiones   = form.cleaned_data['puestos_camiones']
+            estacionamiento.capacidad_microbus   = form.cleaned_data['puestos_microbus']
+            estacionamiento.capacidad_autobus    = form.cleaned_data['puestos_autobus']
             estacionamiento.capacidad_especiales = form.cleaned_data['puestos_especiales']
 
             estacionamiento.save()
@@ -251,6 +251,7 @@ def estacionamiento_reserva(request, _id):
 
             inicioReserva = form.cleaned_data['inicio']
             finalReserva = form.cleaned_data['final']
+            tipoVehiculo = form.cleaned_data['tipoVehiculo']
 
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
@@ -271,23 +272,24 @@ def estacionamiento_reserva(request, _id):
                     }
                 )
 
-            if marzullo(_id, inicioReserva, finalReserva):
+            if marzullo(_id, inicioReserva, finalReserva, tipoVehiculo):
                 reservaFinal = Reserva(
                     estacionamiento = estacionamiento,
                     inicioReserva   = inicioReserva,
                     finalReserva    = finalReserva,
+                    tipoVehiculo    = tipoVehiculo 
                 )
 
                 monto = Decimal(
                     estacionamiento.tarifa.calcularPrecio(
-                        inicioReserva,finalReserva
+                        inicioReserva,finalReserva,tipoVehiculo
                     )
                 )
 
                 request.session['monto'] = float(
                     estacionamiento.tarifa.calcularPrecio(
                         inicioReserva,
-                        finalReserva
+                        finalReserva,tipoVehiculo
                     )
                 )
                 request.session['finalReservaHora']    = finalReserva.hour
@@ -300,6 +302,7 @@ def estacionamiento_reserva(request, _id):
                 request.session['aniofinal']           = finalReserva.year
                 request.session['mesfinal']            = finalReserva.month
                 request.session['diafinal']            = finalReserva.day
+                request.session['tipoVehiculo']        = tipoVehiculo
                 return render(
                     request,
                     'confirmar.html',
@@ -492,10 +495,13 @@ def estacionamiento_pago(request,_id):
                 minute = request.session['finalReservaMinuto']
             )
 
+            tipoVehiculo = request.session['tipoVehiculo']
+
             reservaFinal = Reserva(
                 estacionamiento = estacionamiento,
                 inicioReserva   = inicioReserva,
                 finalReserva    = finalReserva,
+                tipoVehiculo    = tipoVehiculo
             )
 
             # Se guarda la reserva en la base de datos
@@ -598,10 +604,13 @@ def estacionamiento_pago_billetera(request,_id):
                 minute = request.session['finalReservaMinuto']
             )
 
+            tipoVehiculo = request.session['tipoVehiculo']
+
             reservaFinal = Reserva(
                 estacionamiento = estacionamiento,
                 inicioReserva   = inicioReserva,
                 finalReserva    = finalReserva,
+                tipoVehiculo    = tipoVehiculo
             )
 
             # Se guarda la reserva en la base de datos
@@ -758,7 +767,10 @@ def tasa_de_reservacion(request, _id):
             }
         )
     ocupacion = tasa_reservaciones(_id)
-    calcular_porcentaje_de_tasa(estacionamiento.apertura, estacionamiento.cierre, estacionamiento.capacidad, ocupacion)
+    capacidad = (estacionamiento.capacidad_motos + estacionamiento.capacidad_carros + 
+                estacionamiento.capacidad_camiones + estacionamiento.capacidad_microbus + 
+                estacionamiento.capacidad_autobus + estacionamiento.capacidad_especiales)
+    calcular_porcentaje_de_tasa(estacionamiento.apertura, estacionamiento.cierre, capacidad, ocupacion)
     datos_ocupacion = urlencode(ocupacion) # Se convierten los datos del diccionario en el formato key1=value1&key2=value2&...
     return render(
         request,
