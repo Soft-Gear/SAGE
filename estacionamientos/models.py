@@ -38,6 +38,8 @@ class Estacionamiento(models.Model):
 	capacidad_microbus  	= models.IntegerField(blank = True, null = True)
 	capacidad_autobus   	= models.IntegerField(blank = True, null = True)
 	capacidad_especiales    = models.IntegerField(blank = True, null = True)
+	capacidad 			    = models.IntegerField(blank = True, null = True)
+
 
 
 	def __str__(self):

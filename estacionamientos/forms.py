@@ -819,6 +819,14 @@ class ReservaForm(forms.Form):
         ('vehículo especial','Vehículo Especial')
     ]
 
+    tipoVehiculo = forms.ChoiceField(
+        required = True,
+        choices  = choices_tipoVehiculo,
+        widget   = forms.Select(attrs =
+            { 'class' : 'form-control' }
+        )
+    )
+
 class PagoForm(forms.Form):
     
     card_name_validator = RegexValidator(

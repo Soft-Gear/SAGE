@@ -214,7 +214,12 @@ def estacionamiento_detail(request, _id):
             estacionamiento.capacidad_microbus   = form.cleaned_data['puestos_microbus']
             estacionamiento.capacidad_autobus    = form.cleaned_data['puestos_autobus']
             estacionamiento.capacidad_especiales = form.cleaned_data['puestos_especiales']
-
+            estacionamiento.capacidad            = (estacionamiento.capacidad_motos +
+                                                    estacionamiento.capacidad_carros +
+                                                    estacionamiento.capacidad_camiones +
+                                                    estacionamiento.capacidad_microbus +
+                                                    estacionamiento.capacidad_autobus +
+                                                    estacionamiento.capacidad_especiales)
             estacionamiento.save()
             form = EstacionamientoExtendedForm()
 
@@ -767,10 +772,7 @@ def tasa_de_reservacion(request, _id):
             }
         )
     ocupacion = tasa_reservaciones(_id)
-    capacidad = (estacionamiento.capacidad_motos + estacionamiento.capacidad_carros + 
-                estacionamiento.capacidad_camiones + estacionamiento.capacidad_microbus + 
-                estacionamiento.capacidad_autobus + estacionamiento.capacidad_especiales)
-    calcular_porcentaje_de_tasa(estacionamiento.apertura, estacionamiento.cierre, capacidad, ocupacion)
+    calcular_porcentaje_de_tasa(estacionamiento.apertura, estacionamiento.cierre, estacionamiento.capacidad, ocupacion)
     datos_ocupacion = urlencode(ocupacion) # Se convierten los datos del diccionario en el formato key1=value1&key2=value2&...
     return render(
         request,
