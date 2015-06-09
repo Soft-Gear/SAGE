@@ -40,17 +40,17 @@ def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
 def marzullo(idEstacionamiento, hIn, hOut, tipoVehiculo):
 	e = Estacionamiento.objects.get(id = idEstacionamiento)
 	ocupacion = []
-	if tipoVehiculo == 'moto':
+	if tipoVehiculo == 'Moto':
 		capacidad = e.capacidad_motos
-	elif tipoVehiculo == 'carro':
+	elif tipoVehiculo == 'Carro':
 		capacidad = e.capacidad_carros
-	elif tipoVehiculo == 'camion':
+	elif tipoVehiculo == 'Camion':
 		capacidad = e.capacidad_camiones
-	elif tipoVehiculo == 'microbus':
+	elif tipoVehiculo == 'Microbus':
 		capacidad = e.capacidad_microbus
-	elif tipoVehiculo == 'autobus':
+	elif tipoVehiculo == 'Autobus':
 		capacidad = e.capacidad_autobus
-	elif tipoVehiculo == 'especial':
+	elif tipoVehiculo == 'Especial':
 		capacidad = e.capacidad_especiales
 
 	for reserva in e.reserva_set.filter(tipoVehiculo = tipoVehiculo):

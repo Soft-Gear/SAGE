@@ -131,17 +131,17 @@ class TarifaHora(EsquemaTarifario):
 		a = horaFinal-horaInicio
 		a = a.days*24+a.seconds/3600
 		a = ceil(a) #  De las horas se calcula el techo de ellas
-		if tipoVehiculo == 'moto':
+		if tipoVehiculo == 'Moto':
 			return(Decimal(self.tarifa_motos*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'carro':
+		elif tipoVehiculo == 'Carro':
 			return(Decimal(self.tarifa_carros*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'camion':
+		elif tipoVehiculo == 'Camion':
 			return(Decimal(self.tarifa_camiones*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'microbus':
+		elif tipoVehiculo == 'Microbus':
 			return(Decimal(self.tarifa_microbus*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'autobus':
+		elif tipoVehiculo == 'Autobus':
 			return(Decimal(self.tarifa_autobus*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'especial':
+		elif tipoVehiculo == 'Especial':
 			return(Decimal(self.tarifa_especiales*a).quantize(Decimal('1.00')))
 	def tipo(self):
 		return("Por Hora")
@@ -150,17 +150,17 @@ class TarifaMinuto(EsquemaTarifario):
 	def calcularPrecio(self,horaInicio,horaFinal,tipoVehiculo):
 		minutes = horaFinal-horaInicio
 		minutes = minutes.days*24*60+minutes.seconds/60
-		if tipoVehiculo == 'moto':
+		if tipoVehiculo == 'Moto':
 			return (Decimal(minutes)*Decimal(self.tarifa_motos/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'carro':
+		elif tipoVehiculo == 'Carro':
 			return (Decimal(minutes)*Decimal(self.tarifa_carros/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'camion':
+		elif tipoVehiculo == 'Camion':
 			return (Decimal(minutes)*Decimal(self.tarifa_camiones/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'microbus':
+		elif tipoVehiculo == 'Microbus':
 			return (Decimal(minutes)*Decimal(self.tarifa_microbus/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'autobus':
+		elif tipoVehiculo == 'Autobus':
 			return (Decimal(minutes)*Decimal(self.tarifa_autobus/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'especial':
+		elif tipoVehiculo == 'Especial':
 			return (Decimal(minutes)*Decimal(self.tarifa_especiales/60)).quantize(Decimal('1.00'))
 	def tipo(self):
 		return("Por Minuto")
@@ -170,17 +170,17 @@ class TarifaHorayFraccion(EsquemaTarifario):
 		time = horaFinal-horaInicio
 		time = time.days*24*3600+time.seconds
 		#tarifa segun tipo de vehículo
-		if tipoVehiculo == 'moto':
+		if tipoVehiculo == 'Moto':
 			tarifa = self.tarifa_motos
-		elif tipoVehiculo == 'carro':
+		elif tipoVehiculo == 'Carro':
 			tarifa = self.tarifa_carros
-		elif tipoVehiculo == 'camion':
+		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
-		elif tipoVehiculo == 'microbus':
+		elif tipoVehiculo == 'Microbus':
 			tarifa = self.tarifa_microbus
-		elif tipoVehiculo == 'autobus':
+		elif tipoVehiculo == 'Autobus':
 			tarifa = self.tarifa_autobus
-		elif tipoVehiculo == 'especial':
+		elif tipoVehiculo == 'Especial':
 			tarifa = self.tarifa_especiales
 
 		if(time>3600):
@@ -205,22 +205,22 @@ class TarifaFinDeSemana(EsquemaTarifario):
 		tiempoActual       = inicio
 		minuto             = timedelta(minutes=1)
 		#tarifa segun tipo de vehículo
-		if tipoVehiculo == 'moto':
+		if tipoVehiculo == 'Moto':
 			tarifa = self.tarifa_motos
 			tarifa2 = self.tarifa2_motos
-		elif tipoVehiculo == 'carro':
+		elif tipoVehiculo == 'Carro':
 			tarifa = self.tarifa_carros
 			tarifa2 = self.tarifa2_carros
-		elif tipoVehiculo == 'camion':
+		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
 			tarifa2 = self.tarifa2_camiones
-		elif tipoVehiculo == 'microbus':
+		elif tipoVehiculo == 'Microbus':
 			tarifa = self.tarifa_microbus
 			tarifa2 = self.tarifa2_microbus
-		elif tipoVehiculo == 'autobus':
+		elif tipoVehiculo == 'Autobus':
 			tarifa = self.tarifa_autobus
 			tarifa2 = self.tarifa2_autobus
-		elif tipoVehiculo == 'especial':
+		elif tipoVehiculo == 'Especial':
 			tarifa = self.tarifa_especiales
 			tarifa2 = self.tarifa2_especiales
 
@@ -251,22 +251,22 @@ class TarifaHoraPico(EsquemaTarifario):
 		tiempoActual = reservaInicio
 		minuto       = timedelta(minutes=1)
 		#tarifa segun tipo de vehículo
-		if tipoVehiculo == 'moto':
+		if tipoVehiculo == 'Moto':
 			tarifa = self.tarifa_motos
 			tarifa2 = self.tarifa2_motos
-		elif tipoVehiculo == 'carro':
+		elif tipoVehiculo == 'Carro':
 			tarifa = self.tarifa_carros
 			tarifa2 = self.tarifa2_carros
-		elif tipoVehiculo == 'camion':
+		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
 			tarifa2 = self.tarifa2_camiones
-		elif tipoVehiculo == 'microbus':
+		elif tipoVehiculo == 'Microbus':
 			tarifa = self.tarifa_microbus
 			tarifa2 = self.tarifa2_microbus
-		elif tipoVehiculo == 'autobus':
+		elif tipoVehiculo == 'Autobus':
 			tarifa = self.tarifa_autobus
 			tarifa2 = self.tarifa2_autobus
-		elif tipoVehiculo == 'especial':
+		elif tipoVehiculo == 'Especial':
 			tarifa = self.tarifa_especiales
 			tarifa2 = self.tarifa2_especiales
 

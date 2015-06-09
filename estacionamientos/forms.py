@@ -811,12 +811,12 @@ class ReservaForm(forms.Form):
     )
 
     choices_tipoVehiculo = [
-        ('moto', 'Moto'),
-        ('carro', 'Carro'),
-        ('camion', 'Camion'),
-        ('microbus', 'Microbus'),
-        ('autobus', 'Autobus'),
-        ('vehículo especial','Vehículo Especial')
+        ('Moto', 'Moto'),
+        ('Carro', 'Carro'),
+        ('Camion', 'Camión'),
+        ('Microbus', 'Microbús'),
+        ('Autobus', 'Autobús'),
+        ('Vehículo Especial','Vehículo Especial')
     ]
 
     tipoVehiculo = forms.ChoiceField(
