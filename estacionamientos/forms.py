@@ -605,11 +605,13 @@ class EstacionamientoExtendedForm(forms.Form):
     horizonte_reserva = forms.IntegerField(
         required  = True,
         min_value = 1,
+        max_value = 15,
         label     = 'Horizonte de reservacion',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
             , 'placeholder' : 'Horizonte de reservacion'
             , 'min'         : "0"
+            , 'max'         : "15"
             , 'pattern'     : '^[0-9]+'
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
             }

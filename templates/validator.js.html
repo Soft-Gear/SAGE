@@ -20,7 +20,7 @@
         error.innerHTML = "El minimo valor de este campo debe ser " + input.getAttribute('min');
       }
       else if (input.validity.rangeOverflow) {
-        error.innerHTML = "El maximo valor de este campo debe ser " + input.getAttribute('min');
+        error.innerHTML = "El maximo valor de este campo debe ser " + input.getAttribute('max');
       }
       else if (input.validity.tooLong) {
         error.innerHTML = "Este campo debe tener un maximo de " + input.getAttribute('maxlength') + "caracteres";

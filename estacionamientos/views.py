@@ -147,7 +147,8 @@ def estacionamiento_detail(request, _id):
                 'puestos_microbus'      : estacionamiento.capacidad_microbus,
                 'puestos_autobus'       : estacionamiento.capacidad_autobus,
                 'puestos_especiales'    : estacionamiento.capacidad_especiales,
-                'esquema'               : estacionamiento.tarifa.__class__.__name__
+                'esquema'               : estacionamiento.tarifa.__class__.__name__,
+                'horizonte_reserva'     : estacionamiento.horizonte_reserva
             }
             form = EstacionamientoExtendedForm(data = form_data)
         else:
@@ -166,6 +167,7 @@ def estacionamiento_detail(request, _id):
             tarifa_microbus       = form.cleaned_data['tarifa_microbus']
             tarifa_autobus        = form.cleaned_data['tarifa_autobus']
             tarifa_especiales     = form.cleaned_data['tarifa_especiales']
+            horizonte             = form.cleaned_data['horizonte_reserva']
             tipo                  = form.cleaned_data['esquema']
             inicioTarifa2         = form.cleaned_data['inicioTarifa2']
             finTarifa2            = form.cleaned_data['finTarifa2']
@@ -214,6 +216,7 @@ def estacionamiento_detail(request, _id):
             estacionamiento.capacidad_microbus   = form.cleaned_data['puestos_microbus']
             estacionamiento.capacidad_autobus    = form.cleaned_data['puestos_autobus']
             estacionamiento.capacidad_especiales = form.cleaned_data['puestos_especiales']
+            estacionamiento.horizonte_reserva    = horizonte
             estacionamiento.capacidad            = (estacionamiento.capacidad_motos +
                                                     estacionamiento.capacidad_carros +
                                                     estacionamiento.capacidad_camiones +
@@ -265,6 +268,7 @@ def estacionamiento_reserva(request, _id):
                 finalReserva,
                 estacionamiento.apertura,
                 estacionamiento.cierre,
+                estacionamiento.horario_reserva
             )
 
             # Si no es valido devolvemos el request
