@@ -625,6 +625,57 @@ class EstacionamientoExtendedForm(forms.Form):
 
 class ReservaForm(forms.Form):
     
+    name_validator = RegexValidator(
+        regex   = '^[A-Za-záéíóúñÑÁÉÍÓÚäëïöüÄËÏÖÜ\'\- ]+$',
+        message = 'La entrada debe ser un nombre en Español sin símbolos especiales.'
+    )
+        
+    ci_validator = RegexValidator(
+        regex   = '^[VE]-[1-9][0-9]{4}[0-9]+$',
+        message = 'Introduzca un CI con un formato válido de la forma V/E-xxxxxxxx.'
+    )
+    
+    nombre = forms.CharField(
+        required   = True,
+        label      = "Nombre",
+        validators = [name_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Nombre'
+            , 'pattern'     : name_validator.regex.pattern
+            , 'message'     : name_validator.message
+
+            }
+        )
+    )
+    
+    apellido = forms.CharField(
+        required   = True,
+        label      = "Apellido",
+        validators = [name_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Apellido'
+            , 'pattern'     : name_validator.regex.pattern
+            , 'message'     : name_validator.message
+
+            }
+        )
+    )
+    
+    ci = forms.CharField(
+        required   = True,
+        label      = "Cédula",
+        validators = [ci_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'V/E-xxxxxxxx'
+            , 'pattern'     : ci_validator.regex.pattern
+            , 'message'     : ci_validator.message
+            }
+        )
+    )
+    
     inicio = forms.SplitDateTimeField(
         required = True,
         label = 'Horario Inicio Reserva',

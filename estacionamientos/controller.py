@@ -107,7 +107,7 @@ def consultar_ingresos(rif):
 		ingreso       = [estacionamiento.nombre, 0]
 		for factura in listaFacturas:
 			ingreso[1] += factura.monto
-			listaIngresos += [ingreso]
+		listaIngresos += [ingreso]
 		ingresoTotal  += ingreso[1]
 
 	return listaIngresos, ingresoTotal

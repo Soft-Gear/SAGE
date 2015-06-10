@@ -18,43 +18,28 @@
     <hr>
     <div class="col-md-4">
       {% if form %}
-        <form
-          method="post"
-          class="form form-vertical"
-        >
+        <form method="post" class="form form-vertical">
           {% csrf_token %}
           <div class="control-group">
             <div class="controls">
               <p>
                 {{ form.idValid }}
-                <span
-                  class='error'
-                  id='{{form.idValid.name}}_error'
-                  aria-live="polite"
-                ></span>
+                <span class='error' id='{{form.idValid.name}}_error' aria-live="polite">
+                </span>
               </p>
               {{ form.idValid.errors }}
               <p>
                 {{ form.pinValid }}
-                <span
-                  class='error'
-                  id='{{form.pinValid.name}}_error'
-                  aria-live="polite"
-                ></span>
+                <span class='error' id='{{form.pinValid.name}}_error' aria-live="polite"></span>
               </p>
               {{ form.pinValid.errors }}
               <p>
                 {{ cedula1.cedula }}
-                <span
-                  class='error'
-                  id='{{cedula1.cedula.name}}_error'
-                  aria-live="polite"
-                ></span>
+                <span class='error' id='{{cedula1.cedula.name}}_error' aria-live="polite"></span>
               </p>
-              {{ cedula1.cedula.errors }}
             </div>
           </div>
-          <input
+          <input 
             type="submit"
             value="Realizar Pago"
             class="btn btn-primary"
@@ -111,7 +96,7 @@
                   Cédula:
                 </b></td></tr>
                 <tr><td>
-                  {{pago.cedulaTipo}}{{pago.cedula}}
+                  {{pago.cedula}}
                 </td></tr>
 
                 <tr><td><b><i class="fa fa-money"></i>

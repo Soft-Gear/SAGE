@@ -39,6 +39,9 @@ class Estacionamiento(models.Model):
 		return self.nombre+' '+str(self.ci_propietario)
 
 class Reserva(models.Model):
+	nombre 			= models.CharField(max_length = 30)
+	apellido        = models.CharField(max_length = 30)
+	ci				= models.CharField(max_length = 12)
 	estacionamiento = models.ForeignKey(Estacionamiento)
 	inicioReserva   = models.DateTimeField()
 	finalReserva    = models.DateTimeField()
@@ -90,7 +93,7 @@ class HistorialBilleteraElectronica(models.Model):
 	nombre		     = models.CharField(max_length = 30)
 	apellido         = models.CharField(max_length = 30)
 	cedula           = models.CharField(max_length = 10)
-	tarjeta			 = models.CharField(blank = True, max_length = 16)
+	tarjeta			 = models.CharField(blank = True, max_length = 16, default = "")
 	debito 			 = models.DecimalField(decimal_places= 2, max_digits = 256, blank = True, null = True)
 	credito			 = models.DecimalField(decimal_places= 2, max_digits = 256, blank = True, null = True)
 	
