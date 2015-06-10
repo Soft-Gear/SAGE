@@ -833,7 +833,7 @@ class CancelarReservaForm(forms.Form):
     
     id_validator = RegexValidator(
         regex   = '^[0-9]+$',
-        message = 'Introduzca un id de digitos'
+        message = 'Introduzca un ID de digitos'
     )
     
     cedula = forms.CharField(

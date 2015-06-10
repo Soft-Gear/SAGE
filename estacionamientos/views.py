@@ -305,7 +305,7 @@ def estacionamiento_cancelar_reserva(request):
         
         if form.is_valid():
             idReserva = form.cleaned_data['idReserva']
-            ced       = form.cleaned_data['cedula']
+            ci        = form.cleaned_data['cedula']
             
             #Intenta conseguir la reserva
             try:    
@@ -319,7 +319,7 @@ def estacionamiento_cancelar_reserva(request):
                 )
         
             #Verifica que sea la cedula correcta
-            if pagoReserva.cedula != ced:
+            if pagoReserva.reserva.ci != ci:
                 return render(
                     request, 'template-mensaje.html',
                     { 'color'   : 'red'
@@ -401,6 +401,7 @@ def estacionamiento_cancelar_reserva_billetera(request):
                 }
             )
         
+        #Verificando que sea posible abonar la billetera
         if (billetera.saldo + pago.monto > 10000):
             return render(
                 request, 'template-mensaje.html',
@@ -409,23 +410,28 @@ def estacionamiento_cancelar_reserva_billetera(request):
                 }
             )
         
-        devolucion = Factura_devolucion(
+        historial = HistorialBilleteraElectronica(
+            billetera        = billetera,
             fechaTransaccion = datetime.now(),
-            numReciboPago = pago.id,
-            idBilleteraRecargada = billetera.idBilletera,
-            monto  = pago.monto,
-        )
+            tipo             = "Cancelacion",
+            nombre           = reserva.nombre,
+            apellido         = reserva.apellido,
+            cedula           = reserva.ci,
+            credito          = pago.monto
+            )
+            
+        historial.save()
         
         billetera.saldo += pago.monto
         billetera.save()
         pago.estado = False
         pago.save()
         reserva.delete()
-        devolucion.save()
         
         return render(
             request, 'factura-devolucion.html',
-            { 'devolucion' : devolucion }
+            { 'devolucion' : historial,
+              'pago' : pago }
         )
 
 def estacionamiento_pago(request,_id):
