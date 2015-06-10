@@ -67,14 +67,7 @@ class Pago(models.Model):
 
 	def __str__(self):
 		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
-		
-class Factura_devolucion(models.Model):
-	fechaTransaccion     = models.DateTimeField()
-	numReciboPago        = models.IntegerField()
-	idBilleteraRecargada = models.IntegerField()
-	monto                = models.DecimalField(decimal_places = 2, max_digits = 256)
-	estado               = models.BooleanField(default = True)
-		
+
 class BilleteraElectronica(models.Model):
 	idBilletera = models.IntegerField()
 	PIN         = models.CharField(max_length = 4)
