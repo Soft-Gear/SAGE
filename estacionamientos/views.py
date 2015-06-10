@@ -220,6 +220,16 @@ def estacionamiento_detail(request, _id):
                                                     estacionamiento.capacidad_microbus +
                                                     estacionamiento.capacidad_autobus +
                                                     estacionamiento.capacidad_especiales)
+
+            if estacionamiento.capacidad == 0:
+                return render(
+                    request,
+                    'template-mensaje.html',
+                    { 'color':'red'
+                    , 'mensaje': 'El estacionamiento debe tener al menos un puesto'
+                    }
+                )
+
             estacionamiento.save()
             form = EstacionamientoExtendedForm()
 
