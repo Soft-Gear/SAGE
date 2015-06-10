@@ -496,7 +496,7 @@ class EstacionamientoExtendedForm(forms.Form):
     
     puestos_motos = forms.IntegerField(
         required  = True,
-        min_value = 1,
+        min_value = 0,
         label     = 'Número de Puestos para Motos',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
@@ -510,7 +510,7 @@ class EstacionamientoExtendedForm(forms.Form):
 
     puestos_carros = forms.IntegerField(
         required  = True,
-        min_value = 1,
+        min_value = 0,
         label     = 'Número de Puestos para Carros',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
@@ -524,7 +524,7 @@ class EstacionamientoExtendedForm(forms.Form):
 
     puestos_camiones = forms.IntegerField(
         required  = True,
-        min_value = 1,
+        min_value = 0,
         label     = 'Número de Puestos para Camiones',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
@@ -538,7 +538,7 @@ class EstacionamientoExtendedForm(forms.Form):
 
     puestos_microbus = forms.IntegerField(
         required  = True,
-        min_value = 1,
+        min_value = 0,
         label     = 'Número de Puestos para Microbuses',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
@@ -552,7 +552,7 @@ class EstacionamientoExtendedForm(forms.Form):
 
     puestos_autobus = forms.IntegerField(
         required  = True,
-        min_value = 1,
+        min_value = 0,
         label     = 'Número de Puestos para Autobuses',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
@@ -566,7 +566,7 @@ class EstacionamientoExtendedForm(forms.Form):
 
     puestos_especiales = forms.IntegerField(
         required  = True,
-        min_value = 1,
+        min_value = 0,
         label     = 'Número de Puestos para Vehículos Especiales',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
