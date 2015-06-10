@@ -27,11 +27,52 @@ class DecimalTestCase(TestCase):
 
     # Casos de decimales
 
-    def test_tarifa_hora_decimal(self):
-        rate=TarifaHora(tarifa=0.3)
+    def test_tarifa_hora_motos_decimal(self):
+        rate=TarifaHora(tarifa_motos=0.3,tarifa_carros=0.0,tarifa_camiones=0.0,tarifa_microbus=0.0,tarifa_autobus=0.0,tarifa_especiales=0.0)
         initial_time=datetime(2015,2,20,15,0)
         final_time=datetime(2015,2,20,18,0)
-        value = rate.calcularPrecio(initial_time, final_time)
+        vehiculo = 'Moto'
+        value = rate.calcularPrecio(initial_time, final_time, vehiculo)
+        self.assertEqual(value, Decimal('0.9'))
+
+    def test_tarifa_hora_carros_decimal(self):
+        rate=TarifaHora(tarifa_motos=0.0,tarifa_carros=0.3,tarifa_camiones=0.0,tarifa_microbus=0.0,tarifa_autobus=0.0,tarifa_especiales=0.0)
+        initial_time=datetime(2015,2,20,15,0)
+        final_time=datetime(2015,2,20,18,0)
+        vehiculo ='Carro'
+        value = rate.calcularPrecio(initial_time, final_time, vehiculo)
+        self.assertEqual(value, Decimal('0.9'))
+
+    def test_tarifa_hora_microbuses_decimal(self):
+        rate=TarifaHora(tarifa_motos=0.0,tarifa_carros=0.0,tarifa_camiones=0.0,tarifa_microbus=0.3,tarifa_autobus=0.0,tarifa_especiales=0.0)
+        initial_time=datetime(2015,2,20,15,0)
+        final_time=datetime(2015,2,20,18,0)
+        vehiculo ='Microbus'
+        value = rate.calcularPrecio(initial_time, final_time, vehiculo)
+        self.assertEqual(value, Decimal('0.9'))
+
+    def test_tarifa_hora_autobuses_decimal(self):
+        rate=TarifaHora(tarifa_motos=0.0,tarifa_carros=0.0,tarifa_camiones=0.0,tarifa_microbus=0.0,tarifa_autobus=0.3,tarifa_especiales=0.0)
+        initial_time=datetime(2015,2,20,15,0)
+        final_time=datetime(2015,2,20,18,0)
+        vehiculo ='Autobus'
+        value = rate.calcularPrecio(initial_time, final_time, vehiculo)
+        self.assertEqual(value, Decimal('0.9'))
+
+    def test_tarifa_hora_camiones_decimal(self):
+        rate=TarifaHora(tarifa_motos=0.0,tarifa_carros=0.0,tarifa_camiones=0.3,tarifa_microbus=0.0,tarifa_autobus=0.0,tarifa_especiales=0.0)
+        initial_time=datetime(2015,2,20,15,0)
+        final_time=datetime(2015,2,20,18,0)
+        vehiculo ='Microbus'
+        value = rate.calcularPrecio(initial_time, final_time, vehiculo)
+        self.assertEqual(value, Decimal('0.9'))
+
+    def test_tarifa_hora_especiales_decimal(self):
+        rate=TarifaHora(tarifa_motos=0.0,tarifa_carros=0.0,tarifa_camiones=0.0,tarifa_microbus=0.0,tarifa_autobus=0.0,tarifa_especiales=0.3)
+        initial_time=datetime(2015,2,20,15,0)
+        final_time=datetime(2015,2,20,18,0)
+        vehiculo ='Vehículo Especial'
+        value = rate.calcularPrecio(initial_time, final_time, vehiculo)
         self.assertEqual(value, Decimal('0.9'))
 
     def test_tarifa_minuto_decimal(self):
