@@ -22,6 +22,7 @@ from estacionamientos.controller import (
     tasa_reservaciones,
     calcular_porcentaje_de_tasa,
     consultar_ingresos,
+    splitDates, 
 )
 
 from estacionamientos.forms import (
@@ -37,8 +38,9 @@ from estacionamientos.forms import (
     ConsultarSaldoForm,
     RecargarSaldoForm,
     CambiarPropietarioForm,
-    CancelarReservaForm
-)
+    CancelarReservaForm,
+    AgregarDiaFeriado
+    )
 
 from estacionamientos.models import (
     Estacionamiento,
@@ -47,6 +49,7 @@ from estacionamientos.models import (
     Reserva,
     Pago,
     Factura_devolucion,
+    DiasFeriados,
     TarifaHora,
     TarifaMinuto,
     TarifaHorayFraccion,
@@ -67,7 +70,7 @@ def estacionamientos_all(request):
         form  = EstacionamientoForm(request.POST)
         # Parte de la entrega era limitar la cantidad maxima de
         # estacionamientos a 5
-        if len(estacionamientos) >= 5:
+        if len(estacionamientos) >= 100:
             return render(
                 request, 'template-mensaje.html',
                 { 'color'   : 'red'
@@ -92,12 +95,62 @@ def estacionamientos_all(request):
                     email1      = form.cleaned_data['email_1'],
                     email2      = form.cleaned_data['email_2']
                 )
-                obj.save()
+                obj.save()    
+                est = Estacionamiento.objects.get(rif = form.cleaned_data['rif'])                         
+                dia = DiasFeriados(
+                    idest = est.id,
+                    fecha = '2016-07-05',
+                    descripcion = "Declaracion de la independencia"
+                )
+                dia.save()
+                dia2 = DiasFeriados(
+                    idest = est.id,
+                    fecha = '2016-04-19',
+                    descripcion = "Firma del acta de independencia"
+                )
+                dia2.save()
+                dia3 = DiasFeriados(
+                    idest = est.id,
+                    fecha = '2016-05-01',
+                    descripcion = "Dia del trabajador"
+                )
+                dia3.save()
+                dia4 = DiasFeriados(
+                    idest = est.id,
+                    fecha = '2015-06-24',
+                    descripcion = "Batalla de Carabobo"
+                )
+                dia4.save()
+                dia5 = DiasFeriados(
+                    idest = est.id,
+                    fecha = '2015-12-31',
+                    descripcion = "Ultimo dia del año"
+                )
+                dia5.save()
+                dia6 = DiasFeriados(
+                    idest = est.id,
+                    fecha = '2016-01-01',
+                    descripcion = "Primer dia del año"
+                )
+                dia6.save()
+                dia7 = DiasFeriados(
+                    idest = est.id,
+                    fecha = '2015-10-12',
+                    descripcion = "Dia de la raza"
+                )
+                dia7.save()
+                dia8 = DiasFeriados(
+                    idest = est.id,
+                    fecha = '2015-12-24',
+                    descripcion = "Navidad"
+                )
+                dia8.save()
                 # Recargamos los estacionamientos ya que acabamos de agregar
                 estacionamientos = Estacionamiento.objects.all()
                 form = EstacionamientoForm()
             
-            except:
+            except Exception as e:
+                print(e)
                 return render(
                     request, 'template-mensaje.html',
                     { 'color'   : 'red'
@@ -132,9 +185,14 @@ def estacionamiento_detail(request, _id):
                 'inicioTarifa2' : estacionamiento.tarifa.inicioEspecial,
                 'finTarifa2' : estacionamiento.tarifa.finEspecial,
                 'puestos' : estacionamiento.capacidad,
-                'esquema' : estacionamiento.tarifa.__class__.__name__
+                'tarifaFeriado' : estacionamiento.tarifa2.tarifa,
+                'tarifaFeriado2' : estacionamiento.tarifa2.tarifa2,
+                'inicioTarifaFeriado2' : estacionamiento.tarifa2.inicioEspecial,
+                'finTarifaFeriado2' : estacionamiento.tarifa2.finEspecial,
+                'esquema' : estacionamiento.tarifa.__class__.__name__,
+                'esquema2': estacionamiento.tarifa2.__class__.__name__
             }
-            form = EstacionamientoExtendedForm(data = form_data)
+            form = EstacionamientoExtendedForm(data = form_data)          
         else:
             form = EstacionamientoExtendedForm()
 
@@ -146,10 +204,16 @@ def estacionamiento_detail(request, _id):
             horaIn        = form.cleaned_data['horarioin']
             horaOut       = form.cleaned_data['horarioout']
             tarifa        = form.cleaned_data['tarifa']
+            tarifa2       = form.cleaned_data['tarifa2']
             tipo          = form.cleaned_data['esquema']
+            tipo2         = form.cleaned_data['esquema2']
+            tarifaFeriado = form.cleaned_data['tarifaFeriado']
+            tarifaFeriado2 = form.cleaned_data['tarifaFeriado2']
             inicioTarifa2 = form.cleaned_data['inicioTarifa2']
             finTarifa2    = form.cleaned_data['finTarifa2']
-            tarifa2       = form.cleaned_data['tarifa2']
+            inicioTarifaFeriado2 = form.cleaned_data['inicioTarifaFeriado2']
+            finTarifaFeriado2    = form.cleaned_data['finTarifaFeriado2']
+            
 
             esquemaTarifa = eval(tipo)(
                 tarifa         = tarifa,
@@ -157,7 +221,16 @@ def estacionamiento_detail(request, _id):
                 inicioEspecial = inicioTarifa2,
                 finEspecial    = finTarifa2
             )
+            
+            esquemaTarifa2 = eval(tipo2)(
+                tarifa         = tarifaFeriado,
+                tarifa2        = tarifaFeriado2,
+                inicioEspecial = inicioTarifaFeriado2,
+                finEspecial    = finTarifaFeriado2
+            )
 
+            
+            esquemaTarifa2.save()
             esquemaTarifa.save()
             # debería funcionar con excepciones, y el mensaje debe ser mostrado
             # en el mismo formulario
@@ -171,6 +244,7 @@ def estacionamiento_detail(request, _id):
                 )
             # debería funcionar con excepciones
             estacionamiento.tarifa    = esquemaTarifa
+            estacionamiento.tarifa2   = esquemaTarifa2
             estacionamiento.apertura  = horaIn
             estacionamiento.cierre    = horaOut
             estacionamiento.capacidad = form.cleaned_data['puestos']
@@ -237,19 +311,18 @@ def estacionamiento_reserva(request, _id):
                     inicioReserva   = inicioReserva,
                     finalReserva    = finalReserva,
                 )
+                
+                listaDias = DiasFeriados.objects.filter(idest = _id)
+                
+                tipoDias = splitDates(inicioReserva,finalReserva,listaDias)
+                monto = 0
+                for intervalo in tipoDias[0]:                    
+                    monto += estacionamiento.tarifa.calcularPrecio(intervalo[0],intervalo[1])
+                for intervalo2 in tipoDias[1]:
+                    monto += estacionamiento.tarifa2.calcularPrecio(intervalo2[0],intervalo2[1])
 
-                monto = Decimal(
-                    estacionamiento.tarifa.calcularPrecio(
-                        inicioReserva,finalReserva
-                    )
-                )
-
-                request.session['monto'] = float(
-                    estacionamiento.tarifa.calcularPrecio(
-                        inicioReserva,
-                        finalReserva
-                    )
-                )
+                request.session['monto'] = float(monto)
+                monto = Decimal(monto)
                 request.session['finalReservaHora']    = finalReserva.hour
                 request.session['finalReservaMinuto']  = finalReserva.minute
                 request.session['inicioReservaHora']   = inicioReserva.hour
@@ -984,5 +1057,58 @@ def billetera_electronica_recargar(request):
     return render(request,  
         'billetera_electronica_recarga.html',
         { 'form': form
+        }
+    )
+    
+def estacionamiento_feriados(request,_id):
+    if request.method == 'POST':
+        form = AgregarDiaFeriado(request.POST)       
+        if form.is_valid():
+            try:
+                dia = DiasFeriados.objects.get(fecha = form.cleaned_data['dia'], idest = _id) 
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'La fecha introducida ya pertenece a los dias feriados'
+                    }
+                )              
+            except ObjectDoesNotExist:       
+                nuevoDia = DiasFeriados(
+                    idest = _id,
+                    fecha = form.cleaned_data['dia'],
+                    descripcion = form.cleaned_data['descripcion']                  
+                )
+                nuevoDia.save()
+    form = AgregarDiaFeriado()
+    dias = DiasFeriados.objects.filter(idest = _id )
+    return render(
+        request, 'dias_feriados.html',
+        { 'form'    : form
+        , 'id'      : _id
+        , 'dias'    :  dias               
+        }
+    )
+    
+def estacionamiento_feriados_remover(request,_id):
+    if request.method == 'POST':
+        form = AgregarDiaFeriado(request.POST)       
+        if form.is_valid():
+            try:
+                dia = DiasFeriados.objects.get(fecha = form.cleaned_data['dia'], idest = _id)
+                dia.delete()
+            except:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'La fecha introducida no pertenece a los dias feriados'
+                    }
+                )
+    form = AgregarDiaFeriado()
+    dias = DiasFeriados.objects.filter(idest = _id )
+    return render(
+        request, 'dias_feriados.html',
+        { 'form'    : form
+        , 'id'      : _id
+        , 'dias'    :  dias               
         }
     )

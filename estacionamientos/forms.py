@@ -494,6 +494,8 @@ class EstacionamientoExtendedForm(forms.Form):
         message = 'Sólo debe contener dígitos.'
     )
     
+    
+    
     puestos = forms.IntegerField(
         required  = True,
         min_value = 1,
@@ -539,6 +541,14 @@ class EstacionamientoExtendedForm(forms.Form):
         ('TarifaHoraPico', 'Diferenciada por horario pico'),
         ('TarifaFinDeSemana', 'Diferenciada para fines de semana')
     ]
+    
+    esquema2 = forms.ChoiceField(
+        required = True,
+        choices  = choices_esquema,
+        widget   = forms.Select(attrs =
+            { 'class' : 'form-control' }
+        )
+    )
 
     esquema = forms.ChoiceField(
         required = True,
@@ -571,6 +581,31 @@ class EstacionamientoExtendedForm(forms.Form):
             }
         )
     )
+    
+    tarifaFeriado = forms.DecimalField(
+        required   = True,
+        validators = [tarifa_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Tarifa'
+            , 'pattern'     : '^([0-9]+(\.[0-9]+)?)$'
+            , 'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+    
+    tarifaFeriado2 = forms.DecimalField(
+        required   = False,
+        validators = [tarifa_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Tarifa'
+            , 'pattern'     : '^([0-9]+(\.[0-9]+)?)$'
+            , 'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
 
     inicioTarifa2 = forms.TimeField(
         required = False,
@@ -594,6 +629,52 @@ class EstacionamientoExtendedForm(forms.Form):
             , 'message'     : 'La entrada debe ser una hora válida.'
             }
         )
+    )
+    
+    inicioTarifaFeriado2 = forms.TimeField(
+        required = False,
+        label    = 'Inicio Horario Especial',
+        widget   = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Horario Inicio Reserva'
+            , 'pattern'     : '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]'
+            , 'message'     : 'La entrada debe ser una hora válida.'
+            }
+        )
+    )
+
+    finTarifaFeriado2 = forms.TimeField(
+        required = False,
+        label    = 'Fin Horario Especial',
+        widget   = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Horario Fin Reserva'
+            , 'pattern'     : '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]'
+            , 'message'     : 'La entrada debe ser una hora válida.'
+            }
+        )
+    )
+    
+class AgregarDiaFeriado(forms.Form):
+    
+    descripcion = forms.CharField(
+        required = False,
+        label = 'Descripcion',
+        widget = forms.TextInput(attrs=
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Descripcion'
+            , 'message'     : 'La descripcion debe tener menos de 100 caracteres'} 
+        )
+    )
+    
+    dia = forms.DateField(
+        required = True,
+        widget = forms.DateInput(attrs=
+            { 'class'       : 'form-control'
+            , 'type'        : 'date'
+            , 'placeholder' : 'Fecha'
+            }
+        )                  
     )
 
 class ReservaForm(forms.Form):

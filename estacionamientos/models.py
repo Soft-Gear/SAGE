@@ -23,13 +23,16 @@ class Estacionamiento(models.Model):
 	telefono3   = models.CharField(blank = True, null = True, max_length = 30)
 	email1      = models.EmailField(blank = True, null = True)
 	email2      = models.EmailField(blank = True, null = True)
-	rif         = models.CharField(max_length = 12)
+	rif         = models.CharField(max_length = 12, unique = True)
 
 	# Campos para referenciar al esquema de tarifa
 
 	content_type = models.ForeignKey(ContentType, null = True)
 	object_id    = models.PositiveIntegerField(null = True)
 	tarifa       = GenericForeignKey()
+	content_type2 = models.ForeignKey(ContentType, null = True, related_name = 'content_dos')
+	object_id2    = models.PositiveIntegerField(null = True)
+	tarifa2      = GenericForeignKey('content_type2','object_id2')
 	apertura     = models.TimeField(blank = True, null = True)
 	cierre       = models.TimeField(blank = True, null = True)
 	capacidad    = models.IntegerField(blank = True, null = True)
@@ -91,7 +94,16 @@ class BilleteraElectronica(models.Model):
 	saldo       = models.DecimalField(decimal_places= 2, max_digits = 256)
 	
 	def __str__(self):
-		return self.nombre + " " + self.idBilletera + " " + str(self.id)    
+		return self.nombre + " " + self.idBilletera + " " + str(self.id)   
+	
+class DiasFeriados(models.Model):
+	idest 				  = models.IntegerField()
+	fecha			  = models.DateField()
+	descripcion       = models.CharField(max_length = 100)
+	
+	def __str__(self):
+		return self.idest + " " + self.fecha + " " + self.descripcion
+	 
 
 class EsquemaTarifario(models.Model):
 
@@ -100,6 +112,7 @@ class EsquemaTarifario(models.Model):
 	tarifa2        = models.DecimalField(blank = True, null = True, max_digits=10, decimal_places=2)
 	inicioEspecial = models.TimeField(blank = True, null = True)
 	finEspecial    = models.TimeField(blank = True, null = True)
+
 
 	class Meta:
 		abstract = True

@@ -10,17 +10,134 @@
   <div class="panel-body">
     <form action="." method="post" class="form form-vertical">
       {% csrf_token %}
-      {% for field in form %}
+      
         <div class="control-group">
           <div class="controls">
-            {{ field }}
-            <span class='error' id='{{field.name}}_error' aria-live="polite">
-              {{ field.errors }}
+            {{ form.puestos }}
+            <span class='error' id='{{form.puestos.name}}_error' aria-live="polite">
+              {{ form.puestos.errors }}
             </span>
             <p>
           </div>
         </div>
-      {% endfor %}
+        <div class="control-group">
+          <div class="controls">
+            {{ form.horarioin }}
+            <span class='error' id='{{form.horarioin.name}}_error' aria-live="polite">
+              {{ form.horarioin.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.horarioout }}
+            <span class='error' id='{{form.horarioout.name}}_error' aria-live="polite">
+              {{ form.horarioout.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <b>Dias Feriados:</b>
+        </div>
+        <a href="./feriados">
+            Editar dias feriados
+        </a>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.esquema2 }}
+            <span class='error' id='{{form.esquema2.name}}_error' aria-live="polite">
+              {{ form.esquema2.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.tarifaFeriado }}
+            <span class='error' id='{{form.tarifaFeriado.name}}_error' aria-live="polite">
+              {{ form.tarifaFeriado.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.tarifaFeriado2 }}
+            <span class='error' id='{{form.tarifaFeriado2.name}}_error' aria-live="polite">
+              {{ form.tarifaFeriado2.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.inicioTarifaFeriado2 }}
+            <span class='error' id='{{form.inicioTarifaFeriado2.name}}_error' aria-live="polite">
+              {{ form.inicioTarifaFeriado2.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.finTarifaFeriado2 }}
+            <span class='error' id='{{form.finTarifaFeriado2.name}}_error' aria-live="polite">
+              {{ form.finTarifaFeriado2.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <b>Dias Regulares:</b>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.esquema }}
+            <span class='error' id='{{form.esquema.name}}_error' aria-live="polite">
+              {{ form.esquema.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.tarifa }}
+            <span class='error' id='{{form.tarifa.name}}_error' aria-live="polite">
+              {{ form.tarifa.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.tarifa2 }}
+            <span class='error' id='{{form.tarifa2.name}}_error' aria-live="polite">
+              {{ form.tarifa2.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.inicioTarifa2 }}
+            <span class='error' id='{{form.inicioTarifa2.name}}_error' aria-live="polite">
+              {{ form.inicioTarifa2.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            {{ form.finTarifa2 }}
+            <span class='error' id='{{form.finTarifa2.name}}_error' aria-live="polite">
+              {{ form.finTarifa2.errors }}
+            </span>
+            <p>
+          </div>
+        </div>
+     
       <div class="control-group">
         <label></label>
         <div class="controls">
@@ -35,10 +152,18 @@
 {% include "validator.js.html" %}
 <script type="text/javascript">
   esquema = document.getElementById('id_esquema');
+  esquema2 = document.getElementById('id_esquema2');
   tarifa1 = document.getElementById('id_tarifa');
   tarifa2 = document.getElementById('id_tarifa2');
+  tarifaFeriado = document.getElementById('id_tarifaFeriado');
+  tarifaFeriado2 = document.getElementById('id_tarifaFeriado2');
+  inicioFeriado2 = document.getElementById('id_inicioTarifaFeriado2');
+  finFeriado2 = document.getElementById('id_finTarifaFeriado2');
   inicio  = document.getElementById('id_inicioTarifa2');
   fin     = document.getElementById('id_finTarifa2');
+  tarifaFeriado2.style.display='none';
+  inicioFeriado2.style.display='none';
+  finFeriado2.style.display='none';
   tarifa2.style.display='none';
   inicio.style.display='none';
   fin.style.display='none';
@@ -68,6 +193,35 @@
         fin.value = ""
         tarifa2.style.display='none';
         tarifa2.value = ""
+      }
+    }
+  }
+  if (esquema2) {
+    esquema2.onchange=function() {
+      if (this.value == "TarifaHoraPico") {
+        inicioFeriado2.style.display='';
+        inicioFeriado2.placeholder = "Inicio horario pico"
+        finFeriado2.style.display='';
+        finFeriado2.placeholder = "Fin horario pico"
+        tarifaFeriado2.style.display = '';
+        tarifaFeriado.placeholder="Tarifa normal";
+        tarifaFeriado2.placeholder="Tarifa pico";
+      } else if (this.value == "TarifaFinDeSemana") {
+        inicioFeriado2.style.display='none';
+        inicioFeriado2.value = ""
+        finFeriado2.style.display='none';
+        finFeriado2.value = ""
+        tarifaFeriado.placeholder="Tarifa normal";
+        tarifaFeriado2.style.display = '';
+        tarifaFeriado2.placeholder="Tarifa fin de semana";
+      } else {
+        tarifaFeriado.placeholder="Tarifa";
+        inicioFeriado2.style.display='none';
+        inicioFeriado2.value = ""
+        finFeriado2.style.display='none';
+        finFeriado2.value = ""
+        tarifaFeriado2.style.display='none';
+        tarifaFeriado2.value = ""
       }
     }
   }
