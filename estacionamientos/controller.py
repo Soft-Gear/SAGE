@@ -10,22 +10,22 @@ from collections import OrderedDict
 def HorarioEstacionamiento(HoraInicio, HoraFin):
 	return HoraFin > HoraInicio
 
-def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre):
+def validarHorarioReserva(inicioReserva, finReserva, apertura, cierre, max_dias):
 	if inicioReserva >= finReserva:
 		return (False, 'El horario de inicio de reservacion debe ser menor al horario de fin de la reserva.')
 	if finReserva - inicioReserva < timedelta(hours=1):
 		return (False, 'El tiempo de reserva debe ser al menos de 1 hora.')
 	if inicioReserva.date() < datetime.now().date():
 		return (False, 'La reserva no puede tener lugar en el pasado.')
-	if finReserva.date() > (datetime.now()+timedelta(days=6)).date():
-		return (False, 'La reserva debe estar dentro de los próximos 7 días.')
+	if finReserva.date() > (datetime.now()+timedelta(days=max_dias -1)).date():
+		return (False, 'La reserva debe estar dentro de los próximos ' + str(max_dias) + ' días.')
 	if apertura.hour==0 and apertura.minute==0 \
 		and cierre.hour==23 and cierre.minute==59:
-		seven_days=timedelta(days=7)
-		if finReserva-inicioReserva<=seven_days :
+		horizonte_reserva=timedelta(days=max_dias)
+		if finReserva-inicioReserva<=horizonte_reserva :
 			return (True,'')
 		else:
-			return(False,'Se puede reservar un puesto por un maximo de 7 días.')
+			return(False,'Se puede reservar un puesto por un maximo de ' + str(max_dias) + ' días.')
 	else:
 		hora_inicio = time(hour = inicioReserva.hour, minute = inicioReserva.minute)
 		hora_final  = time(hour = finReserva.hour   , minute = finReserva.minute)
