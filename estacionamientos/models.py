@@ -30,7 +30,7 @@ class Estacionamiento(models.Model):
 	content_type 			= models.ForeignKey(ContentType, null = True)
 	object_id    			= models.PositiveIntegerField(null = True)
 	tarifa       			= GenericForeignKey()
-	horizonte_reserva		= models.PositiveIntegerField()
+	horizonte_reserva		= models.PositiveIntegerField(null = True)
 	apertura     			= models.TimeField(blank = True, null = True)
 	cierre       			= models.TimeField(blank = True, null = True)
 	capacidad_motos    		= models.IntegerField(blank = True, null = True)

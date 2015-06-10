@@ -268,7 +268,7 @@ def estacionamiento_reserva(request, _id):
                 finalReserva,
                 estacionamiento.apertura,
                 estacionamiento.cierre,
-                estacionamiento.horario_reserva
+                estacionamiento.horizonte_reserva
             )
 
             # Si no es valido devolvemos el request
