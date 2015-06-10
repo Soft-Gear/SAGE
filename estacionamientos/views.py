@@ -769,9 +769,10 @@ def propietarios_all(request):
         
         if form.is_valid():
             obj = Propietario(
-                nombre  = form.cleaned_data['nombreProp'],
-                ci      = form.cleaned_data['ci'],
-                tel     = form.cleaned_data['telefono']
+                nombre   = form.cleaned_data['nombreProp'],
+                apellido = form.cleaned_data['apellidoProp'],
+                ci       = form.cleaned_data['ci'],
+                tel      = form.cleaned_data['telefono']
             )
             obj.save()
             propietarios = Propietario.objects.all()
@@ -808,7 +809,6 @@ def cambiar_propietario(request, _id):
         if form.is_valid():
             try:
                 objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['ci_propietario'])
-                
                 estacionamiento.ci_propietario = objetoPropietario
                 estacionamiento.save()
             
@@ -905,6 +905,7 @@ def billetera_electronica_crear(request):
         if form.is_valid():
             obj = BilleteraElectronica(
                 nombre      = form.cleaned_data['nombreUsu'],
+                apellido    = form.cleaned_data['apellidoUsu'],
                 CI          = form.cleaned_data['ciUsu'],
                 PIN         = form.cleaned_data['pinUsu'],
                 idBilletera = len(billeteras),

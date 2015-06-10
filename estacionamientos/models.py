@@ -7,15 +7,16 @@ from decimal import Decimal
 from datetime import timedelta
 
 class Propietario(models.Model):
-	nombre = models.CharField(max_length = 50)
-	ci     = models.CharField(max_length = 12, unique = True)
-	tel    = models.CharField(max_length = 30)
+	nombre   = models.CharField(max_length = 30)
+	apellido = models.CharField(max_length = 30)
+	ci       = models.CharField(max_length = 12, unique = True)
+	tel      = models.CharField(max_length = 30)
 
 	def __str__(self):
-		return self.nombre
+		return self.nombre + " " + self.apellido
 
 class Estacionamiento(models.Model):
-	ci_propietario = models.ForeignKey("Propietario") #CI del propietario! No el nombre.
+	ci_propietario = models.ForeignKey(Propietario) #CI del propietario! No el nombre.
 	nombre      = models.CharField(max_length = 50)
 	direccion   = models.TextField(max_length = 120)
 	telefono1   = models.CharField(blank = True, null = True, max_length = 30)
@@ -74,7 +75,8 @@ class Factura_devolucion(models.Model):
 class BilleteraElectronica(models.Model):
 	idBilletera = models.IntegerField()
 	PIN         = models.CharField(max_length = 4)
-	nombre      = models.CharField(max_length = 50)
+	nombre      = models.CharField(max_length = 30)
+	apellido    = models.CharField(max_length = 30)
 	CI          = models.CharField(max_length = 10)
 	saldo       = models.DecimalField(decimal_places= 2, max_digits = 256)
 	

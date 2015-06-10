@@ -39,6 +39,19 @@ class PropietarioForm(forms.Form):
         )
     )
     
+    apellidoProp = forms.CharField(
+        required   = True,
+        label      = "Apellido",
+        validators = [name_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Apellido'
+            , 'pattern'     : name_validator.regex.pattern
+            , 'message'     : name_validator.message
+            }
+        )
+    )
+    
     telefono = forms.CharField(
         required   = True,
         validators = [phone_validator],
@@ -109,6 +122,20 @@ class BilleteraElectronicaForm(forms.Form):
         widget = forms.TextInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nombre'
+            , 'pattern'     : name_validator.regex.pattern
+            , 'message'     : name_validator.message
+
+            }
+        )
+    )
+    
+    apellidoUsu = forms.CharField(
+        required   = True,
+        label      = "Apellido",
+        validators = [name_validator],
+        widget = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Apellido'
             , 'pattern'     : name_validator.regex.pattern
             , 'message'     : name_validator.message
 
