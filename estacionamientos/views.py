@@ -1089,20 +1089,18 @@ def estacionamiento_feriados(request,_id):
         }
     )
     
-def estacionamiento_feriados_remover(request,_id):
-    if request.method == 'POST':
-        form = AgregarDiaFeriado(request.POST)       
-        if form.is_valid():
-            try:
-                dia = DiasFeriados.objects.get(fecha = form.cleaned_data['dia'], idest = _id)
-                dia.delete()
-            except:
-                return render(
-                    request, 'template-mensaje.html',
-                    { 'color'   : 'red'
-                    , 'mensaje' : 'La fecha introducida no pertenece a los dias feriados'
-                    }
-                )
+def estacionamiento_feriados_remover(request,_id,_idrem):
+    if _idrem :
+        try:
+            dia = DiasFeriados.objects.get(id = _idrem)
+            dia.delete()
+        except:
+            return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'La fecha introducida no pertenece a los dias feriados'
+                }
+            )
     form = AgregarDiaFeriado()
     dias = DiasFeriados.objects.filter(idest = _id )
     return render(

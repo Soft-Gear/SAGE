@@ -8,7 +8,7 @@
      Billetera
     </h3>
     <hr>
-    <div class="col-md-5">
+    <div class="col-md-7">
     <table class="table table-striped">
      <thead>
      	<tr>
@@ -28,11 +28,23 @@
        	    </td>
        	    <td>
        	       {{dia.fecha}}
-       	    </td>    	    
+       	    </td>  
+       	    <td>
+       	       <a href="/estacionamientos/{{id}}/feriados/remover/{{dia.id}}">
+      			  <button class="btn btn-primary">
+        			Remover
+      			  </button>
+    			</a> 
+    		</td> 	    
        	  </tr>
    	      {% endfor %}
       </tbody>  		 
      </table> 
+     <a href="/estacionamientos/{{id}}">
+      			  <button class="btn btn-primary">
+        			Volver
+      			  </button>
+    			</a> 
     </div>
     <div class="col-md-4">
     <div class="panel panel-default">
@@ -63,38 +75,6 @@
               <div class="controls">
                 <button type="submit" class="btn btn-primary">
                   Agregar fecha
-                </button>
-              </div>
-            </div>
-          </form>
-      </div>
-     </div>
-     <div class="panel panel-default">
-     <div class="panel-heading">
-      <div class="panel-title">
-       <i class="glyphicon glyphicon-wrench pull-right"></i>
-       <h4>
-        Remover
-       </h4>
-      </div>
-    </div>
-    <div class="panel-body">
-         <form action="/estacionamientos/{{id}}/feriados/remover" method="post" class="form form-vertical">
-            {% csrf_token %}           
-              <div class="control-group">
-                <div class="controls">
-                  {{ form.dia }}
-                  <span class='error' id='{{form.dia.name}}_error' aria-live="polite">
-                    {{ form.dia.errors }}
-                  </span>
-                  <p>
-                </div>
-              </div>           
-            <div class="control-group">
-              <label></label>
-              <div class="controls">
-                <button type="submit" class="btn btn-primary">
-                  Remover fecha
                 </button>
               </div>
             </div>
