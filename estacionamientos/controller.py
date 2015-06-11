@@ -64,6 +64,30 @@ def marzullo(idEstacionamiento, hIn, hOut, tipoVehiculo):
 			return False
 	return True
 
+def splitDates(inicio,final,listaFeriados):
+	horarioSplit = [[],[]]
+	inicioIntervalo = inicio
+	tiempoActual = inicio
+	while tiempoActual <=final:
+		tipo = 0
+		for dia in listaFeriados:
+			if tiempoActual.month == dia.fecha.month and tiempoActual.day == dia.fecha.day:
+				tipo =  1
+		if tiempoActual.month == final.month and tiempoActual.day == final.day:
+			horarioSplit[tipo].append([inicioIntervalo,final])
+			tiempoActual = final
+		else:
+			tiempoActual =datetime.strptime(('{2}-{1}-{0}/23:59').format(tiempoActual.day,tiempoActual.month,tiempoActual.year),"%Y-%m-%d/%H:%M")
+			tipoActual = 0
+			for dia in listaFeriados:
+				if (tiempoActual + timedelta(minutes=1)).month == dia.fecha.month and (tiempoActual + timedelta(minutes=1)).day == dia.fecha.day:
+					tipoActual =  1
+			if tipo != tipoActual:
+				horarioSplit[tipo].append([inicioIntervalo,tiempoActual + timedelta(minutes=1)])
+				inicioIntervalo = tiempoActual + timedelta(minutes=1)
+		tiempoActual += timedelta(minutes=1)	
+	return horarioSplit
+
 def get_client_ip(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 	if x_forwarded_for:

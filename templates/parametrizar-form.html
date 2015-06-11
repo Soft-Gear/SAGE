@@ -13,9 +13,21 @@
       {% for field in form %}
         <div class="control-group">
           <div class="controls">
+            {% if field.name == 'esquema' %}
+              <div class="control-group">
+                <b>Dias Regulares:</b>
+	          </div>
+	        {% elif field.name == 'esquema2' %}
+	          <div class="control-group">
+                <b>Dias Feriados:</b>
+              </div>
+              <a href="./feriados">
+                Editar dias feriados
+              </a>
+            {% endif %}
             {{ field }}
             <span class='error' id='{{field.name}}_error' aria-live="polite">
-              {{ field.errors }}
+               {{ field.errors }}
             </span>
             <p>
           </div>
@@ -35,6 +47,7 @@
 {% include "validator.js.html" %}
 <script type="text/javascript">
   esquema             = document.getElementById('id_esquema');
+  esquema2            = document.getElementById('id_esquema2');
   tarifa_motos        = document.getElementById('id_tarifa_motos');
   tarifa_carros       = document.getElementById('id_tarifa_carros');
   tarifa_camiones     = document.getElementById('id_tarifa_camiones');
@@ -47,16 +60,45 @@
   tarifa2_microbus    = document.getElementById('id_tarifa2_microbus');
   tarifa2_autobus     = document.getElementById('id_tarifa2_autobus');
   tarifa2_especiales  = document.getElementById('id_tarifa2_especiales');
+  tarifa3_motos       = document.getElementById('id_tarifa3_motos');
+  tarifa3_carros      = document.getElementById('id_tarifa3_carros');
+  tarifa3_camiones    = document.getElementById('id_tarifa3_camiones');
+  tarifa3_microbus    = document.getElementById('id_tarifa3_microbus');
+  tarifa3_autobus     = document.getElementById('id_tarifa3_autobus');
+  tarifa3_especiales  = document.getElementById('id_tarifa3_especiales');
+  tarifa4_motos       = document.getElementById('id_tarifa4_motos');
+  tarifa4_carros      = document.getElementById('id_tarifa4_carros');
+  tarifa4_camiones    = document.getElementById('id_tarifa4_camiones');
+  tarifa4_microbus    = document.getElementById('id_tarifa4_microbus');
+  tarifa4_autobus     = document.getElementById('id_tarifa4_autobus');
+  tarifa4_especiales  = document.getElementById('id_tarifa4_especiales');
   inicio              = document.getElementById('id_inicioTarifa2');
   fin                 = document.getElementById('id_finTarifa2');
+  inicioFeriado2      = document.getElementById('id_inicioTarifaFeriado2');
+  finFeriado2         = document.getElementById('id_finTarifaFeriado2');
   tarifa2_motos.style.display     ='none';
   tarifa2_carros.style.display    ='none';
   tarifa2_camiones.style.display  ='none';
   tarifa2_microbus.style.display  ='none';
   tarifa2_autobus.style.display   ='none';
   tarifa2_especiales.style.display='none';
+  tarifa3_motos.style.display     ='none';
+  tarifa3_carros.style.display    ='none';
+  tarifa3_camiones.style.display  ='none';
+  tarifa3_microbus.style.display  ='none';
+  tarifa3_autobus.style.display   ='none';
+  tarifa3_especiales.style.display='none';
+  tarifa4_motos.style.display     ='none';
+  tarifa4_carros.style.display    ='none';
+  tarifa4_camiones.style.display  ='none';
+  tarifa4_microbus.style.display  ='none';
+  tarifa4_autobus.style.display   ='none';
+  tarifa4_especiales.style.display='none';
   inicio.style.display            ='none';
   fin.style.display               ='none';
+  inicioFeriado2.style.display    ='none';
+  finFeriado2.style.display       ='none';
+
   if (esquema) {
     esquema.onchange=function() {
       if (this.value == "TarifaHoraPico") {
@@ -128,6 +170,99 @@
         tarifa_especiales.placeholder     ="Tarifa para Vehículos Especiales";
         tarifa2_especiales.style.display  ='none';
         tarifa2_especiales.value          = "";
+      }
+    }
+  }
+  
+  if (esquema2) {
+    esquema2.onchange=function() {
+      if (this.value == "TarifaHoraPico") {
+        inicioFeriado2.style.display      ='';
+        inicioFeriado2.placeholder        = "Inicio horario pico";
+        finFeriado2.style.display         ='';
+        finFeriado2.placeholder           = "Fin horario pico";
+        tarifa3_motos.style.display       = '';
+        tarifa4_motos.style.display       = '';
+        tarifa3_motos.placeholder         ="Tarifa normal para Motos";
+        tarifa4_motos.placeholder         ="Tarifa pico para Motos";
+        tarifa3_carros.style.display      = '';
+        tarifa4_carros.style.display      = '';
+        tarifa3_carros.placeholder        ="Tarifa normal para Carros";
+        tarifa4_carros.placeholder        ="Tarifa pico para Carros";
+        tarifa3_camiones.style.display    = '';
+        tarifa4_camiones.style.display    = '';
+        tarifa3_camiones.placeholder      ="Tarifa normal para Camiones";
+        tarifa4_camiones.placeholder      ="Tarifa pico para Camiones";
+        tarifa3_microbus.style.display    = '';
+        tarifa4_microbus.style.display    = '';
+        tarifa3_microbus.placeholder      ="Tarifa normal para Microbuses";
+        tarifa4_microbus.placeholder      ="Tarifa pico para Microbuses";
+        tarifa3_autobus.style.display     = '';
+        tarifa4_autobus.style.display     = '';
+        tarifa3_autobus.placeholder       ="Tarifa normal para Autobuses";
+        tarifa4_autobus.placeholder       ="Tarifa pico para Autobuses";
+        tarifa3_especiales.style.display  = '';
+        tarifa4_especiales.style.display  = '';
+        tarifa3_especiales.placeholder    ="Tarifa normal para Vehículos Especiales";
+        tarifa4_especiales.placeholder    ="Tarifa pico para Vehículos Especiales";
+      } else if (this.value == "TarifaFinDeSemana") {
+        inicioFeriado2.style.display      ='none';
+        inicioFeriado2.value              = "";
+        finFeriado2.style.display         ='none';
+        finFeriado2.value                 = "";
+        tarifa3_motos.style.display       = '';
+        tarifa4_motos.style.display       = '';
+        tarifa3_motos.placeholder         ="Tarifa normal para Motos";
+        tarifa4_motos.placeholder         ="Tarifa fin de semana para Motos";
+        tarifa3_carros.style.display      = '';
+        tarifa4_carros.style.display      = '';
+        tarifa3_carros.placeholder        ="Tarifa normal para Carros";
+        tarifa4_carros.placeholder        ="Tarifa fin de semana para Carros";
+        tarifa3_camiones.style.display    = '';
+        tarifa4_camiones.style.display    = '';
+        tarifa3_camiones.placeholder      ="Tarifa normal para Camiones";
+        tarifa4_camiones.placeholder      ="Tarifa fin de semana para Camiones";
+        tarifa3_microbus.style.display    = '';
+        tarifa4_microbus.style.display    = '';
+        tarifa3_microbus.placeholder      ="Tarifa normal para Microbuses";
+        tarifa4_microbus.placeholder      ="Tarifa fin de semana para Microbuses";
+        tarifa3_autobus.style.display     = '';
+        tarifa4_autobus.style.display     = '';
+        tarifa3_autobus.placeholder       ="Tarifa normal para Autobuses";
+        tarifa4_autobus.placeholder       ="Tarifa fin de semana para Autobuses";
+        tarifa3_especiales.style.display  = '';
+        tarifa4_especiales.style.display  = '';
+        tarifa3_especiales.placeholder    ="Tarifa normal para Vehículos Especiales";
+        tarifa4_especiales.placeholder    ="Tarifa fin de semana para Vehículos Especiales";
+      } else {
+        inicioFeriado2.style.display      ='none';
+        inicioFeriado2.value              = "";
+        finFeriado2.style.display         ='none';
+        finFeriado2.value                 = "";
+        tarifa3_motos.style.display       = '';
+        tarifa3_motos.placeholder          ="Tarifa para Motos";
+        tarifa4_motos.style.display       ='none';
+        tarifa4_motos.value               = "";
+        tarifa3_carros.style.display      = '';
+        tarifa3_carros.placeholder         ="Tarifa para Carros";
+        tarifa4_carros.style.display      ='none';
+        tarifa4_carros.value              = "";
+        tarifa3_camiones.style.display    = '';
+        tarifa3_camiones.placeholder       ="Tarifa para Camiones";
+        tarifa4_camiones.style.display    ='none';
+        tarifa4_camiones.value            = "";
+        tarifa3_microbus.style.display    = '';
+        tarifa3_microbus.placeholder       ="Tarifa para Microbuses";
+        tarifa4_microbus.style.display    ='none';
+        tarifa4_microbus.value            = "";
+        tarifa3_autobus.style.display     = '';
+        tarifa3_autobus.placeholder        ="Tarifa para Autobuses";
+        tarifa4_autobus.style.display     ='none';
+        tarifa4_autobus.value             = "";
+        tarifa3_especiales.style.display  = '';
+        tarifa3_especiales.placeholder     ="Tarifa para Vehículos Especiales";
+        tarifa4_especiales.style.display  ='none';
+        tarifa4_especiales.value          = "";
       }
     }
   }

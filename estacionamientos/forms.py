@@ -645,7 +645,6 @@ class EstacionamientoExtendedForm(forms.Form):
         )
     )
 
-
     choices_esquema = [
         ('TarifaHora', 'Por hora'),
         ('TarifaMinuto', 'Por minuto'),
@@ -653,14 +652,14 @@ class EstacionamientoExtendedForm(forms.Form):
         ('TarifaHoraPico', 'Diferenciada por horario pico'),
         ('TarifaFinDeSemana', 'Diferenciada para fines de semana')
     ]
-
+    
     esquema = forms.ChoiceField(
-        required = True,
-        choices  = choices_esquema,
-        widget   = forms.Select(attrs =
-            { 'class' : 'form-control' }
-        )
-    )
+		required = True,
+		choices  = choices_esquema,
+		widget   = forms.Select(attrs =
+			{ 'class' : 'form-control' }
+		)
+	)
 
     tarifa_motos = forms.DecimalField(
         required   = False,
@@ -829,6 +828,182 @@ class EstacionamientoExtendedForm(forms.Form):
             }
         )
     )
+
+    esquema2 = forms.ChoiceField(
+        required = True,
+        choices  = choices_esquema,
+        widget   = forms.Select(attrs =
+            { 'class' : 'form-control' }
+        )
+    )
+
+    tarifa3_motos = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Motos',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa3_carros = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Carros',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa3_camiones = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Camiones',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa3_microbus = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Microbuses',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa3_autobus = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Autobuses',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa3_especiales = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Vehículos Especiales',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa4_motos = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Motos',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa4_carros = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Carros',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa4_camiones = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Camiones',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa4_microbus = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Microbuses',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa4_autobus = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Autobuses',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    tarifa4_especiales = forms.DecimalField(
+            required   = False,
+            validators = [tarifa_validator],
+            widget     = forms.TextInput(attrs = {
+                'class'       : 'form-control',
+                'placeholder' : 'Tarifa 2 para Vehículos Especiales',
+                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
+                'message'     : 'La entrada debe ser un número decimal.'
+            }
+        )
+    )
+
+    inicioTarifaFeriado2 = forms.TimeField(
+        required = False,
+        label    = 'Inicio Horario Especial',
+        widget   = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Horario Inicio Reserva'
+            , 'pattern'     : '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]'
+            , 'message'     : 'La entrada debe ser una hora válida.'
+            }
+        )
+    )
+
+    finTarifaFeriado2 = forms.TimeField(
+        required = False,
+        label    = 'Fin Horario Especial',
+        widget   = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Horario Fin Reserva'
+            , 'pattern'     : '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]'
+            , 'message'     : 'La entrada debe ser una hora válida.'
+            }
+        )
+    )
     
     #Funcion auxiliar para obtener las tarifas, retornando 0 si el campo esta vacia
     def clean_tarifa(self, tipo_tarifa):
@@ -848,6 +1023,28 @@ class EstacionamientoExtendedForm(forms.Form):
         if horizonte is None:
             return 15   #Igual aqui de nuevo, pero con horizontes, si no es especificado returnar el maximo, 15 dias.
         return horizonte
+    
+class AgregarDiaFeriado(forms.Form):
+    
+    descripcion = forms.CharField(
+        required = False,
+        label = 'Descripcion',
+        widget = forms.TextInput(attrs=
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Descripcion'
+            , 'message'     : 'La descripcion debe tener menos de 100 caracteres'} 
+        )
+    )
+    
+    dia = forms.DateField(
+        required = True,
+        widget = forms.DateInput(attrs=
+            { 'class'       : 'form-control'
+            , 'type'        : 'date'
+            , 'placeholder' : 'Fecha'
+            }
+        )                  
+    )
 
 class ReservaForm(forms.Form):
     
