@@ -46,13 +46,12 @@ from estacionamientos.models import (
     BilleteraElectronica,
     Reserva,
     Pago,
-    Factura_devolucion,
     TarifaHora,
     TarifaMinuto,
     TarifaHorayFraccion,
     TarifaFinDeSemana,
-    TarifaHoraPico
-, Recarga_billetera)
+    TarifaHoraPico,
+    HistorialBilleteraElectronica)
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):
@@ -292,6 +291,9 @@ def estacionamiento_reserva(request, _id):
 
             if marzullo(_id, inicioReserva, finalReserva, tipoVehiculo):
                 reservaFinal = Reserva(
+                    nombre          = form.cleaned_data['nombre'],
+                    apellido        = form.cleaned_data['apellido'],
+                    ci              = form.cleaned_data['ci'],
                     estacionamiento = estacionamiento,
                     inicioReserva   = inicioReserva,
                     finalReserva    = finalReserva,
@@ -321,6 +323,10 @@ def estacionamiento_reserva(request, _id):
                 request.session['mesfinal']            = finalReserva.month
                 request.session['diafinal']            = finalReserva.day
                 request.session['tipoVehiculo']        = tipoVehiculo
+                request.session['nombre']              = form.cleaned_data['nombre']
+                request.session['apellido']            = form.cleaned_data['apellido']
+                request.session['ci']                  = form.cleaned_data['ci']
+
                 return render(
                     request,
                     'confirmar.html',
@@ -359,7 +365,7 @@ def estacionamiento_cancelar_reserva(request):
         
         if form.is_valid():
             idReserva = form.cleaned_data['idReserva']
-            ced       = form.cleaned_data['cedula']
+            ci        = form.cleaned_data['cedula']
             
             #Intenta conseguir la reserva
             try:    
@@ -373,7 +379,7 @@ def estacionamiento_cancelar_reserva(request):
                 )
         
             #Verifica que sea la cedula correcta
-            if pagoReserva.cedula != ced:
+            if pagoReserva.reserva.ci != ci:
                 return render(
                     request, 'template-mensaje.html',
                     { 'color'   : 'red'
@@ -455,6 +461,7 @@ def estacionamiento_cancelar_reserva_billetera(request):
                 }
             )
         
+        #Verificando que sea posible abonar la billetera
         if (billetera.saldo + pago.monto > 10000):
             return render(
                 request, 'template-mensaje.html',
@@ -463,23 +470,28 @@ def estacionamiento_cancelar_reserva_billetera(request):
                 }
             )
         
-        devolucion = Factura_devolucion(
+        historial = HistorialBilleteraElectronica(
+            billetera        = billetera,
             fechaTransaccion = datetime.now(),
-            numReciboPago = pago.id,
-            idBilleteraRecargada = billetera.idBilletera,
-            monto  = pago.monto,
-        )
+            tipo             = "Cancelacion",
+            nombre           = reserva.nombre,
+            apellido         = reserva.apellido,
+            cedula           = reserva.ci,
+            credito          = pago.monto
+            )
+            
+        historial.save()
         
         billetera.saldo += pago.monto
         billetera.save()
         pago.estado = False
         pago.save()
         reserva.delete()
-        devolucion.save()
         
         return render(
             request, 'factura-devolucion.html',
-            { 'devolucion' : devolucion }
+            { 'devolucion' : historial,
+              'pago' : pago }
         )
 
 def estacionamiento_pago(request,_id):
@@ -516,6 +528,9 @@ def estacionamiento_pago(request,_id):
             tipoVehiculo = request.session['tipoVehiculo']
 
             reservaFinal = Reserva(
+                nombre          = request.session['nombre'],
+                apellido        = request.session['apellido'],
+                ci              = request.session['ci'],
                 estacionamiento = estacionamiento,
                 inicioReserva   = inicioReserva,
                 finalReserva    = finalReserva,
@@ -533,7 +548,6 @@ def estacionamiento_pago(request,_id):
                 tipoPago         = "Tarjeta",
                 reserva          = reservaFinal,
             )
-
 
             # Se guarda el recibo de pago en la base de datos
             pago.save()
@@ -556,7 +570,6 @@ def estacionamiento_pago(request,_id):
     
 def estacionamiento_pago_billetera(request,_id):
     form = ValidarBilleteraForm()
-    cedula1 = CedulaForm()
     
     try:
         estacionamiento = Estacionamiento.objects.get(id = _id)
@@ -569,9 +582,8 @@ def estacionamiento_pago_billetera(request,_id):
     if request.method == 'POST':
     
         form = ValidarBilleteraForm(request.POST)
-        cedula1 = CedulaForm(request.POST)
         #Guarda lo que introdujo el usuario
-        if form.is_valid() and cedula1.is_valid():
+        if form.is_valid():
             identificador = form.cleaned_data['idValid']
             pinVal = form.cleaned_data['pinValid']
             #Busca la billetera en la base de datos    
@@ -625,6 +637,9 @@ def estacionamiento_pago_billetera(request,_id):
             tipoVehiculo = request.session['tipoVehiculo']
 
             reservaFinal = Reserva(
+                nombre          = request.session['nombre'],
+                apellido        = request.session['apellido'],
+                ci              = request.session['ci'],                   
                 estacionamiento = estacionamiento,
                 inicioReserva   = inicioReserva,
                 finalReserva    = finalReserva,
@@ -636,7 +651,7 @@ def estacionamiento_pago_billetera(request,_id):
             
             pago = Pago(
                 fechaTransaccion = datetime.now(),
-                cedula           = cedula1.cleaned_data['cedula'],
+                cedula           = billetera.CI,
                 monto            = monto,
                 tipoPago         = "Billetera",
                 reserva          = reservaFinal,
@@ -644,7 +659,19 @@ def estacionamiento_pago_billetera(request,_id):
 
             # Se guarda el recibo de pago en la base de datos
             pago.save()
-
+            
+            historial = HistorialBilleteraElectronica(
+                billetera        = billetera,
+                fechaTransaccion = datetime.now(),
+                tipo             = "Reserva",
+                nombre           = request.session['nombre'],
+                apellido         = request.session['apellido'],
+                cedula           = request.session['ci'],
+                debito           = monto
+                )
+            
+            historial.save()
+            
             return render(
                 request,
                 'pago_billetera.html',
@@ -660,7 +687,6 @@ def estacionamiento_pago_billetera(request,_id):
         request,
         'pago_billetera.html',
         { 'form' : form
-        , 'cedula1': cedula1
         }
     )
 
@@ -693,9 +719,8 @@ def estacionamiento_consulta_reserva(request):
     if request.method == 'POST':
         form = CedulaForm(request.POST)
         if form.is_valid():
-
             cedula        = form.cleaned_data['cedula']
-            facturas      = Pago.objects.filter(cedula = cedula).filter(estado = True)
+            facturas      = Pago.objects.filter(estado = True).filter(reserva__ci = cedula)
             listaFacturas = []
 
             listaFacturas = sorted(
@@ -836,9 +861,10 @@ def propietarios_all(request):
         
         if form.is_valid():
             obj = Propietario(
-                nombre  = form.cleaned_data['nombreProp'],
-                ci      = form.cleaned_data['ci'],
-                tel     = form.cleaned_data['telefono']
+                nombre   = form.cleaned_data['nombreProp'],
+                apellido = form.cleaned_data['apellidoProp'],
+                ci       = form.cleaned_data['ci'],
+                tel      = form.cleaned_data['telefono']
             )
             obj.save()
             propietarios = Propietario.objects.all()
@@ -875,7 +901,6 @@ def cambiar_propietario(request, _id):
         if form.is_valid():
             try:
                 objetoPropietario = Propietario.objects.get(ci = form.cleaned_data['ci_propietario'])
-                
                 estacionamiento.ci_propietario = objetoPropietario
                 estacionamiento.save()
             
@@ -939,13 +964,22 @@ def billetera_electronica(request):
                 , 'mensaje' : 'Autenticación denegada'
                 }
             )
+
+            if "saldo" in request.POST:
+                return render(
+                    request,
+                    'billetera_electronica_saldo.html',
+                    {'billetera' : billetera}
+                )
             
-            return render(
-                request,
-                'billetera_electronica_saldo.html',
-                {'billetera' : billetera}
-            )
-        
+            elif "historial" in request.POST:
+                return render(
+                    request,
+                    'billetera_electronica_historial.html',
+                    {'billetera' : billetera,
+                     'historial' : HistorialBilleteraElectronica.objects.filter(billetera = billetera)}   
+                )
+                
     return render(
         request, 'Billetera-Electronica.html',
         {'form': form}
@@ -963,6 +997,7 @@ def billetera_electronica_crear(request):
         if form.is_valid():
             obj = BilleteraElectronica(
                 nombre      = form.cleaned_data['nombreUsu'],
+                apellido    = form.cleaned_data['apellidoUsu'],
                 CI          = form.cleaned_data['ciUsu'],
                 PIN         = form.cleaned_data['pinUsu'],
                 idBilletera = len(billeteras),
@@ -1028,25 +1063,29 @@ def billetera_electronica_recargar(request):
                 )
                 
             billetera.saldo += Decimal(monto)
-            billetera.save()          
-            recarga = Recarga_billetera(
+            billetera.save()
+            
+            recarga = HistorialBilleteraElectronica(
+                billetera        = billetera,
                 fechaTransaccion = datetime.now(),
-                idBilletera      = identificador,
-                cedula           = form.cleaned_data['cedula'],
+                tipo             = "Recarga",
                 nombre           = form.cleaned_data['nombre'],
                 apellido         = form.cleaned_data['apellido'],
-                monto            = form.cleaned_data['monto'],                        
-            )
+                cedula           = form.cleaned_data['cedula'],
+                tarjeta          = "****" + form.cleaned_data['tarjeta'][-4:],
+                credito          = Decimal(form.cleaned_data['monto'])
+                )
+            
             recarga.save()
+            
             return render(
                 request, 'recarga.html',
                 { 'color'     : 'black'  
                 , 'pago'      : recarga     
                 , 'billetera' : billetera       
-                , 'mensaje'   : 'Se ha recargado a su cuenta: '+ monto
+                , 'mensaje'   : 'Su nuevo saldo es '+ str(billetera.saldo)
                 }
             )
-        
     
     return render(request,  
         'billetera_electronica_recarga.html',

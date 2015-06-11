@@ -7,15 +7,16 @@ from decimal import Decimal
 from datetime import timedelta
 
 class Propietario(models.Model):
-	nombre = models.CharField(max_length = 50)
-	ci     = models.CharField(max_length = 12, unique = True)
-	tel    = models.CharField(max_length = 30)
+	nombre   = models.CharField(max_length = 30)
+	apellido = models.CharField(max_length = 30)
+	ci       = models.CharField(max_length = 12, unique = True)
+	tel      = models.CharField(max_length = 30)
 
 	def __str__(self):
-		return self.nombre
+		return self.nombre + " " + self.apellido
 
 class Estacionamiento(models.Model):
-	ci_propietario = models.ForeignKey("Propietario") #CI del propietario! No el nombre.
+	ci_propietario = models.ForeignKey(Propietario) #CI del propietario! No el nombre.
 	nombre      = models.CharField(max_length = 50)
 	direccion   = models.TextField(max_length = 120)
 	telefono1   = models.CharField(blank = True, null = True, max_length = 30)
@@ -47,6 +48,9 @@ class Estacionamiento(models.Model):
 		return self.nombre+' '+str(self.ci_propietario)
 
 class Reserva(models.Model):
+	nombre 			= models.CharField(max_length = 30)
+	apellido        = models.CharField(max_length = 30)
+	ci				= models.CharField(max_length = 12)
 	estacionamiento = models.ForeignKey(Estacionamiento)
 	inicioReserva   = models.DateTimeField()
 	finalReserva    = models.DateTimeField()
@@ -73,36 +77,32 @@ class Pago(models.Model):
 
 	def __str__(self):
 		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
-		
-class Factura_devolucion(models.Model):
-	fechaTransaccion     = models.DateTimeField()
-	numReciboPago        = models.IntegerField()
-	idBilleteraRecargada = models.IntegerField()
-	monto                = models.DecimalField(decimal_places = 2, max_digits = 256)
-	estado               = models.BooleanField(default = True)
-		
-class Recarga_billetera(models.Model):
-	fechaTransaccion = models.DateTimeField()
-	idBilletera 	 = models.IntegerField()
-	nombre		     = models.CharField(max_length = 30)
-	apellido         = models.CharField(max_length = 30)
-	cedula           = models.CharField(max_length = 10)
-	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
-	estado           = models.BooleanField(default = True)
-	
-	def __str__(self):
-		return self.nombre + " " + self.idBilletera + " " + str(self.id)
 
 class BilleteraElectronica(models.Model):
 	idBilletera = models.IntegerField()
 	PIN         = models.CharField(max_length = 4)
-	nombre      = models.CharField(max_length = 50)
+	nombre      = models.CharField(max_length = 30)
+	apellido    = models.CharField(max_length = 30)
 	CI          = models.CharField(max_length = 10)
 	saldo       = models.DecimalField(decimal_places= 2, max_digits = 256)
 	
 	def __str__(self):
 		return self.nombre + " " + self.idBilletera + " " + str(self.id)    
 
+class HistorialBilleteraElectronica(models.Model):
+	billetera		 = models.ForeignKey(BilleteraElectronica)
+	fechaTransaccion = models.DateTimeField()
+	tipo			 = models.CharField(max_length = 10)
+	nombre		     = models.CharField(max_length = 30)
+	apellido         = models.CharField(max_length = 30)
+	cedula           = models.CharField(max_length = 10)
+	tarjeta			 = models.CharField(blank = True, max_length = 16, default = "")
+	debito 			 = models.DecimalField(decimal_places= 2, max_digits = 256, blank = True, null = True)
+	credito			 = models.DecimalField(decimal_places= 2, max_digits = 256, blank = True, null = True)
+	
+	def __str__(self):
+		return str(self.billetera.idBilletera) + " " + str(self.fechaTransaccion) + " " + self.tipo + " " + self.nombre
+	
 class EsquemaTarifario(models.Model):
 
 	# No se cuantos digitos deberiamos poner

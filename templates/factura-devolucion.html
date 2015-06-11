@@ -35,21 +35,21 @@
               Numero de reserva cancelada:
             </b></td></tr>
             <tr><td>
-             {{devolucion.numReciboPago}}
+             {{pago.id}}
             </td></tr>
             
             <tr><td><b><i class="fa fa-user"></i>
               Id billetera recargada:
             </b></td></tr>
             <tr><td>
-             {{devolucion.idBilleteraRecargada}}
+             {{devolucion.billetera.idBilletera}}
             </td></tr>
 
             <tr><td><b><i class="fa fa-money"></i>
               Monto:
             </b></td></tr>
             <tr><td>
-              {{devolucion.monto|floatformat:2|intcomma }}
+              {{devolucion.credito|floatformat:2|intcomma }}
             </td></tr>
           </tbody>
         </table>
