@@ -495,12 +495,12 @@ class EstacionamientoExtendedForm(forms.Form):
     )
     
     puestos_motos = forms.IntegerField(
-        required  = True,
+        required  = False,
         min_value = 0,
-        label     = 'Número de Puestos para Motos',
+        label     = 'Puestos para Motos',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Número de Puestos para Motos'
+            , 'placeholder' : 'Puestos para Motos'
             , 'min'         : "0"
             , 'pattern'     : '^[0-9]+'
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
@@ -509,12 +509,12 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     puestos_carros = forms.IntegerField(
-        required  = True,
+        required  = False,
         min_value = 0,
-        label     = 'Número de Puestos para Carros',
+        label     = 'Puestos para Carros',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Número de Puestos para Carros'
+            , 'placeholder' : 'Puestos para Carros'
             , 'min'         : "0"
             , 'pattern'     : '^[0-9]+'
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
@@ -523,12 +523,12 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     puestos_camiones = forms.IntegerField(
-        required  = True,
+        required  = False,
         min_value = 0,
-        label     = 'Número de Puestos para Camiones',
+        label     = 'Puestos para Camiones',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Número de Puestos para Camiones'
+            , 'placeholder' : 'Puestos para Camiones'
             , 'min'         : "0"
             , 'pattern'     : '^[0-9]+'
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
@@ -537,12 +537,12 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     puestos_microbus = forms.IntegerField(
-        required  = True,
+        required  = False,
         min_value = 0,
-        label     = 'Número de Puestos para Microbuses',
+        label     = 'Puestos para Microbuses',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Número de Puestos para Microbuses'
+            , 'placeholder' : 'Puestos para Microbuses'
             , 'min'         : "0"
             , 'pattern'     : '^[0-9]+'
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
@@ -551,12 +551,12 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     puestos_autobus = forms.IntegerField(
-        required  = True,
+        required  = False,
         min_value = 0,
-        label     = 'Número de Puestos para Autobuses',
+        label     = 'Puestos para Autobuses',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Número de Puestos para Autobuses'
+            , 'placeholder' : 'Puestos para Autobuses'
             , 'min'         : "0"
             , 'pattern'     : '^[0-9]+'
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
@@ -565,12 +565,12 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     puestos_especiales = forms.IntegerField(
-        required  = True,
+        required  = False,
         min_value = 0,
-        label     = 'Número de Puestos para Vehículos Especiales',
+        label     = 'Puestos para Vehículos Especiales',
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
-            , 'placeholder' : 'Número de Puestos para Vehículos Especiales'
+            , 'placeholder' : 'Puestos para Vehículos Especiales'
             , 'min'         : "0"
             , 'pattern'     : '^[0-9]+'
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
@@ -603,7 +603,7 @@ class EstacionamientoExtendedForm(forms.Form):
     )
     
     horizonte_reserva = forms.IntegerField(
-        required  = True,
+        required  = False,
         min_value = 0,
         max_value = 15,
         label     = 'Horizonte de reservacion',
@@ -636,7 +636,7 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     tarifa_motos = forms.DecimalField(
-        required   = True,
+        required   = False,
         validators = [tarifa_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
@@ -648,7 +648,7 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     tarifa_carros = forms.DecimalField(
-        required   = True,
+        required   = False,
         validators = [tarifa_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
@@ -660,7 +660,7 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     tarifa_camiones = forms.DecimalField(
-        required   = True,
+        required   = False,
         validators = [tarifa_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
@@ -672,7 +672,7 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     tarifa_microbus = forms.DecimalField(
-        required   = True,
+        required   = False,
         validators = [tarifa_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
@@ -684,7 +684,7 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     tarifa_autobus = forms.DecimalField(
-        required   = True,
+        required   = False,
         validators = [tarifa_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
@@ -696,7 +696,7 @@ class EstacionamientoExtendedForm(forms.Form):
     )
 
     tarifa_especiales = forms.DecimalField(
-        required   = True,
+        required   = False,
         validators = [tarifa_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
@@ -802,6 +802,25 @@ class EstacionamientoExtendedForm(forms.Form):
             }
         )
     )
+    
+    #Funcion auxiliar para obtener las tarifas, retornando 0 si el campo esta vacia
+    def clean_tarifa(self, tipo_tarifa):
+        tarifa = self.cleaned_data[tipo_tarifa]
+        if tarifa is None:
+            return 0    #Si no se llena el campo se retorna como tarifa 0
+        return tarifa
+    
+    def clean_puestos(self, tipo_puesto):
+        puestos = self.cleaned_data[tipo_puesto]
+        if puestos is None:
+            return 0    #Igual aqui pero con puestos, campo vacio se traduce a no puestos
+        return puestos
+    
+    def clean_horizonte(self):
+        horizonte = self.cleaned_data['horizonte_reserva']
+        if horizonte is None:
+            return 15   #Igual aqui de nuevo, pero con horizontes, si no es especificado returnar el maximo, 15 dias.
+        return horizonte
 
 class ReservaForm(forms.Form):
     

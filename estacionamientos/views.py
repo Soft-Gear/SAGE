@@ -123,7 +123,6 @@ def estacionamiento_detail(request, _id):
 
     if request.method == 'GET':
         if estacionamiento.tarifa:
-            
             form_data = {
                 'horarioin'             : estacionamiento.apertura,
                 'horarioout'            : estacionamiento.cierre,
@@ -161,22 +160,22 @@ def estacionamiento_detail(request, _id):
         if form.is_valid():
             horaIn                = form.cleaned_data['horarioin']
             horaOut               = form.cleaned_data['horarioout']
-            tarifa_motos          = form.cleaned_data['tarifa_motos']
-            tarifa_carros         = form.cleaned_data['tarifa_carros']
-            tarifa_camiones       = form.cleaned_data['tarifa_camiones']
-            tarifa_microbus       = form.cleaned_data['tarifa_microbus']
-            tarifa_autobus        = form.cleaned_data['tarifa_autobus']
-            tarifa_especiales     = form.cleaned_data['tarifa_especiales']
-            horizonte             = form.cleaned_data['horizonte_reserva']
+            tarifa_motos          = form.clean_tarifa('tarifa_motos')
+            tarifa_carros         = form.clean_tarifa('tarifa_carros')
+            tarifa_camiones       = form.clean_tarifa('tarifa_camiones')
+            tarifa_microbus       = form.clean_tarifa('tarifa_microbus')
+            tarifa_autobus        = form.clean_tarifa('tarifa_autobus')
+            tarifa_especiales     = form.clean_tarifa('tarifa_especiales')
+            horizonte             = form.clean_horizonte()
             tipo                  = form.cleaned_data['esquema']
             inicioTarifa2         = form.cleaned_data['inicioTarifa2']
             finTarifa2            = form.cleaned_data['finTarifa2']
-            tarifa2_motos         = form.cleaned_data['tarifa2_motos']
-            tarifa2_carros        = form.cleaned_data['tarifa2_carros']
-            tarifa2_camiones      = form.cleaned_data['tarifa2_camiones']
-            tarifa2_microbus      = form.cleaned_data['tarifa2_microbus']
-            tarifa2_autobus       = form.cleaned_data['tarifa2_autobus']
-            tarifa2_especiales    = form.cleaned_data['tarifa2_especiales']
+            tarifa2_motos         = form.clean_tarifa('tarifa2_motos')
+            tarifa2_carros        = form.clean_tarifa('tarifa2_carros')
+            tarifa2_camiones      = form.clean_tarifa('tarifa2_camiones')
+            tarifa2_microbus      = form.clean_tarifa('tarifa2_microbus')
+            tarifa2_autobus       = form.clean_tarifa('tarifa2_autobus')
+            tarifa2_especiales    = form.clean_tarifa('tarifa2_especiales')
 
             esquemaTarifa = eval(tipo)(
                 tarifa_motos         = tarifa_motos,
@@ -210,12 +209,12 @@ def estacionamiento_detail(request, _id):
             estacionamiento.tarifa               = esquemaTarifa
             estacionamiento.apertura             = horaIn
             estacionamiento.cierre               = horaOut
-            estacionamiento.capacidad_motos      = form.cleaned_data['puestos_motos']
-            estacionamiento.capacidad_carros     = form.cleaned_data['puestos_carros']
-            estacionamiento.capacidad_camiones   = form.cleaned_data['puestos_camiones']
-            estacionamiento.capacidad_microbus   = form.cleaned_data['puestos_microbus']
-            estacionamiento.capacidad_autobus    = form.cleaned_data['puestos_autobus']
-            estacionamiento.capacidad_especiales = form.cleaned_data['puestos_especiales']
+            estacionamiento.capacidad_motos      = form.clean_puestos('puestos_motos')
+            estacionamiento.capacidad_carros     = form.clean_puestos('puestos_carros')
+            estacionamiento.capacidad_camiones   = form.clean_puestos('puestos_camiones')
+            estacionamiento.capacidad_microbus   = form.clean_puestos('puestos_microbus')
+            estacionamiento.capacidad_autobus    = form.clean_puestos('puestos_autobus')
+            estacionamiento.capacidad_especiales = form.clean_puestos('puestos_especiales')
             estacionamiento.horizonte_reserva    = horizonte
             estacionamiento.capacidad            = (estacionamiento.capacidad_motos +
                                                     estacionamiento.capacidad_carros +
