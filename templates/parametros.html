@@ -171,102 +171,133 @@
           <tr><td>BsF. {{estacionamiento.tarifa.tarifa_especiales|floatformat:2|intcomma}}</td></tr>
         {% endif %}  
       {% endif %}
-    {% endif %}
     
-    {% if estacionamiento.tarifa2 %}
-      <tr><td><b><i class="fa fa-circle"></i></i> Esquema Dias Feriados:</b></td></tr>
-      <tr><td>{{estacionamiento.tarifa2.tipo}} </td></tr>
-    {% endif %}
-    {% if estacionamiento.tarifa2.tipo == "Tarifa diferenciada para fines de semana" %}
-	  <!-- Motos -->
-      {% if estacionamiento.capacidad_motos %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Motos:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_motos}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Motos:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_motos}}</td></tr>
+      {% if estacionamiento.tarifa2 %}
+        <tr><td><b><i class="fa fa-circle"></i></i> Esquema Dias Feriados:</b></td></tr>
+        <tr><td>{{estacionamiento.tarifa2.tipo}} </td></tr>
       {% endif %}
-      <!-- Carros -->
-      {% if estacionamiento.capacidad_carros %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Carros:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_carros}}</td></tr>
-		<tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Carros:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_carros}}</td></tr>
+      {% if estacionamiento.tarifa2.tipo == "Tarifa diferenciada para fines de semana" %}
+	    <!-- Motos -->
+        {% if estacionamiento.capacidad_motos %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Motos:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_motos}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Motos:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_motos}}</td></tr>
+        {% endif %}
+        <!-- Carros -->
+        {% if estacionamiento.capacidad_carros %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Carros:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_carros}}</td></tr>
+		  <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Carros:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_carros}}</td></tr>
+        {% endif %}
+        <!-- Camiones -->
+        {% if estacionamiento.capacidad_camiones %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Camiones:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_camiones}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Camiones:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_camiones}}</td></tr>
+        {% endif %}
+        <!-- Microbuses -->
+        {% if estacionamiento.capacidad_microbus %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Microbuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_microbus}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Microbuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_microbus}}</td></tr>
+        {% endif %}
+        <!-- Autobuses -->
+        {% if estacionamiento.capacidad_autobus %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Autobuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_autobus}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Autobuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_autobus}}</td></tr>
+        {% endif %}
+        <!-- Especiales -->
+        {% if estacionamiento.capacidad_especiales %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Vehículos Especiales:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_especiales}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Vehículos Especiales:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_especiales}}</td></tr>
+        {% endif %}
+      {% elif estacionamiento.tarifa2.tipo == "Tarifa diferenciada por hora pico" %}
+        <!-- Motos -->
+        {% if estacionamiento.capacidad_motos %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Motos:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_motos}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Motos:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_motos}}</td></tr>
+        {% endif %}
+        <!-- Carros -->
+        {% if estacionamiento.capacidad_carros %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Carros:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_carros}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Carros:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_carros}}</td></tr>
+        {% endif %}
+        <!-- Camiones -->
+        {% if estacionamiento.capacidad_camiones %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Camiones:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_camiones}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Camiones:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_camiones}}</td></tr>
+        {% endif %}
+        <!-- Microbuses -->
+        {% if estacionamiento.capacidad_microbus %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Microbuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_microbus}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Microbuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_microbus}}</td></tr>
+        {% endif %}
+        <!-- Autobuses -->
+        {% if estacionamiento.capacidad_autobus %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Autobuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_autobus}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Autobuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_autobus}}</td></tr>
+        {% endif %}
+        <!-- Especiales -->
+        {% if estacionamiento.capacidad_especiales %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Vehículos Especiales:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_especiales}}</td></tr>
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Vehículos Especiales:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_especiales}}</td></tr>
+        {% endif %}
+ 	    <tr><td><b><i class="fa fa-clock-o"></i> Inicio tarifa especial:</b></td></tr>
+        <tr><td>{{estacionamiento.tarifa2.inicioEspecial}}</td></tr>
+        <tr><td><b><i class="fa fa-clock-o"></i> Fin tarifa especial:</b></td></tr>
+        <tr><td>{{estacionamiento.tarifa2.finEspecial}}</td></tr>
+      {% else %}
+        <!-- Motos -->
+        {% if estacionamiento.capacidad_motos %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa para Motos:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_motos|floatformat:2|intcomma}}</td></tr>
+        {% endif %}
+        <!-- Carros -->
+        {% if estacionamiento.capacidad_carros %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa para Carros:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_carros|floatformat:2|intcomma}}</td></tr>
+        {% endif %}
+        <!-- Camiones -->
+        {% if estacionamiento.capacidad_camiones %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa para Camiones:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_camiones|floatformat:2|intcomma}}</td></tr>
+        {% endif %}
+        <!-- Microbuses -->
+        {% if estacionamiento.capacidad_microbus %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa para Microbuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_microbus|floatformat:2|intcomma}}</td></tr>
+        {% endif %}
+        <!-- Autobuses -->
+        {% if estacionamiento.capacidad_autobus %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa para Autobuses:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_autobus|floatformat:2|intcomma}}</td></tr>
+        {% endif %}
+        <!-- Especiales -->
+        {% if estacionamiento.capacidad_especiales %}
+          <tr><td><b><i class="fa fa-money"></i></i> Tarifa para Vehículos Especiales:</b></td></tr>
+          <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_especiales|floatformat:2|intcomma}}</td></tr>
+        {% endif %}  
       {% endif %}
-      <!-- Camiones -->
-      {% if estacionamiento.capacidad_camiones %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Camiones:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_camiones}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Camiones:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_camiones}}</td></tr>
-      {% endif %}
-      <!-- Microbuses -->
-      {% if estacionamiento.capacidad_microbus %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Microbuses:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_microbus}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Microbuses:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_microbus}}</td></tr>
-      {% endif %}
-      <!-- Autobuses -->
-      {% if estacionamiento.capacidad_autobus %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Autobuses:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_autobus}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Autobuses:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_autobus}}</td></tr>
-      {% endif %}
-      <!-- Especiales -->
-      {% if estacionamiento.capacidad_especiales %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Vehículos Especiales:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_especiales}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa fin de semana para Vehículos Especiales:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_especiales}}</td></tr>
-      {% endif %}
-    {% elif estacionamiento.tarifa2.tipo == "Tarifa diferenciada por hora pico" %}
-      <!-- Motos -->
-      {% if estacionamiento.capacidad_motos %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Motos:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_motos}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Motos:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_motos}}</td></tr>
-      {% endif %}
-      <!-- Carros -->
-      {% if estacionamiento.capacidad_carros %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Carros:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_carros}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Carros:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_carros}}</td></tr>
-      {% endif %}
-      <!-- Camiones -->
-      {% if estacionamiento.capacidad_camiones %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Camiones:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_camiones}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Camiones:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_camiones}}</td></tr>
-      {% endif %}
-      <!-- Microbuses -->
-      {% if estacionamiento.capacidad_microbus %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Microbuses:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_microbus}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Microbuses:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_microbus}}</td></tr>
-      {% endif %}
-      <!-- Autobuses -->
-      {% if estacionamiento.capacidad_autobus %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Autobuses:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_autobus}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Autobuses:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_autobus}}</td></tr>
-      {% endif %}
-      <!-- Especiales -->
-      {% if estacionamiento.capacidad_especiales %}
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa regular para Vehículos Especiales:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa_especiales}}</td></tr>
-        <tr><td><b><i class="fa fa-money"></i></i> Tarifa Especial para Vehículos Especiales:</b></td></tr>
-        <tr><td>BsF. {{estacionamiento.tarifa2.tarifa2_especiales}}</td></tr>
-      {% endif %}
- 	  <tr><td><b><i class="fa fa-clock-o"></i> Inicio tarifa especial:</b></td></tr>
-      <tr><td>{{estacionamiento.tarifa2.inicioEspecial}}</td></tr>
-      <tr><td><b><i class="fa fa-clock-o"></i> Fin tarifa especial:</b></td></tr>
-      <tr><td>{{estacionamiento.tarifa2.finEspecial}}</td></tr>
 	{% endif %}
   </tbody>
 </table>
