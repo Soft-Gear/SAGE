@@ -411,7 +411,7 @@ def estacionamiento_reserva(request, _id):
 
                 monto = Decimal(monto)
 
-                request.session['monto'] = monto
+                request.session['monto']               = float(monto)
                 request.session['finalReservaHora']    = finalReserva.hour
                 request.session['finalReservaMinuto']  = finalReserva.minute
                 request.session['inicioReservaHora']   = inicioReserva.hour
