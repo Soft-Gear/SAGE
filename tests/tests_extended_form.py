@@ -52,14 +52,14 @@ class ExtendedFormTestCase(TestCase):
                       'esquema':'TarifaMinuto'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
-        self.assertTrue(form.is_valid())
+        self.assertFalse(form.is_valid())
 
     # caso borde
     def test_estacionamiento_extended_form_seis_campos_bien(self):
         form_data = { 'puestos_motos': 2,
                       'horarioin': time(hour = 6,  minute = 0),
                       'horarioout': time(hour = 19,  minute = 0),
-                      'horizonte_reserva' : 7,
+                      'esquema2' : 'TarifaHora',
                       'tarifa': '12',
                       'esquema':'TarifaHora'
                     }
@@ -83,7 +83,8 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
-                    'esquema':'TarifaHora'
+                    'esquema':'TarifaHora',
+                    'esquema2' : 'TarifaHora'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertTrue(form.is_valid())
@@ -104,7 +105,8 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
-                    'esquema':'TarifaMinuto'
+                    'esquema':'TarifaMinuto',
+                    'esquema2' : 'TarifaMinuto'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertTrue(form.is_valid())
@@ -125,7 +127,8 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
-                    'esquema':'TarifaHorayFraccion'
+                    'esquema':'TarifaHorayFraccion',
+                    'esquema2' : 'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
         self.assertTrue(form.is_valid())
@@ -146,6 +149,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHoraPico',
                     'tarifa2_motos': '12',
                     'tarifa2_carros': '12',
@@ -175,6 +179,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaFinDeSemana',
                     'tarifa2_motos': '12',
                     'tarifa2_carros': '12',
@@ -202,6 +207,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -223,6 +229,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -244,6 +251,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -265,6 +273,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -286,6 +295,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -307,6 +317,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -328,6 +339,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -349,6 +361,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -370,6 +383,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -391,6 +405,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -412,6 +427,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -433,6 +449,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -454,6 +471,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -475,6 +493,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -496,6 +515,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -517,6 +537,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -538,6 +559,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': '12',
                     'tarifa_camiones': '12',
                     'tarifa_especiales': '12',
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -559,6 +581,7 @@ class ExtendedFormTestCase(TestCase):
                     'tarifa_microbus': None,
                     'tarifa_camiones': None,
                     'tarifa_especiales': None,
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -569,6 +592,7 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'horizonte_reserva' : 0,
                     'horarioin': time(hour = 6,  minute = 0),
                     'horarioout': time(hour = 19,  minute = 0),
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)
@@ -579,6 +603,7 @@ class ExtendedFormTestCase(TestCase):
         form_data = { 'horizonte_reserva' : 15,
                     'horarioin': time(hour = 6,  minute = 0),
                     'horarioout': time(hour = 19,  minute = 0),
+                    'esquema2' : 'TarifaHora',
                     'esquema':'TarifaHorayFraccion'
                     }
         form = EstacionamientoExtendedForm(data = form_data)

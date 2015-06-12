@@ -32,11 +32,21 @@ class PropietarioAllFormTestCase(TestCase):
         }
         form = PropietarioForm(data = form_data)
         self.assertFalse(form.is_valid())
+        
+    def test_tres_campos_necesarios(self):
+        form_data = {
+            'nombreProp': 'Pedro',
+            'apellidoProp':'D\'Angostino',
+            'ci': 'V-12345678'
+        }
+        form = PropietarioForm(data = form_data)
+        self.assertFalse(form.is_valid())
 
     # caso borde
     def test_todos_los_campos_necesarios(self):
         form_data = {
             'nombreProp': 'Pedro',
+            'apellidoProp':'D\'Angostino',
             'ci': 'V-12345678',
             'telefono': '02129322878'
         }
@@ -47,6 +57,7 @@ class PropietarioAllFormTestCase(TestCase):
     def test_nombre_valido_dieresis_acento(self):
         form_data = {
             'nombreProp': 'María Güilo',
+            'apellidoProp':'D\'Angostino',
             'ci': 'V-12345678',
             'telefono': '02129322878'
         }
@@ -57,6 +68,7 @@ class PropietarioAllFormTestCase(TestCase):
     def test_nombre_valido_guion_comilla(self):
         form_data = {
             'nombreProp': 'D\'Angostino-FebresÑu',
+            'apellidoProp':'Fell',
             'ci': 'V-12345678',
             'telefono': '02129322878'
         }
@@ -67,6 +79,7 @@ class PropietarioAllFormTestCase(TestCase):
     def test_nombre_invalido_digitos_en_campo(self):
         form_data = {
             'nombreProp': 'Pedro132',
+            'apellidoProp':'D\'Angostino',
             'ci': 'V-12345678',
             'telefono': '02129322878'
         }
@@ -77,6 +90,7 @@ class PropietarioAllFormTestCase(TestCase):
     def test_nombre_invalido_simbolos_especiales(self):
         form_data = {
             'nombreProp': 'Pedro!',
+            'apellidoProp':'D\'Angostino',
             'ci': 'V-12345678',
             'telefono': '02129322878'
         }
@@ -87,6 +101,7 @@ class PropietarioAllFormTestCase(TestCase):
     def test_CI_formato_invalido(self):
         form_data = {
             'nombreProp': 'Pedro132',
+            'apellidoProp':'D\'Angostino',
             'ci': 'Kaa123456789',
             'telefono': '02129322878'
         }
@@ -97,6 +112,7 @@ class PropietarioAllFormTestCase(TestCase):
     def test_formato_invalido_telefono(self):
         form_data = {
             'nombreProp': 'Pedro',
+            'apellidoProp':'D\'Angostino',
             'ci': 'V-12345678',
             'telefono': '02193228782'
         }
@@ -107,6 +123,7 @@ class PropietarioAllFormTestCase(TestCase):
     def test_tamano_invalido_telefono(self):
         form_data = {
             'nombreProp': 'Pedro',
+            'apellidoProp':'D\'Angostino',
             'ci': 'V-12345678',
             'telefono_1': '0212322878'
         }
