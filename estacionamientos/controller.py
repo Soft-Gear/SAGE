@@ -100,8 +100,8 @@ def tasa_reservaciones(id_estacionamiento,prt=False):
 	e = Estacionamiento.objects.get(id = id_estacionamiento)
 	ahora = datetime.today().replace(hour=0,minute=0,second=0,microsecond=0)
 	reservas_filtradas = e.reserva_set.filter(finalReserva__gt=ahora)
-	lista_fechas=[(ahora+timedelta(i)).date() for i in range(7)]
-	lista_valores=[0 for i in range(7)]
+	lista_fechas=[(ahora+timedelta(i)).date() for i in range(e.horizonte_reserva)]
+	lista_valores=[0 for i in range(e.horizonte_reserva)]
 	ocupacion_por_dia = OrderedDict(zip(lista_fechas,lista_valores))
 	UN_DIA = timedelta(days = 1)
 	
