@@ -29,7 +29,10 @@ class ReservaFormTestCase(TestCase):
 
     # TDD
     def test_EstacionamientoReserva_TodosCamposBien(self):
-        form_data = {'inicio_1': time(hour=6, minute=0),
+        form_data = {'nombre'  : 'Carlos',
+                     'apellido': 'Ferrer-Acosta',
+                     'ci'      : 'V-12345678',
+                     'inicio_1': time(hour=6, minute=0),
                      'final_1' : time(hour=15, minute=0),
                      'final_0' : date(year=2015, month=2, day=27),
                      'inicio_0': date(year=2015, month=2, day=27),
@@ -40,7 +43,10 @@ class ReservaFormTestCase(TestCase):
 
     # malicia
     def test_EstacionamientoReserva_InicioString(self):
-        form_data = {'inicio_1': 'teruel',
+        form_data = {'nombre'  : 'Carlos',
+                     'apellido': 'Ferrer-Acosta',
+                     'ci'      : 'V-12345678',
+                     'inicio_1': 'teruel',
                      'final_1': time(hour = 15, minute = 0),
                      'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27),
@@ -51,7 +57,10 @@ class ReservaFormTestCase(TestCase):
 
     # malicia
     def test_EstacionamientoReserva_FinString(self):
-        form_data = {'inicio_1': time(hour = 6, minute = 0),
+        form_data = {'nombre'  : 'Carlos',
+                     'apellido': 'Ferrer-Acosta',
+                     'ci'      : 'V-12345678',
+                     'inicio_1': time(hour = 6, minute = 0),
                      'final_1': 'Reinoza',
                      'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27),
@@ -62,7 +71,10 @@ class ReservaFormTestCase(TestCase):
 
     # malicia
     def test_EstacionamientoReserva_InicioNone(self):
-        form_data = {'inicio_1': None,
+        form_data = {'nombre'  : 'Carlos',
+                     'apellido': 'Ferrer-Acosta',
+                     'ci'      : 'V-12345678',
+                     'inicio_1': None,
                      'final_1': time(hour = 15, minute = 0),
                      'final_0': date(year=2015,month=2,day=27),
                      'inicio_0': date(year=2015,month=2,day=27),
@@ -73,7 +85,10 @@ class ReservaFormTestCase(TestCase):
 
     # malicia
     def test_EstacionamientoReserva_finalNone(self):
-        form_data = {'inicio_1': time(hour = 6, minute = 0),
+        form_data = {'nombre'  : 'Carlos',
+                     'apellido': 'Ferrer-Acosta',
+                     'ci'      : 'V-12345678',
+                     'inicio_1': time(hour = 6, minute = 0),
                      'final_1': time(hour = 15, minute = 0),
                      'final_0': None,
                      'inicio_0': date(year=2015,month=2,day=27),
@@ -84,7 +99,10 @@ class ReservaFormTestCase(TestCase):
         
     # malicia
     def test_EstacionamientoReserva_TipoVehiculoNone(self):
-        form_data = {'inicio_1': time(hour=6, minute=0),
+        form_data = {'nombre'  : 'Carlos',
+                     'apellido': 'Ferrer-Acosta',
+                     'ci'      : 'V-12345678',
+                     'inicio_1': time(hour=6, minute=0),
                      'final_1' : time(hour=15, minute=0),
                      'final_0' : date(year=2015, month=2, day=27),
                      'inicio_0': date(year=2015, month=2, day=27),

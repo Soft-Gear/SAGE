@@ -41,12 +41,14 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
             'pinUsu': '1234'
         }
         form = BilleteraElectronicaForm(data = form_data)
-        self.assertTrue(form.is_valid())
+        self.assertFalse(form.is_valid())
 
+        
     # caso borde
     def test_todos_los_campos_necesarios(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-12345678',
             'pinUsu': '1234'
         }
@@ -57,6 +59,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_nombre_pequeno(self):
         form_data = {
             'nombreUsu': 'J',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-12345678',
             'pinUsu': '1234'
         }
@@ -67,6 +70,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_nombre_invalido_digitos_en_campo(self):
         form_data = {
             'nombreUsu': 'Juan1234',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-12345678',
             'pinUsu': '1234'
         }
@@ -77,6 +81,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_nombre_invalido_simbolos_especiales(self):
         form_data = {
             'nombreUsu': 'J#u$a%n!',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-123456789',
             'pinUsu': '1234'
         }
@@ -87,6 +92,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_CI_tamano_invalido(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-1234',
             'pinUsu': '1234'
         }
@@ -97,6 +103,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_CI_minima(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-100000',
             'pinUsu': '1234'
         }
@@ -107,6 +114,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_CI_formato_invalido(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'Dani123456789',
             'pinUsu': '1234'
         }
@@ -117,6 +125,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_CI_invalida_simbolos_especiales(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V~12345678',
             'pinUsu': '1234'
         }
@@ -127,6 +136,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_CI_invalida_simbolos_especiales2(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V- 12345678',
             'pinUsu': '1234'
         }
@@ -181,6 +191,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_PIN_minimo(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-12345678',
             'pinUsu': '0000'
         }
@@ -191,6 +202,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_PIN_invalido_simbolos_especiales(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-12345678',
             'pinUsu': '1\'!0'
         }
@@ -201,6 +213,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_PIN_invalido_simbolos_especiales2(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-12345678',
             'pinUsu': '1#34'
         }
@@ -211,6 +224,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_PIN_invalido_letras_en_campo(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-12345678',
             'pinUsu': 'ab3d'
         }
@@ -221,6 +235,7 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
     def test_PIN_corto_invalido(self):
         form_data = {
             'nombreUsu': 'Juan',
+            'apellidoUsu': 'Güacaran',
             'ciUsu': 'V-12345678',
             'pinUsu': '123'
         }
