@@ -6,6 +6,12 @@ from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
 from datetime import timedelta
 
+class SAGE(models.Model):
+	tarifa_cancelacion = models.DecimalField(decimal_places = 1, max_digits = 3)
+
+	def __str__(self):
+		return self.tarifa_devolucion
+
 class Propietario(models.Model):
 	nombre   = models.CharField(max_length = 30)
 	apellido = models.CharField(max_length = 30)
@@ -53,6 +59,7 @@ class Reserva(models.Model):
 	apellido        = models.CharField(max_length = 30)
 	ci				= models.CharField(max_length = 12)
 	estacionamiento = models.ForeignKey(Estacionamiento)
+	tarifa_cancelar = models.ForeignKey(SAGE, blank = True, null = True)
 	inicioReserva   = models.DateTimeField()
 	finalReserva    = models.DateTimeField()
 	tipoVehiculo	= models.CharField(max_length = 10)

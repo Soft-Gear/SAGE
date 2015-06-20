@@ -26,6 +26,7 @@ from estacionamientos.controller import (
 )
 
 from estacionamientos.forms import (
+    PorcentajeForm,
     EstacionamientoExtendedForm,
     PropietarioForm,
     BilleteraElectronicaForm,
@@ -43,6 +44,7 @@ from estacionamientos.forms import (
     )
 
 from estacionamientos.models import (
+    SAGE,
     Estacionamiento,
     Propietario,
     BilleteraElectronica,
@@ -55,6 +57,38 @@ from estacionamientos.models import (
     TarifaFinDeSemana,
     TarifaHoraPico,
     HistorialBilleteraElectronica)
+
+def tarifa_cancelacion(request):
+
+    try:
+        tarifaCan = SAGE.objects.get(id = 1)
+    except ObjectDoesNotExist:
+        tarifaCan = SAGE(tarifa_cancelacion =0.0)
+
+    if request.method == 'GET':
+
+        form_data = {'porcentaje': tarifaCan.tarifa_cancelacion}
+        form = PorcentajeForm(data = form_data)
+
+    elif request.method == 'POST':
+
+        form = PorcentajeForm(request.POST)
+        if form.is_valid():
+            tarifaCan.tarifa_cancelacion = form.cleaned_data['porcentaje']
+            tarifaCan.save()
+        else:
+            return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'Error en los argumentos de la forma'
+                }
+            )
+
+    return render(
+        request,
+        'administracion.html',
+        { 'form': form }
+    )
 
 # Usamos esta vista para procesar todos los estacionamientos
 def estacionamientos_all(request):

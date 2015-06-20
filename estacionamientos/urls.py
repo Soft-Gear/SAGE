@@ -8,6 +8,7 @@ from estacionamientos import views
 # Este error es raro, en django funciona
 urlpatterns = patterns('',
     url(r'^$', views.estacionamientos_all, name = 'estacionamientos_all'),
+    url(r'^SAGE$', views.tarifa_cancelacion, name = 'tarifa_cancelacion'),
     url(r'^(?P<_id>\d+)/$', views.estacionamiento_detail, name = 'estacionamiento_detail'),
     url(r'^(?P<_id>\d+)/reserva$', views.estacionamiento_reserva, name = 'estacionamiento_reserva'),
     url(r'^(?P<_id>\d+)/feriados$', views.estacionamiento_feriados, name = 'estacionamiento_feriados'),  

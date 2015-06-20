@@ -9,6 +9,26 @@ class CustomSplitDateTimeWidget(SplitDateTimeWidget):
     def format_output(self, rendered_widgets):
         return '<p></p>'.join(rendered_widgets)
 
+class PorcentajeForm(forms.Form):
+
+    porc_validator = RegexValidator(
+        regex   = '^[0-9].[0-9]$',
+        message = 'Introduzca un porcentajoe que esté entre 0.0 y 9.9'
+    )
+
+    porcentaje = forms.CharField(
+        required   = True,
+        label      = "Porcentaje",
+        validators = [porc_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Porcentaje para el pago de la cancelación'
+            , 'pattern'     : porc_validator.regex.pattern
+            , 'message'     : porc_validator.message
+            }
+        )
+    )
+
 class PropietarioForm(forms.Form):
     
     ci_validator = RegexValidator(
