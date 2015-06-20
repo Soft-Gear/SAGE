@@ -1301,3 +1301,21 @@ class CancelarReservaForm(forms.Form):
             }
         )
     )
+    
+class HorarioInicialForm(forms.Form):
+    
+    inicio = forms.SplitDateTimeField(
+        required = True,
+        label    = 'Horario Inicio Reserva',
+        widget   = CustomSplitDateTimeWidget(attrs=
+            { 'class'       : 'form-control'
+            , 'type'        : 'date'
+            , 'placeholder' : 'Hora Inicio Reserva'
+            }
+        )
+    )
+
+
+
+
+

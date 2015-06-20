@@ -28,7 +28,7 @@ from estacionamientos.controller import (
 from estacionamientos.forms import (
     EstacionamientoExtendedForm,
     PropietarioForm,
-    BilleteraElectronicaForm,
+    BilleteraElectronicaForm, 
     ValidarBilleteraForm,
     EstacionamientoForm,
     ReservaForm,
@@ -39,6 +39,7 @@ from estacionamientos.forms import (
     RecargarSaldoForm,
     CambiarPropietarioForm,
     CancelarReservaForm,
+    HorarioInicialForm,
     AgregarDiaFeriado
     )
 
@@ -1240,5 +1241,130 @@ def estacionamiento_feriados_remover(request,_id,_idrem):
         { 'form'    : form
         , 'id'      : _id
         , 'dias'    :  dias               
+        }
+    )
+    
+def estacionamiento_moverReserva(request):
+    if request.method == 'GET': 
+        form = CancelarReservaForm()
+        
+    if request.method == 'POST': 
+        form = CancelarReservaForm(request.POST)
+        
+        if form.is_valid():
+            idReserva = form.cleaned_data['idReserva']
+            ci        = form.cleaned_data['cedula']
+            
+            #Intenta conseguir la reserva
+            try:    
+                reserva = Reserva.objects.get(id = idReserva)
+            except ObjectDoesNotExist:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'Id de la reserva no existe'
+                    }
+                )
+            if reserva.ci != ci:
+                return render(
+                    request, 'template-mensaje.html',
+                    { 'color'   : 'red'
+                    , 'mensaje' : 'La cedula no coincide con el ID introducido'
+                    }
+                )
+            form = HorarioInicialForm
+            return render(
+                    request, 'mover-horario.html',
+                    {  'form' : form
+                    , 'idreserva' : idReserva
+                    }
+                )
+    return render(
+        request, 'mover.html',
+        { 'form'    : form               
+        }
+    )
+
+def estacionamiento_moverReservaHorario(request, idres):
+    
+    if request.method == 'GET':
+        form = HorarioInicialForm()
+        
+    if request.method == 'POST':
+        form = HorarioInicialForm(request.POST)
+        pago = Pago.objects.get(reserva.id = idres)
+        reserva = Reserva.objects.get(id = idres)
+        inicioReservaNueva = form.cleaned_data['inicio']
+        finReservaNueva = inicioReservaNueva + (reserva.finalReserva - reserva.inicioReserva)
+        tipoDeVehiculo = reserva.tipoVehiculo
+        e = Estacionamiento.objects.get(id = reserva.estacionamiento.id)
+        
+        m_validado = validarHorarioReserva(
+                inicioReservaNueva,
+                finReservaNueva,
+                e.apertura,
+                e.cierre,
+                e.horizonte_reserva
+            )
+        
+        if not m_validado[0]:
+            return render(
+                request,
+                'template-mensaje.html',
+                { 'color'  :'red'
+                , 'mensaje': m_validado[1]
+                }
+            )
+        reservaVieja = Reserva(
+            nombre          = reserva.nombre,
+            apellido        = reserva.apellido,
+            ci              = reserva.ci,
+            estacionamiento = reserva.estacionamiento,
+            inicioReserva   = reserva.inicioReserva,
+            finalReserva    = reserva.finalReserva,
+            tipoVehiculo    = reserva.tipoVehiculo
+        )
+        reserva.delete()
+        if marzullo(e.id, inicioReservaNueva, finReservaNueva, tipoDeVehiculo):
+            reservaNueva = Reserva(
+                nombre          = reservaVieja.nombre,
+                apellido        = reservaVieja.apellido,
+                ci              = reservaVieja.ci,
+                estacionamiento = reservaVieja.estacionamiento,
+                inicioReserva   = reservaVieja.inicioReserva,
+                finalReserva    = reservaVieja.finalReserva,
+                tipoVehiculo    = reservaVieja.tipoVehiculo
+            )
+                
+            listaDias = DiasFeriados.objects.filter(idest = e.id)
+            tipoDias = splitDates(inicioReservaNueva,finReservaNueva,listaDias)
+            monto = 0
+            for intervalo in tipoDias[0]:                    
+                monto += e.tarifa.calcularPrecio(intervalo[0],intervalo[1],tipoDeVehiculo)
+            for intervalo2 in tipoDias[1]:
+                monto += e.tarifa2.calcularPrecio(intervalo2[0],intervalo2[1],tipoDeVehiculo)
+
+            monto = Decimal(monto)
+            
+            if pago.monto > monto:
+                
+            elif pago.monto < monto:
+                
+            else:
+                
+        else:
+            reservaVieja.save()
+            return render(
+                request,
+                'template-mensaje.html',
+                {'color'   : 'red'
+                , 'mensaje' : 'No hay un puesto disponible para ese horario'
+                }
+            )            
+       
+        
+    return render(
+        request, 'mover-horario.html',
+        { 'form'    : form               
         }
     )
