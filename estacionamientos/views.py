@@ -39,7 +39,8 @@ from estacionamientos.forms import (
     RecargarSaldoForm,
     CambiarPropietarioForm,
     CancelarReservaForm,
-    AgregarDiaFeriado
+    AgregarDiaFeriado,
+    BilleteraElectronicaCambiarPinForm
     )
 
 from estacionamientos.models import (
@@ -1112,6 +1113,71 @@ def billetera_electronica_crear(request):
         { 'form': form
         , 'billeteras' : billeteras
         }
+    )
+    
+def billetera_electronica_cambiar_pin(request):
+    
+    if request.method =="GET":   
+        form = BilleteraElectronicaCambiarPinForm()
+    
+    #Si recibe los datos del usuario    
+    if request.method == 'POST':
+    
+        form = BilleteraElectronicaCambiarPinForm(request.POST)
+        #Guarda lo que introdujo el usuario
+        if form.is_valid():
+            identificador = form.cleaned_data['idBill']
+            pinVal = form.cleaned_data['pinUsu']
+            nuevopin = form.cleaned_data['nuevo_pin']
+            confirmar = form.cleaned_data['confirmar_pin']
+            #Busca la billetera en la base de datos    
+            try:    
+                billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
+            except ObjectDoesNotExist:
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'Autenticación denegada'
+                }
+            )
+            
+            #Verifica que el PIN sea el correcto    
+            if pinVal != billetera.PIN:
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'Autenticación denegada'
+                }
+            )
+
+            if nuevopin != confirmar:
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'El nuevo PIN no es el mismo que el PIN confirmado.'
+                }
+            )
+                
+            if nuevopin != billetera.PIN:
+                return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'El nuevo PIN debe ser diferente al ya usado.'
+                }
+            )    
+                
+            billetera.PIN = nuevopin
+            billetera.save()
+            
+            return render(
+                request, 'template-mensaje.html',
+                {'mensaje' : 'PIN cambiado satisfactoriamente'
+                }
+            )
+                
+    return render(
+        request, 'billetera_electronica_cambiar_pin.html',
+        {'form': form}
     )
 
 #Intento de recargar saldo, view incompleto
