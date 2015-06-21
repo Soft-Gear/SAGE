@@ -563,34 +563,6 @@ class EstacionamientoExtendedForm(forms.Form):
         )
     )
 
-    puestos_microbus = forms.IntegerField(
-        required  = False,
-        min_value = 0,
-        label     = 'Puestos para Microbuses',
-        widget    = forms.NumberInput(attrs=
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Puestos para Microbuses'
-            , 'min'         : "0"
-            , 'pattern'     : '^[0-9]+'
-            , 'message'     : 'La entrada debe ser un número entero no negativo.'
-            }
-        )
-    )
-
-    puestos_autobus = forms.IntegerField(
-        required  = False,
-        min_value = 0,
-        label     = 'Puestos para Autobuses',
-        widget    = forms.NumberInput(attrs=
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Puestos para Autobuses'
-            , 'min'         : "0"
-            , 'pattern'     : '^[0-9]+'
-            , 'message'     : 'La entrada debe ser un número entero no negativo.'
-            }
-        )
-    )
-
     puestos_especiales = forms.IntegerField(
         required  = False,
         min_value = 0,
@@ -697,30 +669,6 @@ class EstacionamientoExtendedForm(forms.Form):
         )
     )
 
-    tarifa_microbus = forms.DecimalField(
-        required   = False,
-        validators = [tarifa_validator],
-        widget     = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Tarifa para Microbuses'
-            , 'pattern'     : '^([0-9]+(\.[0-9]+)?)$'
-            , 'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa_autobus = forms.DecimalField(
-        required   = False,
-        validators = [tarifa_validator],
-        widget     = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Tarifa para Autobuses'
-            , 'pattern'     : '^([0-9]+(\.[0-9]+)?)$'
-            , 'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
     tarifa_especiales = forms.DecimalField(
         required   = False,
         validators = [tarifa_validator],
@@ -763,30 +711,6 @@ class EstacionamientoExtendedForm(forms.Form):
             widget     = forms.TextInput(attrs = {
                 'class'       : 'form-control',
                 'placeholder' : 'Tarifa para Camiones',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa2_microbus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Microbuses',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa2_autobus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Autobuses',
                 'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
                 'message'     : 'La entrada debe ser un número decimal.'
             }
@@ -873,30 +797,6 @@ class EstacionamientoExtendedForm(forms.Form):
         )
     )
 
-    tarifa3_microbus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Microbuses',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa3_autobus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Autobuses',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
     tarifa3_especiales = forms.DecimalField(
             required   = False,
             validators = [tarifa_validator],
@@ -939,30 +839,6 @@ class EstacionamientoExtendedForm(forms.Form):
             widget     = forms.TextInput(attrs = {
                 'class'       : 'form-control',
                 'placeholder' : 'Tarifa para Camiones',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa4_microbus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Microbuses',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa4_autobus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Autobuses',
                 'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
                 'message'     : 'La entrada debe ser un número decimal.'
             }
@@ -1125,8 +1001,6 @@ class ReservaForm(forms.Form):
         ('Moto', 'Moto'),
         ('Carro', 'Carro'),
         ('Camion', 'Camión'),
-        ('Microbus', 'Microbús'),
-        ('Autobus', 'Autobús'),
         ('Vehículo Especial','Vehículo Especial')
     ]
 

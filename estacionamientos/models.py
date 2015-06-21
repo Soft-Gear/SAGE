@@ -40,8 +40,6 @@ class Estacionamiento(models.Model):
 	capacidad_motos         = models.IntegerField(blank = True, null = True)
 	capacidad_carros        = models.IntegerField(blank = True, null = True)
 	capacidad_camiones      = models.IntegerField(blank = True, null = True)
-	capacidad_microbus      = models.IntegerField(blank = True, null = True)
-	capacidad_autobus       = models.IntegerField(blank = True, null = True)
 	capacidad_especiales    = models.IntegerField(blank = True, null = True)
 	capacidad               = models.IntegerField(blank = True, null = True)
 
@@ -118,14 +116,10 @@ class EsquemaTarifario(models.Model):
 	tarifa_motos         = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 	tarifa_carros        = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 	tarifa_camiones      = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
-	tarifa_microbus      = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
-	tarifa_autobus       = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 	tarifa_especiales    = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 	tarifa2_motos        = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
 	tarifa2_carros       = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
 	tarifa2_camiones     = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
-	tarifa2_microbus     = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
-	tarifa2_autobus      = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
 	tarifa2_especiales   = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
 	inicioEspecial 		 = models.TimeField(blank = True, null = True)
 	finEspecial    		 = models.TimeField(blank = True, null = True)
@@ -147,10 +141,6 @@ class TarifaHora(EsquemaTarifario):
 			return(Decimal(self.tarifa_carros*a).quantize(Decimal('1.00')))
 		elif tipoVehiculo == 'Camion':
 			return(Decimal(self.tarifa_camiones*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'Microbus':
-			return(Decimal(self.tarifa_microbus*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'Autobus':
-			return(Decimal(self.tarifa_autobus*a).quantize(Decimal('1.00')))
 		elif tipoVehiculo == 'Vehículo Especial':
 			return(Decimal(self.tarifa_especiales*a).quantize(Decimal('1.00')))
 	def tipo(self):
@@ -166,10 +156,6 @@ class TarifaMinuto(EsquemaTarifario):
 			return (Decimal(minutes)*Decimal(self.tarifa_carros/60)).quantize(Decimal('1.00'))
 		elif tipoVehiculo == 'Camion':
 			return (Decimal(minutes)*Decimal(self.tarifa_camiones/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'Microbus':
-			return (Decimal(minutes)*Decimal(self.tarifa_microbus/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'Autobus':
-			return (Decimal(minutes)*Decimal(self.tarifa_autobus/60)).quantize(Decimal('1.00'))
 		elif tipoVehiculo == 'Vehículo Especial':
 			return (Decimal(minutes)*Decimal(self.tarifa_especiales/60)).quantize(Decimal('1.00'))
 	def tipo(self):
@@ -186,10 +172,6 @@ class TarifaHorayFraccion(EsquemaTarifario):
 			tarifa = self.tarifa_carros
 		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
-		elif tipoVehiculo == 'Microbus':
-			tarifa = self.tarifa_microbus
-		elif tipoVehiculo == 'Autobus':
-			tarifa = self.tarifa_autobus
 		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 
@@ -224,12 +206,6 @@ class TarifaFinDeSemana(EsquemaTarifario):
 		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
 			tarifa2 = self.tarifa2_camiones
-		elif tipoVehiculo == 'Microbus':
-			tarifa = self.tarifa_microbus
-			tarifa2 = self.tarifa2_microbus
-		elif tipoVehiculo == 'Autobus':
-			tarifa = self.tarifa_autobus
-			tarifa2 = self.tarifa2_autobus
 		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 			tarifa2 = self.tarifa2_especiales
@@ -270,12 +246,6 @@ class TarifaHoraPico(EsquemaTarifario):
 		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
 			tarifa2 = self.tarifa2_camiones
-		elif tipoVehiculo == 'Microbus':
-			tarifa = self.tarifa_microbus
-			tarifa2 = self.tarifa2_microbus
-		elif tipoVehiculo == 'Autobus':
-			tarifa = self.tarifa_autobus
-			tarifa2 = self.tarifa2_autobus
 		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 			tarifa2 = self.tarifa2_especiales

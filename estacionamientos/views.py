@@ -180,34 +180,24 @@ def estacionamiento_detail(request, _id):
                 'tarifa_motos'          : estacionamiento.tarifa.tarifa_motos,
                 'tarifa_carros'         : estacionamiento.tarifa.tarifa_carros,
                 'tarifa_camiones'       : estacionamiento.tarifa.tarifa_camiones,
-                'tarifa_microbus'       : estacionamiento.tarifa.tarifa_microbus,
-                'tarifa_autobus'        : estacionamiento.tarifa.tarifa_autobus,
                 'tarifa_especiales'     : estacionamiento.tarifa.tarifa_especiales,
                 'tarifa2_motos'         : estacionamiento.tarifa.tarifa2_motos,
                 'tarifa2_carros'        : estacionamiento.tarifa.tarifa2_carros,
                 'tarifa2_camiones'      : estacionamiento.tarifa.tarifa2_camiones,
-                'tarifa2_microbus'      : estacionamiento.tarifa.tarifa2_microbus,
-                'tarifa2_autobus'       : estacionamiento.tarifa.tarifa2_autobus,
                 'tarifa2_especiales'    : estacionamiento.tarifa.tarifa2_especiales,
                 'tarifa3_motos'         : estacionamiento.tarifa2.tarifa_motos,
                 'tarifa3_carros'        : estacionamiento.tarifa2.tarifa_carros,
                 'tarifa3_camiones'      : estacionamiento.tarifa2.tarifa_camiones,
-                'tarifa3_microbus'      : estacionamiento.tarifa2.tarifa_microbus,
-                'tarifa3_autobus'       : estacionamiento.tarifa2.tarifa_autobus,
                 'tarifa3_especiales'    : estacionamiento.tarifa2.tarifa_especiales,
                 'tarifa4_motos'         : estacionamiento.tarifa2.tarifa2_motos,
                 'tarifa4_carros'        : estacionamiento.tarifa2.tarifa2_carros,
                 'tarifa4_camiones'      : estacionamiento.tarifa2.tarifa2_camiones,
-                'tarifa4_microbus'      : estacionamiento.tarifa2.tarifa2_microbus,
-                'tarifa4_autobus'       : estacionamiento.tarifa2.tarifa2_autobus,
                 'tarifa4_especiales'    : estacionamiento.tarifa2.tarifa2_especiales,
                 'inicioTarifa2'         : estacionamiento.tarifa2.inicioEspecial,
                 'finTarifa2'            : estacionamiento.tarifa2.finEspecial,
                 'puestos_motos'         : estacionamiento.capacidad_motos,
                 'puestos_carros'        : estacionamiento.capacidad_carros,
                 'puestos_camiones'      : estacionamiento.capacidad_camiones,
-                'puestos_microbus'      : estacionamiento.capacidad_microbus,
-                'puestos_autobus'       : estacionamiento.capacidad_autobus,
                 'puestos_especiales'    : estacionamiento.capacidad_especiales,
                 'esquema'               : estacionamiento.tarifa.__class__.__name__,
                 'horizonte_reserva'     : estacionamiento.horizonte_reserva,
@@ -229,8 +219,6 @@ def estacionamiento_detail(request, _id):
             tarifa_motos          = form.clean_tarifa('tarifa_motos')
             tarifa_carros         = form.clean_tarifa('tarifa_carros')
             tarifa_camiones       = form.clean_tarifa('tarifa_camiones')
-            tarifa_microbus       = form.clean_tarifa('tarifa_microbus')
-            tarifa_autobus        = form.clean_tarifa('tarifa_autobus')
             tarifa_especiales     = form.clean_tarifa('tarifa_especiales')
             horizonte             = form.clean_horizonte()
             tipo                  = form.cleaned_data['esquema']
@@ -242,34 +230,24 @@ def estacionamiento_detail(request, _id):
             tarifa2_motos         = form.clean_tarifa('tarifa2_motos')
             tarifa2_carros        = form.clean_tarifa('tarifa2_carros')
             tarifa2_camiones      = form.clean_tarifa('tarifa2_camiones')
-            tarifa2_microbus      = form.clean_tarifa('tarifa2_microbus')
-            tarifa2_autobus       = form.clean_tarifa('tarifa2_autobus')
             tarifa2_especiales    = form.clean_tarifa('tarifa2_especiales')
             tarifa3_motos         = form.clean_tarifa('tarifa3_motos')
             tarifa3_carros        = form.clean_tarifa('tarifa3_carros')
             tarifa3_camiones      = form.clean_tarifa('tarifa3_camiones')
-            tarifa3_microbus      = form.clean_tarifa('tarifa3_microbus')
-            tarifa3_autobus       = form.clean_tarifa('tarifa3_autobus')
             tarifa3_especiales    = form.clean_tarifa('tarifa3_especiales')
             tarifa4_motos         = form.clean_tarifa('tarifa4_motos')
             tarifa4_carros        = form.clean_tarifa('tarifa4_carros')
             tarifa4_camiones      = form.clean_tarifa('tarifa4_camiones')
-            tarifa4_microbus      = form.clean_tarifa('tarifa4_microbus')
-            tarifa4_autobus       = form.clean_tarifa('tarifa4_autobus')
             tarifa4_especiales    = form.clean_tarifa('tarifa4_especiales')
 
             esquemaTarifa = eval(tipo)(
                 tarifa_motos         = tarifa_motos,
                 tarifa_carros        = tarifa_carros,
                 tarifa_camiones      = tarifa_camiones,
-                tarifa_microbus      = tarifa_microbus,
-                tarifa_autobus       = tarifa_autobus,
                 tarifa_especiales    = tarifa_especiales,
                 tarifa2_motos        = tarifa2_motos,
                 tarifa2_carros       = tarifa2_carros,
                 tarifa2_camiones     = tarifa2_camiones,
-                tarifa2_microbus     = tarifa2_microbus,
-                tarifa2_autobus      = tarifa2_autobus,
                 tarifa2_especiales   = tarifa2_especiales,
                 inicioEspecial       = inicioTarifa2,
                 finEspecial          = finTarifa2
@@ -279,14 +257,10 @@ def estacionamiento_detail(request, _id):
                 tarifa_motos         = tarifa3_motos,
                 tarifa_carros        = tarifa3_carros,
                 tarifa_camiones      = tarifa3_camiones,
-                tarifa_microbus      = tarifa3_microbus,
-                tarifa_autobus       = tarifa3_autobus,
                 tarifa_especiales    = tarifa3_especiales,
                 tarifa2_motos        = tarifa4_motos,
                 tarifa2_carros       = tarifa4_carros,
                 tarifa2_camiones     = tarifa4_camiones,
-                tarifa2_microbus     = tarifa4_microbus,
-                tarifa2_autobus      = tarifa4_autobus,
                 tarifa2_especiales   = tarifa4_especiales,
                 inicioEspecial       = inicioTarifaFeriado2,
                 finEspecial          = finTarifaFeriado2
@@ -313,15 +287,11 @@ def estacionamiento_detail(request, _id):
             estacionamiento.capacidad_motos      = form.clean_puestos('puestos_motos')
             estacionamiento.capacidad_carros     = form.clean_puestos('puestos_carros')
             estacionamiento.capacidad_camiones   = form.clean_puestos('puestos_camiones')
-            estacionamiento.capacidad_microbus   = form.clean_puestos('puestos_microbus')
-            estacionamiento.capacidad_autobus    = form.clean_puestos('puestos_autobus')
             estacionamiento.capacidad_especiales = form.clean_puestos('puestos_especiales')
             estacionamiento.horizonte_reserva    = horizonte
             estacionamiento.capacidad            = (estacionamiento.capacidad_motos +
                                                     estacionamiento.capacidad_carros +
                                                     estacionamiento.capacidad_camiones +
-                                                    estacionamiento.capacidad_microbus +
-                                                    estacionamiento.capacidad_autobus +
                                                     estacionamiento.capacidad_especiales)
 
             if estacionamiento.capacidad == 0:
