@@ -94,52 +94,51 @@ def estacionamientos_all(request):
                     email1          = form.cleaned_data['email_1'],
                     email2          = form.cleaned_data['email_2']
                 )
-                obj.save()    
-                est = Estacionamiento.objects.get(rif = form.cleaned_data['rif'])                         
+                obj.save()                      
                 dia = DiasFeriados(
-                    idest = est.id,
+                    idest = obj.id,
                     fecha = '2016-07-05',
                     descripcion = "Declaracion de la independencia"
                 )
                 dia.save()
                 dia2 = DiasFeriados(
-                    idest = est.id,
+                    idest = obj.id,
                     fecha = '2016-04-19',
                     descripcion = "Firma del acta de independencia"
                 )
                 dia2.save()
                 dia3 = DiasFeriados(
-                    idest = est.id,
+                    idest = obj.id,
                     fecha = '2016-05-01',
                     descripcion = "Dia del trabajador"
                 )
                 dia3.save()
                 dia4 = DiasFeriados(
-                    idest = est.id,
+                    idest = obj.id,
                     fecha = '2015-06-24',
                     descripcion = "Batalla de Carabobo"
                 )
                 dia4.save()
                 dia5 = DiasFeriados(
-                    idest = est.id,
+                    idest = obj.id,
                     fecha = '2015-12-31',
                     descripcion = "Ultimo dia del año"
                 )
                 dia5.save()
                 dia6 = DiasFeriados(
-                    idest = est.id,
+                    idest = obj.id,
                     fecha = '2016-01-01',
                     descripcion = "Primer dia del año"
                 )
                 dia6.save()
                 dia7 = DiasFeriados(
-                    idest = est.id,
+                    idest = obj.id,
                     fecha = '2015-10-12',
                     descripcion = "Dia de la raza"
                 )
                 dia7.save()
                 dia8 = DiasFeriados(
-                    idest = est.id,
+                    idest = obj.id,
                     fecha = '2015-12-24',
                     descripcion = "Navidad"
                 )

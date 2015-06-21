@@ -24,7 +24,7 @@ class Estacionamiento(models.Model):
 	telefono3   = models.CharField(blank = True, null = True, max_length = 30)
 	email1      = models.EmailField(blank = True, null = True)
 	email2      = models.EmailField(blank = True, null = True)
-	rif         = models.CharField(max_length = 12, unique = True)
+	rif         = models.CharField(max_length = 12, unique = False)
 
 	# Campos para referenciar al esquema de tarifa
 
