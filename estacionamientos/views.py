@@ -593,9 +593,14 @@ def estacionamiento_cancelar_reserva_billetera(request):
                 , 'mensaje' : 'La reserva ya pasó. No puede cancelarla'
                 }
             )
-        
+
+        descuento = 0
+        if pago.tipoPago == "Tarjeta":
+            descuento = pago.monto*reserva.tarifa_cancelar.tarifa_cancelacion/100
+        reembolzo = pago.monto - descuento
+
         #Verificando que sea posible abonar la billetera
-        if (billetera.saldo + pago.monto > 10000):
+        if (billetera.saldo + reembolzo > 10000):
             return render(
                 request, 'template-mensaje.html',
                 { 'color'   : 'red'
@@ -610,12 +615,12 @@ def estacionamiento_cancelar_reserva_billetera(request):
             nombre           = reserva.nombre,
             apellido         = reserva.apellido,
             cedula           = reserva.ci,
-            credito          = pago.monto
+            credito          = reembolzo
             )
             
         historial.save()
         
-        billetera.saldo += pago.monto
+        billetera.saldo += reembolzo
         billetera.save()
         pago.estado = False
         pago.save()
@@ -624,6 +629,7 @@ def estacionamiento_cancelar_reserva_billetera(request):
         return render(
             request, 'factura-devolucion.html',
             { 'devolucion' : historial,
+              'descuento' : descuento,
               'pago' : pago }
         )
 
@@ -660,11 +666,18 @@ def estacionamiento_pago(request,_id):
 
             tipoVehiculo = request.session['tipoVehiculo']
 
+            try:
+                tarifaCan = SAGE.objects.get(id = 1)
+            except ObjectDoesNotExist:
+                tarifaCan = SAGE(tarifa_cancelacion = 0.0)
+                tarifaCan.save()
+
             reservaFinal = Reserva(
                 nombre          = request.session['nombre'],
                 apellido        = request.session['apellido'],
                 ci              = request.session['ci'],
                 estacionamiento = estacionamiento,
+                tarifa_cancelar = tarifaCan,
                 inicioReserva   = inicioReserva,
                 finalReserva    = finalReserva,
                 tipoVehiculo    = tipoVehiculo
@@ -769,11 +782,18 @@ def estacionamiento_pago_billetera(request,_id):
 
             tipoVehiculo = request.session['tipoVehiculo']
 
+            try:
+                tarifaCan = SAGE.objects.get(id = 1)
+            except ObjectDoesNotExist:
+                tarifaCan = SAGE(tarifa_cancelacion = 0.0)
+                tarifaCan.save()
+
             reservaFinal = Reserva(
                 nombre          = request.session['nombre'],
                 apellido        = request.session['apellido'],
                 ci              = request.session['ci'],                   
                 estacionamiento = estacionamiento,
+                tarifa_cancelar = tarifaCan,
                 inicioReserva   = inicioReserva,
                 finalReserva    = finalReserva,
                 tipoVehiculo    = tipoVehiculo

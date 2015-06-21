@@ -10,7 +10,7 @@ class SAGE(models.Model):
 	tarifa_cancelacion = models.DecimalField(decimal_places = 1, max_digits = 3)
 
 	def __str__(self):
-		return self.tarifa_devolucion
+		return str(self.tarifa_cancelacion)
 
 class Propietario(models.Model):
 	nombre   = models.CharField(max_length = 30)
