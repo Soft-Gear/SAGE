@@ -594,7 +594,7 @@ def estacionamiento_cancelar_reserva_billetera(request):
               'pago' : pago }
         )
 
-def estacionamiento_pago(request,_id):
+def estacionamiento_pago(request,_id, _idres = None):
     form = PagoForm()
     
     try:
@@ -639,6 +639,9 @@ def estacionamiento_pago(request,_id):
 
             # Se guarda la reserva en la base de datos
             reservaFinal.save()
+            if _idres is not None:
+                reservaVieja = Reserva.objects.get(id = _idres)
+                reservaVieja.delete() 
 
             monto = Decimal(request.session['monto']).quantize(Decimal('1.00'))
             pago = Pago(
@@ -1347,16 +1350,30 @@ def estacionamiento_moverReservaHorario(request, _idres):
             for intervalo2 in tipoDias[1]:
                 monto += e.tarifa2.calcularPrecio(intervalo2[0],intervalo2[1],tipoDeVehiculo)
 
+            monto = monto - pago.monto
             monto = Decimal(monto)
             
-            if pago.monto > monto:
+            if monto < 0.00:
                 pass
-            elif pago.monto < monto:
+            elif monto > 0.00:
                 pass
             else:
-                pass
+            
+                return render(
+                request,
+                'mover-confirmar.html',
+                { 'color'   : 'green'
+                , 'mensaje' : 'Debe pagar un monto de : ' + str(monto) + 'bsF'
+                , 'reserva' : reservaNueva
+                , 'monto'   : monto
+                , 'res'     : reservaVieja.id
+                }
+            )   
         else:
+            reservaVieja.id = _idres
             reservaVieja.save()
+            pago.reserva = reservaVieja
+            pago.save()
             return render(
                 request,
                 'template-mensaje.html',
