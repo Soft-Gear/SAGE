@@ -101,3 +101,7 @@ class FinDeSemanaTestCase(TestCase):
             finReserva = inicioReserva + timedelta(hours=10) # diez horas mas tarde
             valor = tarifa.calcularPrecio(inicioReserva,finReserva,'Carro')
             self.assertEqual(valor, 2*(9.75-n) + 5*(n+.25))
+            
+    def test_tipo_tarifa_correcta(self): # Cobertura
+        rate=TarifaFinDeSemana(tarifa_carros=1)
+        self.assertEqual(rate.tipo(),"Tarifa diferenciada para fines de semana")

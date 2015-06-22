@@ -153,3 +153,7 @@ class HoraPicoTestCase(TestCase):
         finReserva = datetime(2015,1,1,6,1)
         valor = tarifa.calcularPrecio(inicioReserva,finReserva,'Carro')
         self.assertEqual(valor,61)
+        
+    def test_tipo_tarifa_correcta(self): # Cobertura
+        rate=TarifaHoraPico(tarifa_carros=1)
+        self.assertEqual(rate.tipo(),"Tarifa diferenciada por hora pico")

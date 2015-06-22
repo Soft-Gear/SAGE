@@ -76,6 +76,7 @@ class consultaReservaTestCase(TestCase):
         p.save()
         lista, total = consultar_ingresos("J-123456789")
         self.assertTrue(len(lista) == 1 and total == 150)
+        
     # TDD malicia
     def test_un_estacionamiento_muchos_pagos(self):
         n = 1000
