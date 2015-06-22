@@ -160,7 +160,7 @@ class BilleteraElectronicaForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -198,7 +198,7 @@ class ValidarBilleteraForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -365,7 +365,7 @@ class ConsultarSaldoForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -403,7 +403,7 @@ class BilleteraElectronicaCambiarPinForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -416,7 +416,7 @@ class BilleteraElectronicaCambiarPinForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Nuevo PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -429,7 +429,7 @@ class BilleteraElectronicaCambiarPinForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'Confirme nuevo PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -551,7 +551,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
