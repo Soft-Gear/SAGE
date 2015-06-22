@@ -12,13 +12,13 @@ class CustomSplitDateTimeWidget(SplitDateTimeWidget):
 class PorcentajeForm(forms.Form):
 
     porc_validator = RegexValidator(
-        regex   = '^[0-9].[0-9]$',
+        regex   = '^[0-9](\.[0-9])?$',
         message = 'Introduzca un porcentajoe que esté entre 0.0 y 9.9'
     )
 
     porcentaje = forms.CharField(
         required   = True,
-        label      = "Porcentaje",
+        label      = "Porcentaje de 0 a 9.9",
         validators = [porc_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'

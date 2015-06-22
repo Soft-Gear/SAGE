@@ -63,7 +63,7 @@ def tarifa_cancelacion(request):
     try:
         tarifaCan = SAGE.objects.get(id = 1)
     except ObjectDoesNotExist:
-        tarifaCan = SAGE(tarifa_cancelacion =0.0)
+        tarifaCan = SAGE(tarifa_cancelacion = 0.0)
 
     if request.method == 'GET':
 
@@ -76,7 +76,13 @@ def tarifa_cancelacion(request):
         if form.is_valid():
             tarifaCan.tarifa_cancelacion = form.cleaned_data['porcentaje']
             tarifaCan.save()
-        else:
+            return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'green'
+                , 'mensaje' : 'Porcentaje cambiado satisfactoriamente'
+                }
+            )
+        else: #Esto nunca deberia pasar de todas formas
             return render(
                 request, 'template-mensaje.html',
                 { 'color'   : 'red'
