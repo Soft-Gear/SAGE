@@ -1276,7 +1276,7 @@ def estacionamiento_moverReserva(request):
             return render(
                     request, 'mover-horario.html',
                     {  'form' : form
-                    , 'idreserva' : idReserva
+                    , 'reserva' : reserva
                     }
                 )
     return render(
@@ -1285,16 +1285,16 @@ def estacionamiento_moverReserva(request):
         }
     )
 
-def estacionamiento_moverReservaHorario(request, idres):
+def estacionamiento_moverReservaHorario(request, _idres):
     
     if request.method == 'GET':
         form = HorarioInicialForm()
         
     if request.method == 'POST':
         form = HorarioInicialForm(request.POST)
-        pago = Pago.objects.get(reserva.id = idres)
-        reserva = Reserva.objects.get(id = idres)
-        inicioReservaNueva = form.cleaned_data['inicio']
+        reserva = Reserva.objects.get(id = _idres)
+        pago = Pago.objects.get(reserva_id = _idres)
+        inicioReservaNueva = reserva.inicioReserva
         finReservaNueva = inicioReservaNueva + (reserva.finalReserva - reserva.inicioReserva)
         tipoDeVehiculo = reserva.tipoVehiculo
         e = Estacionamiento.objects.get(id = reserva.estacionamiento.id)
@@ -1331,11 +1331,14 @@ def estacionamiento_moverReservaHorario(request, idres):
                 apellido        = reservaVieja.apellido,
                 ci              = reservaVieja.ci,
                 estacionamiento = reservaVieja.estacionamiento,
-                inicioReserva   = reservaVieja.inicioReserva,
-                finalReserva    = reservaVieja.finalReserva,
+                inicioReserva   = inicioReservaNueva,
+                finalReserva    = finReservaNueva,
                 tipoVehiculo    = reservaVieja.tipoVehiculo
             )
-                
+            reservaVieja.id = _idres
+            reservaVieja.save()
+            pago.reserva = reservaVieja
+            pago.save()
             listaDias = DiasFeriados.objects.filter(idest = e.id)
             tipoDias = splitDates(inicioReservaNueva,finReservaNueva,listaDias)
             monto = 0
@@ -1347,11 +1350,11 @@ def estacionamiento_moverReservaHorario(request, idres):
             monto = Decimal(monto)
             
             if pago.monto > monto:
-                
+                pass
             elif pago.monto < monto:
-                
+                pass
             else:
-                
+                pass
         else:
             reservaVieja.save()
             return render(
