@@ -180,7 +180,7 @@ class BilleteraElectronicaForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -218,7 +218,7 @@ class ValidarBilleteraForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -385,9 +385,73 @@ class ConsultarSaldoForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
+    
+class BilleteraElectronicaCambiarPinForm(forms.Form):
+    
+    pin_validator = RegexValidator(
+        regex   = '^\d{4}$',
+        message = 'EL PIN debe ser 4 digitos'
+    )
+    
+    id_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    idBill = forms.CharField(
+        required   = True,
+        label      = "ID Billetera",
+        validators = [id_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : id_validator.regex.pattern
+            , 'message'     : id_validator.message
+            }
+        )
+    )
+    
+    pinUsu = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.PasswordInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
+    
+    nuevo_pin = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.PasswordInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Nuevo PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
+    
+    confirmar_pin = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.PasswordInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Confirme nuevo PIN'
             , 'pattern'     : pin_validator.regex.pattern
             , 'message'     : pin_validator.message
             }
@@ -507,7 +571,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
