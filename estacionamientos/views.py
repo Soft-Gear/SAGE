@@ -40,8 +40,8 @@ from estacionamientos.forms import (
     CambiarPropietarioForm,
     CancelarReservaForm,
     HorarioInicialForm,
-    AgregarDiaFeriado
-    )
+    AgregarDiaFeriado,
+    MoverReservaRecargo)
 
 from estacionamientos.models import (
     Estacionamiento,
@@ -644,6 +644,7 @@ def estacionamiento_pago(request,_id, _idres = None):
                 reservaVieja = Reserva.objects.get(id = _idres)
                 listPagoViejo = Pago.objects.filter(reserva_id = _idres)
                 for pagoViejo in listPagoViejo:
+                    print("hola")
                     pagoViejo.reserva = reservaFinal
                 reservaVieja.delete() 
             
@@ -1375,11 +1376,19 @@ def estacionamiento_moverReservaHorario(request, _idres):
                 request.session['nombre']              = reservaNueva.nombre
                 request.session['apellido']            = reservaNueva.apellido
                 request.session['ci']                  = reservaNueva.ci
-            
+                print(monto)
                 if monto < 0.00:
-                    pass
+                    form = MoverReservaRecargo()
+                    request.session['montoRecarga'] = abs(monto)
+                    return render(
+                        request,
+                        'mover-confirmar-recarga.html',
+                        { 'mensaje' : 'Se debe recargar un monto de : ' + str(monto) + 'bsF. Introduzaca el ID de su billetera'
+                         , 'form'   : form
+                         }
+                    )   
                 elif monto > 0.00:
-                    pass
+                    pass  
                 else:
                 
                     return render(
@@ -1411,3 +1420,52 @@ def estacionamiento_moverReservaHorario(request, _idres):
         { 'form'    : form               
         }
     )
+    
+def estacionamiento_RecargarBilleteraMover(request):
+    
+    form = MoverReservaRecargo(request.POST)
+    if form.is_valid():
+        monto = request.session['montoRecarga']
+        identificador = form.cleaned_data['idBill']
+        
+        try:    
+            billetera = BilleteraElectronica.objects.get(idBilletera = identificador)
+        except ObjectDoesNotExist:
+            return render(
+                request, 'template-mensaje.html',
+                { 'color'   : 'red'
+                , 'mensaje' : 'La billetera no existe'
+                }
+            )
+            
+        if billetera.saldo + Decimal(monto) > 10000:
+            resto = 10000 - billetera.saldo
+            return render(
+            request, 'template-mensaje.html',
+            { 'color'   : 'red'
+            , 'mensaje' : 'La recarga excede el limite de 10.000. Solo puede recargar un maximo de ' + str(resto) + ' restante'
+            }
+            )
+                
+        billetera.saldo += Decimal(monto)
+        billetera.save()
+            
+        recarga = HistorialBilleteraElectronica(
+            billetera        = billetera,
+            fechaTransaccion = datetime.now(),
+            tipo             = "Recarga",
+            nombre           = form.cleaned_data['nombre'],
+            apellido         = form.cleaned_data['apellido'],
+            cedula           = form.cleaned_data['cedula'],
+            tarjeta          = "****" + form.cleaned_data['tarjeta'][-4:],
+            credito          = Decimal(form.cleaned_data['monto'])
+            )
+            
+        recarga.save()
+        return render(
+                    request,
+                    'template-mensaje.html',
+                    {'color'   : 'red'
+                     , 'mensaje' : 'Se ha realizado la nueva reserva satidfactoriomente'
+                     }
+                )            

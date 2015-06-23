@@ -1315,7 +1315,25 @@ class HorarioInicialForm(forms.Form):
         )
     )
 
-
+class MoverReservaRecargo(forms.Form):
+    
+    idBill_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    idBill = forms.CharField(
+        required   = True,
+        label      = "ID Billetera",
+        validators = [idBill_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : idBill_validator.regex.pattern
+            , 'message'     : idBill_validator.message
+            }
+        )
+    )
 
 
 
