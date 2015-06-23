@@ -101,7 +101,7 @@ class DiasFeriados(models.Model):
 	descripcion       = models.CharField(max_length = 100)
 	
 	def __str__(self):
-		return self.idest + " " + self.fecha + " " + self.descripcion
+		return str(self.idest) + " " + str(self.fecha) + " " + self.descripcion
 
 class HistorialBilleteraElectronica(models.Model):
 	billetera		 = models.ForeignKey(BilleteraElectronica)
