@@ -636,12 +636,17 @@ def estacionamiento_pago(request,_id, _idres = None):
                 finalReserva    = finalReserva,
                 tipoVehiculo    = tipoVehiculo
             )
-
+            
             # Se guarda la reserva en la base de datos
             reservaFinal.save()
+            # Se elimina la reserva vieja si se esta pagando por mover
             if _idres is not None:
                 reservaVieja = Reserva.objects.get(id = _idres)
+                listPagoViejo = Pago.objects.filter(reserva_id = _idres)
+                for pagoViejo in listPagoViejo:
+                    pagoViejo.reserva = reservaFinal
                 reservaVieja.delete() 
+            
 
             monto = Decimal(request.session['monto']).quantize(Decimal('1.00'))
             pago = Pago(
@@ -1295,14 +1300,15 @@ def estacionamiento_moverReservaHorario(request, _idres):
         
     if request.method == 'POST':
         form = HorarioInicialForm(request.POST)
-        reserva = Reserva.objects.get(id = _idres)
-        pago = Pago.objects.get(reserva_id = _idres)
-        inicioReservaNueva = reserva.inicioReserva
-        finReservaNueva = inicioReservaNueva + (reserva.finalReserva - reserva.inicioReserva)
-        tipoDeVehiculo = reserva.tipoVehiculo
-        e = Estacionamiento.objects.get(id = reserva.estacionamiento.id)
+        if form.is_valid():
+            reserva = Reserva.objects.get(id = _idres)
+            pago = Pago.objects.get(reserva_id = _idres)
+            inicioReservaNueva = form.cleaned_data['inicio']
+            finReservaNueva = inicioReservaNueva + (reserva.finalReserva - reserva.inicioReserva)
+            tipoDeVehiculo = reserva.tipoVehiculo
+            e = Estacionamiento.objects.get(id = reserva.estacionamiento.id)
         
-        m_validado = validarHorarioReserva(
+            m_validado = validarHorarioReserva(
                 inicioReservaNueva,
                 finReservaNueva,
                 e.apertura,
@@ -1310,77 +1316,94 @@ def estacionamiento_moverReservaHorario(request, _idres):
                 e.horizonte_reserva
             )
         
-        if not m_validado[0]:
-            return render(
-                request,
-                'template-mensaje.html',
-                { 'color'  :'red'
-                , 'mensaje': m_validado[1]
-                }
-            )
-        reservaVieja = Reserva(
-            nombre          = reserva.nombre,
-            apellido        = reserva.apellido,
-            ci              = reserva.ci,
-            estacionamiento = reserva.estacionamiento,
-            inicioReserva   = reserva.inicioReserva,
-            finalReserva    = reserva.finalReserva,
-            tipoVehiculo    = reserva.tipoVehiculo
-        )
-        reserva.delete()
-        if marzullo(e.id, inicioReservaNueva, finReservaNueva, tipoDeVehiculo):
-            reservaNueva = Reserva(
-                nombre          = reservaVieja.nombre,
-                apellido        = reservaVieja.apellido,
-                ci              = reservaVieja.ci,
-                estacionamiento = reservaVieja.estacionamiento,
-                inicioReserva   = inicioReservaNueva,
-                finalReserva    = finReservaNueva,
-                tipoVehiculo    = reservaVieja.tipoVehiculo
-            )
-            reservaVieja.id = _idres
-            reservaVieja.save()
-            pago.reserva = reservaVieja
-            pago.save()
-            listaDias = DiasFeriados.objects.filter(idest = e.id)
-            tipoDias = splitDates(inicioReservaNueva,finReservaNueva,listaDias)
-            monto = 0
-            for intervalo in tipoDias[0]:                    
-                monto += e.tarifa.calcularPrecio(intervalo[0],intervalo[1],tipoDeVehiculo)
-            for intervalo2 in tipoDias[1]:
-                monto += e.tarifa2.calcularPrecio(intervalo2[0],intervalo2[1],tipoDeVehiculo)
-
-            monto = monto - pago.monto
-            monto = Decimal(monto)
-            
-            if monto < 0.00:
-                pass
-            elif monto > 0.00:
-                pass
-            else:
-            
+            if not m_validado[0]:
                 return render(
-                request,
-                'mover-confirmar.html',
-                { 'color'   : 'green'
-                , 'mensaje' : 'Debe pagar un monto de : ' + str(monto) + 'bsF'
-                , 'reserva' : reservaNueva
-                , 'monto'   : monto
-                , 'res'     : reservaVieja.id
-                }
-            )   
-        else:
-            reservaVieja.id = _idres
-            reservaVieja.save()
-            pago.reserva = reservaVieja
-            pago.save()
-            return render(
-                request,
-                'template-mensaje.html',
-                {'color'   : 'red'
-                , 'mensaje' : 'No hay un puesto disponible para ese horario'
-                }
-            )            
+                    request,
+                    'template-mensaje.html',
+                    { 'color'  :'red'
+                     , 'mensaje': m_validado[1]
+                     }
+                )
+            reservaVieja = Reserva(
+                nombre          = reserva.nombre,
+                apellido        = reserva.apellido,
+                ci              = reserva.ci,
+                estacionamiento = reserva.estacionamiento,
+                inicioReserva   = reserva.inicioReserva,
+                finalReserva    = reserva.finalReserva,
+                tipoVehiculo    = reserva.tipoVehiculo
+            )
+            reserva.delete()
+            if marzullo(e.id, inicioReservaNueva, finReservaNueva, tipoDeVehiculo):
+                reservaNueva = Reserva(
+                    nombre          = reservaVieja.nombre,
+                    apellido        = reservaVieja.apellido,
+                    ci              = reservaVieja.ci,
+                    estacionamiento = reservaVieja.estacionamiento,
+                    inicioReserva   = inicioReservaNueva,
+                    finalReserva    = finReservaNueva,
+                    tipoVehiculo    = reservaVieja.tipoVehiculo
+                )
+                reservaVieja.id = _idres
+                reservaVieja.save()
+                pago.reserva = reservaVieja
+                pago.save()
+            
+                listaDias = DiasFeriados.objects.filter(idest = e.id)
+                tipoDias = splitDates(inicioReservaNueva,finReservaNueva,listaDias)
+                monto = 0
+                for intervalo in tipoDias[0]:                    
+                    monto += e.tarifa.calcularPrecio(intervalo[0],intervalo[1],tipoDeVehiculo)
+                for intervalo2 in tipoDias[1]:
+                    monto += e.tarifa2.calcularPrecio(intervalo2[0],intervalo2[1],tipoDeVehiculo)
+
+                monto = monto - pago.monto
+                monto = Decimal(monto)
+            
+                request.session['monto']               = float(monto)
+                request.session['finalReservaHora']    = reservaNueva.finalReserva.hour
+                request.session['finalReservaMinuto']  = reservaNueva.finalReserva.minute
+                request.session['inicioReservaHora']   = reservaNueva.inicioReserva.hour
+                request.session['inicioReservaMinuto'] = reservaNueva.inicioReserva.minute
+                request.session['anioinicial']         = reservaNueva.inicioReserva.year
+                request.session['mesinicial']          = reservaNueva.inicioReserva.month
+                request.session['diainicial']          = reservaNueva.inicioReserva.day
+                request.session['aniofinal']           = reservaNueva.finalReserva.year
+                request.session['mesfinal']            = reservaNueva.finalReserva.month
+                request.session['diafinal']            = reservaNueva.finalReserva.day
+                request.session['tipoVehiculo']        = reservaNueva.tipoVehiculo
+                request.session['nombre']              = reservaNueva.nombre
+                request.session['apellido']            = reservaNueva.apellido
+                request.session['ci']                  = reservaNueva.ci
+            
+                if monto < 0.00:
+                    pass
+                elif monto > 0.00:
+                    pass
+                else:
+                
+                    return render(
+                        request,
+                        'mover-confirmar.html',
+                        { 'color'   : 'green'
+                         , 'mensaje' : 'Debe pagar un monto de : ' + str(monto) + 'bsF'
+                         , 'reserva' : reservaNueva
+                         , 'monto'   : monto
+                         , 'res'     : reservaVieja.id
+                         }
+                    )   
+            else:
+                reservaVieja.id = _idres
+                reservaVieja.save()
+                pago.reserva = reservaVieja
+                pago.save()
+                return render(
+                    request,
+                    'template-mensaje.html',
+                    {'color'   : 'red'
+                     , 'mensaje' : 'No hay un puesto disponible para ese horario'
+                     }
+                )            
        
         
     return render(
