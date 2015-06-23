@@ -142,7 +142,7 @@ class consultaReservaTestCase(TestCase):
             ci_propietario = pro2,
             nombre      = "nom2",
             direccion   = "dir3",
-            rif         = "J-19876543321",
+            rif         = "J-123456789",
             capacidad   = n,
             apertura    = time(0,0),
             cierre      = time(23,59),
@@ -180,9 +180,87 @@ class consultaReservaTestCase(TestCase):
                 )
             p.save()
         lista, total = consultar_ingresos("J-123456789")
-        lista2, total2 = consultar_ingresos("J-19876543321")
-        self.assertTrue(len(lista) == 1 and total == n*100)
-        self.assertTrue(len(lista2) == 1 and total2 == n*100)
+        self.assertTrue(len(lista) == 2 and total == 2*n*100)
+
+
+
+    def test_muchos_estacionamiento_mitad_sin_pagos(self):
+        n  = 100
+        m  = 10
+        for i in range(0,n):
+            
+            pro1 = Propietario(
+            nombre = "prop1%d"%i,
+            ci = "V-12345678%d"%i,
+            tel = "0412-1234567"
+            )
+            pro2 = Propietario(
+            nombre = "prop2%d"%(i+1),
+            ci = "V-12345679%d"%(i+1),
+            tel = "0412-1234567"
+            )
+            pro1.save()
+            pro2.save()
+            e1 = Estacionamiento(
+                ci_propietario = pro1,
+                nombre      = "nom%d"%i,
+                direccion   = "dir1",
+                rif         = "J-123456789",
+                capacidad   = m,
+                apertura    = time(0,0),
+                cierre      = time(23,59),
+            )
+            e2 = Estacionamiento(
+                ci_propietario = pro2,
+                nombre      = "no%d"%i,
+                direccion   = "dir3",
+                rif         = "J-123456789",
+                capacidad   = m,
+                apertura    = time(0,0),
+                cierre      = time(23,59),
+            )
+            e1.save()
+            e2.save()
+            for j in range(0,m):
+                r = Reserva(
+                        estacionamiento = e1,
+                        inicioReserva = datetime(2015,3,10,3,0),
+                        finalReserva  = datetime(2015,3,10,5,0)
+                    )
+                r.save()
+                p = Pago(
+                        fechaTransaccion = datetime.now(),
+                        cedula           = "V-1234567",
+                        tipoPago      = "VISTA",
+                        reserva          = r,
+                        monto            = 100,
+                    )
+                p.save()
+
+        lista, total = consultar_ingresos("J-123456789")
+        self.assertTrue(len(lista) == 2*n and total == n*m*100)
+
+    def test_muchos_estacionamiento_sin_pagos(self):
+        n  = 1000
+        for i in range(0,n):
+            pro = Propietario(
+                nombre = "prop%d"%i,
+                ci = 'V-12345678%d'%i,
+                tel = "0412-1234567"
+            )
+            pro.save()
+            e1 = Estacionamiento(
+                ci_propietario = pro,
+                nombre      = "nom%d"%i,
+                direccion   = "dir1",
+                rif         = "J-123456789",
+                capacidad   = n,
+                apertura    = time(0,0),
+                cierre      = time(23,59),
+            )
+            e1.save()
+        lista, total = consultar_ingresos("J-123456789")
+        self.assertTrue(len(lista) == n and total == 0)
 
     def test_muchos_estacionamiento_con_disintos_rif(self):
         n  = 1000
