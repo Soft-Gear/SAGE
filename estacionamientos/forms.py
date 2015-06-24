@@ -9,6 +9,26 @@ class CustomSplitDateTimeWidget(SplitDateTimeWidget):
     def format_output(self, rendered_widgets):
         return '<p></p>'.join(rendered_widgets)
 
+class PorcentajeForm(forms.Form):
+
+    porc_validator = RegexValidator(
+        regex   = '^[0-9](\.[0-9])?$',
+        message = 'Introduzca un porcentajoe que esté entre 0.0 y 9.9'
+    )
+
+    porcentaje = forms.CharField(
+        required   = True,
+        label      = "Porcentaje de 0 a 9.9",
+        validators = [porc_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Porcentaje para el pago de la cancelación'
+            , 'pattern'     : porc_validator.regex.pattern
+            , 'message'     : porc_validator.message
+            }
+        )
+    )
+
 class PropietarioForm(forms.Form):
     
     ci_validator = RegexValidator(
@@ -160,7 +180,7 @@ class BilleteraElectronicaForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -198,7 +218,7 @@ class ValidarBilleteraForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -365,9 +385,73 @@ class ConsultarSaldoForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
+    
+class BilleteraElectronicaCambiarPinForm(forms.Form):
+    
+    pin_validator = RegexValidator(
+        regex   = '^\d{4}$',
+        message = 'EL PIN debe ser 4 digitos'
+    )
+    
+    id_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    idBill = forms.CharField(
+        required   = True,
+        label      = "ID Billetera",
+        validators = [id_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : id_validator.regex.pattern
+            , 'message'     : id_validator.message
+            }
+        )
+    )
+    
+    pinUsu = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.PasswordInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
+    
+    nuevo_pin = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.PasswordInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Nuevo PIN'
+            , 'pattern'     : pin_validator.regex.pattern
+            , 'message'     : pin_validator.message
+            }
+        )
+    )
+    
+    confirmar_pin = forms.CharField(
+        required   = True,
+        label      = "PIN",
+        validators = [pin_validator],
+        widget     = forms.PasswordInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'Confirme nuevo PIN'
             , 'pattern'     : pin_validator.regex.pattern
             , 'message'     : pin_validator.message
             }
@@ -487,7 +571,7 @@ class RecargarSaldoForm(forms.Form):
         required   = True,
         label      = "PIN",
         validators = [pin_validator],
-        widget     = forms.TextInput(attrs =
+        widget     = forms.PasswordInput(attrs =
             { 'class'       : 'form-control'
             , 'placeholder' : 'PIN'
             , 'pattern'     : pin_validator.regex.pattern
@@ -556,34 +640,6 @@ class EstacionamientoExtendedForm(forms.Form):
         widget    = forms.NumberInput(attrs=
             { 'class'       : 'form-control'
             , 'placeholder' : 'Puestos para Camiones'
-            , 'min'         : "0"
-            , 'pattern'     : '^[0-9]+'
-            , 'message'     : 'La entrada debe ser un número entero no negativo.'
-            }
-        )
-    )
-
-    puestos_microbus = forms.IntegerField(
-        required  = False,
-        min_value = 0,
-        label     = 'Puestos para Microbuses',
-        widget    = forms.NumberInput(attrs=
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Puestos para Microbuses'
-            , 'min'         : "0"
-            , 'pattern'     : '^[0-9]+'
-            , 'message'     : 'La entrada debe ser un número entero no negativo.'
-            }
-        )
-    )
-
-    puestos_autobus = forms.IntegerField(
-        required  = False,
-        min_value = 0,
-        label     = 'Puestos para Autobuses',
-        widget    = forms.NumberInput(attrs=
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Puestos para Autobuses'
             , 'min'         : "0"
             , 'pattern'     : '^[0-9]+'
             , 'message'     : 'La entrada debe ser un número entero no negativo.'
@@ -697,30 +753,6 @@ class EstacionamientoExtendedForm(forms.Form):
         )
     )
 
-    tarifa_microbus = forms.DecimalField(
-        required   = False,
-        validators = [tarifa_validator],
-        widget     = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Tarifa para Microbuses'
-            , 'pattern'     : '^([0-9]+(\.[0-9]+)?)$'
-            , 'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa_autobus = forms.DecimalField(
-        required   = False,
-        validators = [tarifa_validator],
-        widget     = forms.TextInput(attrs =
-            { 'class'       : 'form-control'
-            , 'placeholder' : 'Tarifa para Autobuses'
-            , 'pattern'     : '^([0-9]+(\.[0-9]+)?)$'
-            , 'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
     tarifa_especiales = forms.DecimalField(
         required   = False,
         validators = [tarifa_validator],
@@ -763,30 +795,6 @@ class EstacionamientoExtendedForm(forms.Form):
             widget     = forms.TextInput(attrs = {
                 'class'       : 'form-control',
                 'placeholder' : 'Tarifa para Camiones',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa2_microbus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Microbuses',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa2_autobus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Autobuses',
                 'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
                 'message'     : 'La entrada debe ser un número decimal.'
             }
@@ -873,30 +881,6 @@ class EstacionamientoExtendedForm(forms.Form):
         )
     )
 
-    tarifa3_microbus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Microbuses',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa3_autobus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Autobuses',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
     tarifa3_especiales = forms.DecimalField(
             required   = False,
             validators = [tarifa_validator],
@@ -939,30 +923,6 @@ class EstacionamientoExtendedForm(forms.Form):
             widget     = forms.TextInput(attrs = {
                 'class'       : 'form-control',
                 'placeholder' : 'Tarifa para Camiones',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa4_microbus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Microbuses',
-                'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
-                'message'     : 'La entrada debe ser un número decimal.'
-            }
-        )
-    )
-
-    tarifa4_autobus = forms.DecimalField(
-            required   = False,
-            validators = [tarifa_validator],
-            widget     = forms.TextInput(attrs = {
-                'class'       : 'form-control',
-                'placeholder' : 'Tarifa para Autobuses',
                 'pattern'     : '^([0-9]+(\.[0-9]+)?)$',
                 'message'     : 'La entrada debe ser un número decimal.'
             }
@@ -1125,8 +1085,6 @@ class ReservaForm(forms.Form):
         ('Moto', 'Moto'),
         ('Carro', 'Carro'),
         ('Camion', 'Camión'),
-        ('Microbus', 'Microbús'),
-        ('Autobus', 'Autobús'),
         ('Vehículo Especial','Vehículo Especial')
     ]
 
@@ -1295,9 +1253,45 @@ class CancelarReservaForm(forms.Form):
         validators = [id_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'ID Pago'
+            , 'placeholder' : 'ID de reserva'
             , 'pattern'     : id_validator.regex.pattern
             , 'message'     : id_validator.message
             }
         )
     )
+    
+class HorarioInicialForm(forms.Form):
+    
+    inicio = forms.SplitDateTimeField(
+        required = True,
+        label    = 'Horario Inicio Reserva',
+        widget   = CustomSplitDateTimeWidget(attrs=
+            { 'class'       : 'form-control'
+            , 'type'        : 'date'
+            , 'placeholder' : 'Hora Inicio Reserva'
+            }
+        )
+    )
+
+class MoverReservaRecargo(forms.Form):
+    
+    idBill_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    idBill = forms.CharField(
+        required   = True,
+        label      = "ID Billetera",
+        validators = [idBill_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : idBill_validator.regex.pattern
+            , 'message'     : idBill_validator.message
+            }
+        )
+    )
+
+
+

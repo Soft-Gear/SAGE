@@ -64,3 +64,7 @@ class TarifaMinutoTestCase(TestCase):
         final_time = datetime(2015,2,25,23,59)
         rate = TarifaMinuto(tarifa_carros = 60)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time,'Carro'),7*24*60)
+        
+    def test_tipo_tarifa_correcta(self): # Cobertura
+        rate=TarifaMinuto(tarifa_carros=1)
+        self.assertEqual(rate.tipo(),"Por Minuto")

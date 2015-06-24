@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+  SAGE - Billetera Electronica
+{% endblock %}
+{% block innerContents%}
+  <div class="col-sm-10">
+    <h3><i class="fa fa-bus"></i>
+     Billetera
+    </h3>
+    <hr>
+    <div class="col-md-5">
+      {% include "cambiar_pin_form.html" %}
+    </div>
+    <div class="col-md-4"> 
+	  {% include "menu-billetera.html" %}
+    </div>
+  </div>
+{% endblock %}

@@ -6,6 +6,12 @@ from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
 from datetime import timedelta
 
+class SAGE(models.Model):
+	tarifa_cancelacion = models.DecimalField(decimal_places = 1, max_digits = 3)
+
+	def __str__(self):
+		return str(self.tarifa_cancelacion)
+
 class Propietario(models.Model):
 	nombre   = models.CharField(max_length = 30)
 	apellido = models.CharField(max_length = 30)
@@ -24,7 +30,7 @@ class Estacionamiento(models.Model):
 	telefono3   = models.CharField(blank = True, null = True, max_length = 30)
 	email1      = models.EmailField(blank = True, null = True)
 	email2      = models.EmailField(blank = True, null = True)
-	rif         = models.CharField(max_length = 12, unique = True)
+	rif         = models.CharField(max_length = 12, unique = False)
 
 	# Campos para referenciar al esquema de tarifa
 
@@ -40,8 +46,6 @@ class Estacionamiento(models.Model):
 	capacidad_motos         = models.IntegerField(blank = True, null = True)
 	capacidad_carros        = models.IntegerField(blank = True, null = True)
 	capacidad_camiones      = models.IntegerField(blank = True, null = True)
-	capacidad_microbus      = models.IntegerField(blank = True, null = True)
-	capacidad_autobus       = models.IntegerField(blank = True, null = True)
 	capacidad_especiales    = models.IntegerField(blank = True, null = True)
 	capacidad               = models.IntegerField(blank = True, null = True)
 
@@ -53,6 +57,7 @@ class Reserva(models.Model):
 	apellido        = models.CharField(max_length = 30)
 	ci				= models.CharField(max_length = 12)
 	estacionamiento = models.ForeignKey(Estacionamiento)
+	tarifa_cancelar = models.ForeignKey(SAGE, blank = True, null = True)
 	inicioReserva   = models.DateTimeField()
 	finalReserva    = models.DateTimeField()
 	tipoVehiculo	= models.CharField(max_length = 10)
@@ -72,12 +77,12 @@ class Pago(models.Model):
 	fechaTransaccion = models.DateTimeField()
 	cedula           = models.CharField(max_length = 10)
 	tipoPago         = models.CharField(max_length = 30)
-	reserva          = models.ForeignKey(Reserva)
+	reserva          = models.ForeignKey(Reserva, null=True, on_delete = models.SET_NULL)
 	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
 	estado           = models.BooleanField(default = True)
 
 	def __str__(self):
-		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
+		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedula)
 
 class BilleteraElectronica(models.Model):
 	idBilletera = models.IntegerField()
@@ -96,7 +101,7 @@ class DiasFeriados(models.Model):
 	descripcion       = models.CharField(max_length = 100)
 	
 	def __str__(self):
-		return self.idest + " " + self.fecha + " " + self.descripcion
+		return str(self.idest) + " " + str(self.fecha) + " " + self.descripcion
 
 class HistorialBilleteraElectronica(models.Model):
 	billetera		 = models.ForeignKey(BilleteraElectronica)
@@ -118,14 +123,10 @@ class EsquemaTarifario(models.Model):
 	tarifa_motos         = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 	tarifa_carros        = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 	tarifa_camiones      = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
-	tarifa_microbus      = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
-	tarifa_autobus       = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 	tarifa_especiales    = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 	tarifa2_motos        = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
 	tarifa2_carros       = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
 	tarifa2_camiones     = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
-	tarifa2_microbus     = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
-	tarifa2_autobus      = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
 	tarifa2_especiales   = models.DecimalField(max_digits=10, decimal_places=2, default = 0)
 	inicioEspecial 		 = models.TimeField(blank = True, null = True)
 	finEspecial    		 = models.TimeField(blank = True, null = True)
@@ -147,10 +148,6 @@ class TarifaHora(EsquemaTarifario):
 			return(Decimal(self.tarifa_carros*a).quantize(Decimal('1.00')))
 		elif tipoVehiculo == 'Camion':
 			return(Decimal(self.tarifa_camiones*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'Microbus':
-			return(Decimal(self.tarifa_microbus*a).quantize(Decimal('1.00')))
-		elif tipoVehiculo == 'Autobus':
-			return(Decimal(self.tarifa_autobus*a).quantize(Decimal('1.00')))
 		elif tipoVehiculo == 'Vehículo Especial':
 			return(Decimal(self.tarifa_especiales*a).quantize(Decimal('1.00')))
 	def tipo(self):
@@ -166,10 +163,6 @@ class TarifaMinuto(EsquemaTarifario):
 			return (Decimal(minutes)*Decimal(self.tarifa_carros/60)).quantize(Decimal('1.00'))
 		elif tipoVehiculo == 'Camion':
 			return (Decimal(minutes)*Decimal(self.tarifa_camiones/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'Microbus':
-			return (Decimal(minutes)*Decimal(self.tarifa_microbus/60)).quantize(Decimal('1.00'))
-		elif tipoVehiculo == 'Autobus':
-			return (Decimal(minutes)*Decimal(self.tarifa_autobus/60)).quantize(Decimal('1.00'))
 		elif tipoVehiculo == 'Vehículo Especial':
 			return (Decimal(minutes)*Decimal(self.tarifa_especiales/60)).quantize(Decimal('1.00'))
 	def tipo(self):
@@ -186,10 +179,6 @@ class TarifaHorayFraccion(EsquemaTarifario):
 			tarifa = self.tarifa_carros
 		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
-		elif tipoVehiculo == 'Microbus':
-			tarifa = self.tarifa_microbus
-		elif tipoVehiculo == 'Autobus':
-			tarifa = self.tarifa_autobus
 		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 
@@ -224,12 +213,6 @@ class TarifaFinDeSemana(EsquemaTarifario):
 		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
 			tarifa2 = self.tarifa2_camiones
-		elif tipoVehiculo == 'Microbus':
-			tarifa = self.tarifa_microbus
-			tarifa2 = self.tarifa2_microbus
-		elif tipoVehiculo == 'Autobus':
-			tarifa = self.tarifa_autobus
-			tarifa2 = self.tarifa2_autobus
 		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 			tarifa2 = self.tarifa2_especiales
@@ -270,12 +253,6 @@ class TarifaHoraPico(EsquemaTarifario):
 		elif tipoVehiculo == 'Camion':
 			tarifa = self.tarifa_camiones
 			tarifa2 = self.tarifa2_camiones
-		elif tipoVehiculo == 'Microbus':
-			tarifa = self.tarifa_microbus
-			tarifa2 = self.tarifa2_microbus
-		elif tipoVehiculo == 'Autobus':
-			tarifa = self.tarifa_autobus
-			tarifa2 = self.tarifa2_autobus
 		elif tipoVehiculo == 'Vehículo Especial':
 			tarifa = self.tarifa_especiales
 			tarifa2 = self.tarifa2_especiales

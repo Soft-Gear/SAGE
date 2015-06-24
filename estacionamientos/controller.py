@@ -46,10 +46,6 @@ def marzullo(idEstacionamiento, hIn, hOut, tipoVehiculo):
 		capacidad = e.capacidad_carros
 	elif tipoVehiculo == 'Camion':
 		capacidad = e.capacidad_camiones
-	elif tipoVehiculo == 'Microbus':
-		capacidad = e.capacidad_microbus
-	elif tipoVehiculo == 'Autobus':
-		capacidad = e.capacidad_autobus
 	elif tipoVehiculo == 'Vehículo Especial':
 		capacidad = e.capacidad_especiales
 

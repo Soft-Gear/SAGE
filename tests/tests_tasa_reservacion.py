@@ -39,6 +39,7 @@ class TestTasaEstacionamiento(TestCase):
             direccion = "dir",
             rif = "rif",
             capacidad = puestos,
+            horizonte_reserva = 7,
             apertura       = hora_apertura,
             cierre         = hora_cierre,
         )

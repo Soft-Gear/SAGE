@@ -123,4 +123,12 @@ class ReservaFormControllerTestCase(TestCase):
         x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre, 7)
         self.assertEqual(x, (False, 'El horario de inicio de reserva debe estar en un horario válido.'))
 
-    # malicia
+    # Malicia
+    def test_ReservaInicio_Ayer(self):
+        hoy=datetime.now()
+        HoraApertura=time(6,0)
+        HoraCierre=time(18,0)
+        ReservaInicio=datetime(hoy.year,hoy.month,hoy.day,15) - timedelta(days=1)
+        ReservaFin=datetime(hoy.year,hoy.month,hoy.day,15) + timedelta(days=2)
+        x = validarHorarioReserva(ReservaInicio, ReservaFin, HoraApertura, HoraCierre, 7)
+        self.assertEqual(x, (False, 'La reserva no puede tener lugar en el pasado.'))

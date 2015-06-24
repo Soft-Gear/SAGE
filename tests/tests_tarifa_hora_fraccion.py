@@ -117,3 +117,7 @@ class TarifaHoraFraccionTestCase(TestCase):
         final_time = datetime(2015,2,25,6,30)
         rate = TarifaHorayFraccion(tarifa_carros = 2)
         self.assertEqual(rate.calcularPrecio(initial_time,final_time,'Carro'),7*24*2)
+
+    def test_tipo_tarifa_correcta(self): # Cobertura
+        rate=TarifaHorayFraccion(tarifa_carros=1)
+        self.assertEqual(rate.tipo(),"Por Hora y Fraccion")
