@@ -1253,9 +1253,45 @@ class CancelarReservaForm(forms.Form):
         validators = [id_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'ID Pago'
+            , 'placeholder' : 'ID de reserva'
             , 'pattern'     : id_validator.regex.pattern
             , 'message'     : id_validator.message
             }
         )
     )
+    
+class HorarioInicialForm(forms.Form):
+    
+    inicio = forms.SplitDateTimeField(
+        required = True,
+        label    = 'Horario Inicio Reserva',
+        widget   = CustomSplitDateTimeWidget(attrs=
+            { 'class'       : 'form-control'
+            , 'type'        : 'date'
+            , 'placeholder' : 'Hora Inicio Reserva'
+            }
+        )
+    )
+
+class MoverReservaRecargo(forms.Form):
+    
+    idBill_validator = RegexValidator(
+        regex   = '^[0-9]+$',
+        message = 'Introduzca un id de digitos'
+    )
+    
+    idBill = forms.CharField(
+        required   = True,
+        label      = "ID Billetera",
+        validators = [idBill_validator],
+        widget     = forms.TextInput(attrs =
+            { 'class'       : 'form-control'
+            , 'placeholder' : 'ID Billetera'
+            , 'pattern'     : idBill_validator.regex.pattern
+            , 'message'     : idBill_validator.message
+            }
+        )
+    )
+
+
+

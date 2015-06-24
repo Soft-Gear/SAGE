@@ -1,0 +1,46 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <i class="glyphicon glyphicon-wrench pull-right"></i>
+      <h4>
+        Hora inicial
+      </h4>
+    </div>
+  </div>
+  <div class="panel-body">
+    <form action="./moverReservaHorario/{{ reserva.id }}" method="post" class="form form-vertical">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="control-group">
+          <div class="controls">
+              {{ field }}
+              {{ field.errors }}
+          </div>
+        </div>
+        <br/>
+      {% endfor %}
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary">
+            Mover
+          </button>
+        </div>
+      </div>
+    </form> 
+    
+    <tr><td>
+      &nbsp;
+    </tr></td>
+    
+    <form action ="/estacionamientos/consulta_reserva" method ="get" class = "form form-vertical">
+      {% csrf_token %}
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary">
+            Volver
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
