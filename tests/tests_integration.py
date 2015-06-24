@@ -291,6 +291,17 @@ class IntegrationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'cambiar-propietario.html')
         
+    # Borde
+    def test_vista_mover_reserva(self):
+        response = self.client.get('/estacionamientos/moverReserva')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'mover.html')
+    
+    # Borde
+    def test_vista_mover_reserva_horario(self):
+        response = self.client.get('/estacionamientos/moverReservaHorario')
+        self.assertEqual(response.status_code, 301)
+        
 ########################################################################
 #                        POST
 ########################################################################
@@ -404,4 +415,14 @@ class IntegrationTest(TestCase):
         e.save()
         response = self.client.post('/estacionamientos/1/reserva',{'nombre':'Carlos','direccion':'Caracas'})
         self.assertEqual(response.status_code, 200)
+        
+    # Borde
+    def test_vista_mover_reserva_post(self):
+        response = self.client.post('/estacionamientos/moverReserva')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'mover.html')
     
+    # Borde
+    def test_vista_mover_reserva_horario_post(self):
+        response = self.client.post('/estacionamientos/moverReservaHorario')
+        self.assertEqual(response.status_code, 301)
