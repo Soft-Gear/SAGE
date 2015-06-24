@@ -837,12 +837,12 @@ def estacionamiento_consulta_reserva(request):
         form = CedulaForm(request.POST)
         if form.is_valid():
             cedula        = form.cleaned_data['cedula']
-            facturas      = Pago.objects.filter(estado = True).filter(reserva__ci = cedula)
+            facturas      = Reserva.objects.filter(ci = cedula)
             listaFacturas = []
 
             listaFacturas = sorted(
                 list(facturas),
-                key = lambda r: r.reserva.inicioReserva
+                key = lambda r: r.inicioReserva
             )
             return render(
                 request,
@@ -1312,6 +1312,9 @@ def estacionamiento_moverReservaHorario(request, _idres):
         if form.is_valid():
             reserva = Reserva.objects.get(id = _idres)
             pagos = Pago.objects.filter(reserva_id = _idres)
+            pagoid = []
+            for pago in pagos:  #SOLUCION A LISTA MUTABLE
+                pagoid.append(pago.id)
             inicioReservaNueva = form.cleaned_data['inicio']
             finReservaNueva = inicioReservaNueva + (reserva.finalReserva - reserva.inicioReserva)
             tipoDeVehiculo = reserva.tipoVehiculo
@@ -1358,6 +1361,10 @@ def estacionamiento_moverReservaHorario(request, _idres):
                 reservaVieja.id = _idres
                 reservaVieja.save()
                 
+                pagos = []  #Recreando la lista de pagos
+                for nid in pagoid: 
+                    pagos.append(Pago.objects.get(id = nid))
+                    
                 for pago in pagos:
                     pago.reserva = reservaVieja
                     pago.save()
@@ -1397,11 +1404,11 @@ def estacionamiento_moverReservaHorario(request, _idres):
 
                 if monto < 0.00:
                     form = MoverReservaRecargo()
-                    request.session['montoRecarga'] = abs(monto)
+                    request.session['montoRecarga'] = float(abs(monto))
                     return render(
                         request,
                         'mover-confirmar-recarga.html',
-                        { 'mensaje' : 'Se debe recargar un monto de : ' + str(monto) + 'bsF. Introduzaca el ID de su billetera'
+                        { 'mensaje' : 'Se debe recargar un monto de : ' + str(monto * -1) + ' Introduzca el ID de una billetera'
                          , 'form'   : form
                         }
                     )
@@ -1420,7 +1427,7 @@ def estacionamiento_moverReservaHorario(request, _idres):
                 else:
                     reservaNueva.save()
                     for pago in pagos:
-                        pago.reserva = reservaNueva()
+                        pago.reserva = reservaNueva
                         pago.save()
                     reservaVieja.delete()
                     
@@ -1487,7 +1494,7 @@ def estacionamiento_RecargarBilleteraMover(request):
             fechaTransaccion = datetime.now(),
             tipo             = "Reembolso",
             nombre           = request.session['nombre'],
-            apellido         = form.cleaned_data['apellido'],
+            apellido         = request.session['apellido'],
             cedula           = request.session['ci'],
             credito          = Decimal(monto)
             )
@@ -1529,6 +1536,9 @@ def estacionamiento_RecargarBilleteraMover(request):
         for pago in pagos:
             pago.reserva = reservaFinal
             pago.save()
+        
+        reservaVieja = Reserva.objects.get(id = request.session['idres'])
+        reservaVieja.delete()
             
         nuevoPago = Pago(
             fechaTransaccion = datetime.now(),

@@ -1295,7 +1295,7 @@ class CancelarReservaForm(forms.Form):
         validators = [id_validator],
         widget     = forms.TextInput(attrs =
             { 'class'       : 'form-control'
-            , 'placeholder' : 'ID Pago'
+            , 'placeholder' : 'ID de reserva'
             , 'pattern'     : id_validator.regex.pattern
             , 'message'     : id_validator.message
             }

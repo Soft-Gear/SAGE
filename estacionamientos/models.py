@@ -72,12 +72,12 @@ class Pago(models.Model):
 	fechaTransaccion = models.DateTimeField()
 	cedula           = models.CharField(max_length = 10)
 	tipoPago         = models.CharField(max_length = 30)
-	reserva          = models.ForeignKey(Reserva)
+	reserva          = models.ForeignKey(Reserva, null=True, on_delete = models.SET_NULL)
 	monto            = models.DecimalField(decimal_places = 2, max_digits = 256)
 	estado           = models.BooleanField(default = True)
 
 	def __str__(self):
-		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedulaTipo)+"-"+str(self.cedula)
+		return str(self.id)+" "+str(self.reserva.estacionamiento.nombre)+" "+str(self.cedula)
 
 class BilleteraElectronica(models.Model):
 	idBilletera = models.IntegerField()
