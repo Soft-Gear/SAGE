@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django.test import TestCase
-
+from datetime import datetime
 from estacionamientos.forms import BilleteraElectronicaForm, ValidarBilleteraForm, RecargarSaldoForm
+from estacionamientos.models import DiasFeriados
+
+from estacionamientos.controller import splitDates
 
 ###################################################################
 #                    BILLETERAELECTRONICA_ALL FORM
@@ -559,4 +562,21 @@ class BilleteraElectronicaAllFormTestCase(TestCase):
         }
         form = RecargarSaldoForm(data = form_data)
         self.assertTrue(form.is_valid())
+        
+    def test_splitDates(self):
+        inicio = datetime.strptime(('2015-06-29/8:00'),"%Y-%m-%d/%H:%M")
+        final  = datetime.strptime(('2015-07-08/8:00'),"%Y-%m-%d/%H:%M")
+        dia = DiasFeriados(
+                    idest = 0,
+                    fecha = '2016-07-05',
+                    descripcion = "Prueba"
+                )
+        dia.save()
+        listaDiasFeriados = DiasFeriados.objects.all()
+        result = splitDates(inicio,final,listaDiasFeriados)
+        self.assertEqual(result, [[[datetime.strptime(('2015-06-29/8:00'),"%Y-%m-%d/%H:%M"),datetime.strptime(('2015-07-05/00:00'),"%Y-%m-%d/%H:%M")]
+                                  ,[datetime.strptime(('2015-07-06/00:00'),"%Y-%m-%d/%H:%M"),datetime.strptime(('2015-07-08/8:00'),"%Y-%m-%d/%H:%M")]]
+                                  ,[[datetime.strptime(('2015-07-05/00:00'),"%Y-%m-%d/%H:%M"),datetime.strptime(('2015-07-06/00:00'),"%Y-%m-%d/%H:%M")]]
+                                  ]
+                         )
         
